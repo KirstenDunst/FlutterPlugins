@@ -1,11 +1,24 @@
-import 'package:flutter/material.dart';
+/*
+ * @Author: Cao Shixin
+ * @Date: 2021-01-04 17:54:50
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2021-01-04 18:33:17
+ * @Description: 
+ */
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:device_info_csx/device_info_csx.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
+  runZonedGuarded(() {
+    runApp(MyApp());
+  }, (dynamic error, dynamic stack) {
+    print(error);
+    print(stack);
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -14,7 +27,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
 
   @override
   void initState() {
@@ -22,23 +35,25 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+    Map<String, dynamic> deviceData = <String, dynamic>{};
+
     try {
-      platformVersion = await DeviceInfoCsx.platformVersion;
+      if (Platform.isAndroid) {
+        deviceData = (await DeviceInfoCsx.androidInfo()).toJson();
+      } else if (Platform.isIOS) {
+        deviceData = (await DeviceInfoCsx.iosInfo()).toJson();
+      }
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _deviceData = deviceData;
     });
   }
 
@@ -47,10 +62,34 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: Text(
+              Platform.isAndroid ? 'Android Device Info' : 'iOS Device Info'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: ListView(
+          children: _deviceData.keys.map((String property) {
+            return Row(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    property,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  child: Text(
+                    '${_deviceData[property]}',
+                    maxLines: 10,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )),
+              ],
+            );
+          }).toList(),
         ),
       ),
     );
