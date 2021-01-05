@@ -37,20 +37,20 @@
     if ([@"changeScreenDirection" isEqualToString:call.method]) {
         NSNumber *index = [NSNumber numberWithInt: [call.arguments[0] intValue]];
         if ([index isEqualToNumber:@0]) {
-            if (iOSOrientation == UIDeviceOrientationLandscapeLeft || iOSOrientation == UIDeviceOrientationLandscapeRight){
+            if (iOSOrientation == UIDeviceOrientationLandscapeLeft || iOSOrientation == UIDeviceOrientationLandscapeRight) {
                 lastLandOrientation = iOSOrientation;
             }
             iOSOrientation = UIDeviceOrientationPortrait;
-        } else if([index isEqualToNumber:@1]){
+        } else if([index isEqualToNumber:@1]) {
             iOSOrientation = UIDeviceOrientationLandscapeLeft;
-        } else if([index isEqualToNumber:@2]){
+        } else if([index isEqualToNumber:@2]) {
             iOSOrientation = UIDeviceOrientationLandscapeRight;
-        } else if([index isEqualToNumber:@3]){
-            if (iOSOrientation != UIDeviceOrientationPortrait && iOSOrientation != UIDeviceOrientationPortraitUpsideDown){
+        } else if([index isEqualToNumber:@3]) {
+            if (iOSOrientation != UIDeviceOrientationPortrait && iOSOrientation != UIDeviceOrientationPortraitUpsideDown) {
                 iOSOrientation = UIDeviceOrientationPortrait;
             }
-        } else if([index isEqualToNumber:@4]){
-            if (iOSOrientation != UIDeviceOrientationLandscapeLeft && iOSOrientation != UIDeviceOrientationLandscapeRight){
+        } else if([index isEqualToNumber:@4]) {
+            if (iOSOrientation != UIDeviceOrientationLandscapeLeft && iOSOrientation != UIDeviceOrientationLandscapeRight) {
                 if (lastLandOrientation) {
                     iOSOrientation = lastLandOrientation;
                 } else {
@@ -58,7 +58,7 @@
                 }
             }
             lastLandOrientation = iOSOrientation;
-        } else if([index isEqualToNumber:@6]){
+        } else if([index isEqualToNumber:@6]) {
             if (iOSOrientation == UIDeviceOrientationPortraitUpsideDown) {
                 iOSOrientation = UIDeviceOrientationPortrait;
             }
@@ -68,7 +68,7 @@
         [UIViewController attemptRotationToDeviceOrientation];
         result(nil);
     } else {
-    result(FlutterMethodNotImplemented);
+        result(FlutterMethodNotImplemented);
     }
 }
 

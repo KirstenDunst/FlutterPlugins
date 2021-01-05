@@ -2,10 +2,10 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:10:47
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-05 15:29:48
+ * @LastEditTime: 2021-01-05 15:38:27
  * @Description: 
 -->
-# LimitingDirection
+# limiting_direction_csx
 flutter强制某些界面横屏，特殊界面--特殊的可支持设备旋转方位。解决目前所有的flutter不能操作iOS的问题！
 
 
@@ -19,7 +19,7 @@ flutter强制某些界面横屏，特殊界面--特殊的可支持设备旋转�
 (这个配置主要针对pad的适配，需要添加，单纯的手机应用开发，这个配置可以不用勾选就可以实现其效果)
 
 ## 2.主项目的Main.storyboard的控制器类型class从FlutterViewController调整为MainViewController
-![ios配置Main.storyboard，图片在根目录下的iosConfiguration.png](https://github.com/KirstenDunst/LimitingDirection/blob/main/iosConfiguration.png)
+![ios配置Main.storyboard，图片在根目录下的iosConfiguration.png](https://github.com/KirstenDunst/FlutterPlugins/blob/main/limiting_direction_csx/iosConfiguration.png)
 
 
 # 使用代码介绍
