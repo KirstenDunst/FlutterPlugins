@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-05 15:31:26
+ * @LastEditTime: 2021-01-05 16:08:58
  * @Description: 
  */
 import 'dart:async';
@@ -15,7 +15,7 @@ class LimitingDirectionCsx {
       
   /// 设置屏幕支持的方位
   static Future setUpScreenDirection(DeviceDirectionMask directionMask) async {
-    return _channel
+    await _channel
         .invokeMethod('changeScreenDirection', [directionMask.index]);
   }
 }
