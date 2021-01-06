@@ -13,7 +13,7 @@ class BackgroundAliveCsx {
   static const MethodChannel _channel =
       const MethodChannel('background_alive_csx');
 
-  static Future playBackgroundVideo() async {
-    await _channel.invokeMethod('playBackgroundVideo');
+  static Future keepBackgroundAlive() async {
+    await _channel.invokeMethod('keepBackgroundAlive');
   }
 }
