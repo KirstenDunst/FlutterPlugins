@@ -25,10 +25,13 @@ public class BackgroundAliveCsxPlugin implements FlutterPlugin, MethodCallHandle
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("keepBackgroundAlive")) {
+    if (call.method.equals("openBackgroundTask")) {
       //做安卓的后台保活机制
 
       
+    } else if (call.method.equals("stopBackgroundTask")) {
+      //停止后台保活机制
+
     } else {
       result.notImplemented();
     }

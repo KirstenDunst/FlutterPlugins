@@ -17,7 +17,7 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"keepBackgroundAlive" isEqualToString:call.method]) {
+  if ([@"openBackgroundTask" isEqualToString:call.method]) {
       //后台播放音频
       AVAudioSession *session = [AVAudioSession sharedInstance];
       [session setActive:YES error:nil];
@@ -25,17 +25,26 @@
       //让app支持接受远程控制事件(可以不添加控制事件)
       [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
       
-//      NSURL *url = [[NSBundle mainBundle] URLForResource:@"summer" withExtension:@"mp3"];
+//      NSURL *url = [[NSBundle mainBundle] URLForResource:@"silent" withExtension:@"mp3"];
       NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"background_alive_csx" withExtension:@"bundle"];
       NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
-      NSData *mp3Data = [NSData dataWithContentsOfFile:[bundle pathForResource:@"silent" ofType:@"mp3"]];
+      NSData *mp3Data = [NSData dataWithContentsOfFile:[bundle pathForResource:@"summer" ofType:@"mp3"]];
       
-      self.myPlayer = [CSXPlayAudio sharedAudioPlayer];
       [self.myPlayer setplayData:mp3Data isCirculation:true];
       [self.myPlayer play];
+  } else if ([@"stopBackgroundTask" isEqualToString:call.method]) {
+      [self.myPlayer stop];
   } else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+# pragma ===lazy
+- (CSXPlayAudio *) myPlayer {
+    if (_myPlayer == nil) {
+        _myPlayer = [CSXPlayAudio sharedAudioPlayer];
+    }
+    return _myPlayer;
 }
 
 @end
