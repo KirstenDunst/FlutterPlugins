@@ -28,7 +28,7 @@
 //      NSURL *url = [[NSBundle mainBundle] URLForResource:@"silent" withExtension:@"mp3"];
       NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"background_alive_csx" withExtension:@"bundle"];
       NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
-      NSData *mp3Data = [NSData dataWithContentsOfFile:[bundle pathForResource:@"summer" ofType:@"mp3"]];
+      NSData *mp3Data = [NSData dataWithContentsOfFile:[bundle pathForResource:@"silent" ofType:@"mp3"]];
       
       [self.myPlayer setplayData:mp3Data isCirculation:true];
       [self.myPlayer play];
