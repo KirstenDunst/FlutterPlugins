@@ -1,4 +1,11 @@
 #import "BackgroundAliveCsxPlugin.h"
+#import <AVFoundation/AVFoundation.h>
+#import "CSXPlayAudio.h"
+
+@interface BackgroundAliveCsxPlugin ()<AVAudioPlayerDelegate>
+//播放器
+@property (nonatomic, strong) CSXPlayAudio *myPlayer;
+@end
 
 @implementation BackgroundAliveCsxPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -10,8 +17,22 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"playBackgroundVideo" isEqualToString:call.method]) {
-    //后台播放音频
+  if ([@"keepBackgroundAlive" isEqualToString:call.method]) {
+      //后台播放音频
+      AVAudioSession *session = [AVAudioSession sharedInstance];
+      [session setActive:YES error:nil];
+      [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+      //让app支持接受远程控制事件(可以不添加控制事件)
+      [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+      
+//      NSURL *url = [[NSBundle mainBundle] URLForResource:@"summer" withExtension:@"mp3"];
+      NSURL *bundleURL = [[NSBundle mainBundle] URLForResource:@"background_alive_csx" withExtension:@"bundle"];
+      NSBundle *bundle = [NSBundle bundleWithURL:bundleURL];
+      NSData *mp3Data = [NSData dataWithContentsOfFile:[bundle pathForResource:@"silent" ofType:@"mp3"]];
+      
+      self.myPlayer = [CSXPlayAudio sharedAudioPlayer];
+      [self.myPlayer setplayData:mp3Data isCirculation:true];
+      [self.myPlayer play];
   } else {
     result(FlutterMethodNotImplemented);
   }

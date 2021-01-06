@@ -2,9 +2,10 @@
  * @Author: Cao Shixin
  * @Date: 2021-01-05 15:53:20
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-05 16:10:53
+ * @LastEditTime: 2021-01-06 14:00:28
  * @Description: 
  */
+import 'package:background_alive_csx/background_alive_csx.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +26,12 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('后台保活'),
+          child: InkWell(
+            child: Text('后台保活'),
+            onTap: () async {
+              await BackgroundAliveCsx.keepBackgroundAlive();
+            },
+          ),
         ),
       ),
     );

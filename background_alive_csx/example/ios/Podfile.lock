@@ -1,0 +1,22 @@
+PODS:
+  - background_alive_csx (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - background_alive_csx (from `.symlinks/plugins/background_alive_csx/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  background_alive_csx:
+    :path: ".symlinks/plugins/background_alive_csx/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  background_alive_csx: 7555cd5ad6f031cbccbf537498657237b0cf3824
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.8.4
