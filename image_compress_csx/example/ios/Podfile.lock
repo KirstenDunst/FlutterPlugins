@@ -1,0 +1,57 @@
+PODS:
+  - Flutter (1.0.0)
+  - image_compress_csx (0.0.1):
+    - Flutter
+    - Mantle
+    - SDWebImageWebPCoder
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
+  - Mantle (2.1.6):
+    - Mantle/extobjc (= 2.1.6)
+  - Mantle/extobjc (2.1.6)
+  - path_provider (0.0.1):
+    - Flutter
+  - SDWebImage/Core (5.10.1)
+  - SDWebImageWebPCoder (0.8.1):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - image_compress_csx (from `.symlinks/plugins/image_compress_csx/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+
+SPEC REPOS:
+  trunk:
+    - libwebp
+    - Mantle
+    - SDWebImage
+    - SDWebImageWebPCoder
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  image_compress_csx:
+    :path: ".symlinks/plugins/image_compress_csx/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  image_compress_csx: 214956a1de334259bd76f722d7acde541e07b4d7
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
+  Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
+  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
+  SDWebImageWebPCoder: fac2821bf5a6642a73979d0962dbed5eac45a605
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.8.4

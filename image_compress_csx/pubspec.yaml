@@ -1,8 +1,7 @@
 name: image_compress_csx
-description: A new flutter plugin project.
+description: Based on the native developed image compression plug-in, some optimization adjustments are made in the flutter_image_compress
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/image_compress_csx
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
