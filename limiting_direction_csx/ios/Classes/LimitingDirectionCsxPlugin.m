@@ -1,4 +1,5 @@
 #import "LimitingDirectionCsxPlugin.h"
+static FlutterMethodChannel *channel;
 
 @interface LimitingDirectionCsxPlugin () {
     UIDeviceOrientation iOSOrientation;
@@ -8,7 +9,7 @@
 
 @implementation LimitingDirectionCsxPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
+  channel = [FlutterMethodChannel
       methodChannelWithName:@"limiting_direction_csx"
             binaryMessenger:[registrar messenger]];
   LimitingDirectionCsxPlugin* instance = [[LimitingDirectionCsxPlugin alloc] init];
@@ -19,14 +20,48 @@
     self = [super init];
     if (self) {
        iOSOrientation = [UIDevice currentDevice].orientation;
-       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateDevice:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        [channel invokeMethod:@"orientationCallback" arguments:[self dealOrientationCallBack]];
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateDevice:) name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
     }
     return self;
 }
 
-- (void)rotateDevice:(NSObject *)sender {
+- (void)rotateDevice:(NSNotification *)sender {
     UIDevice *device = [sender valueForKey:@"object"];
     iOSOrientation = device.orientation;
+    [channel invokeMethod:@"orientationCallback" arguments:[self dealOrientationCallBack]];
+}
+
+- (NSString *)dealOrientationCallBack {
+    NSString *tempStr = @"0";
+    switch (iOSOrientation) {
+        case UIDeviceOrientationUnknown:
+            tempStr = @"0";
+            break;
+        case UIDeviceOrientationPortrait:
+            tempStr = @"1";
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            tempStr = @"2";
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            tempStr = @"3";
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            tempStr = @"4";
+            break;
+        case UIDeviceOrientationFaceUp:
+            tempStr = @"5";
+            break;
+        case UIDeviceOrientationFaceDown:
+            tempStr = @"6";
+            break;
+       
+        default:
+            tempStr = @"0";
+            break;
+    }
+    return  tempStr;
 }
 
 - (void)dealloc {
@@ -67,6 +102,8 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LimitingDirectionCsxPlugin" object:nil userInfo:@{@"orientationMask": index}];
         [UIViewController attemptRotationToDeviceOrientation];
         result(nil);
+    } else if ([@"getNowDeviceDirection" isEqualToString:call.method]) {
+        result([self dealOrientationCallBack]);
     } else {
         result(FlutterMethodNotImplemented);
     }

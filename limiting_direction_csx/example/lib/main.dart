@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:15
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-05 15:35:17
+ * @LastEditTime: 2021-01-14 13:44:10
  * @Description: 
  */
 import 'dart:io';
@@ -14,7 +14,7 @@ import 'package:limiting_direction_csx/limiting_direction_csx.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
-    await LimitingDirectionCsx.setUpScreenDirection(
+    await LimitingDirectionCsx.setScreenDirection(
         DeviceDirectionMask.Landscape);
   } else {
     await SystemChrome.setPreferredOrientations(
@@ -31,15 +31,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    print('>>>>>>>>>>>>>>>${LimitingDirectionCsx().currentDeviceOrientation}');
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('ios 屏幕旋转 example'),
-        ),
-      ),
+          appBar: AppBar(
+            title: Text('Plugin example app'),
+          ),
+          body: StreamBuilder<UIDeviceOrientation>(
+            stream: LimitingDirectionCsx().getDeviceDirectionStream(),
+            builder: (context, AsyncSnapshot snapshot) {
+              return Text('结果：${snapshot.data}');
+            },
+          )),
     );
   }
 }
