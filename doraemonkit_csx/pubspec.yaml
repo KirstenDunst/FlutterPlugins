@@ -1,8 +1,7 @@
 name: doraemonkit_csx
 description: A new flutter plugin project.
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -11,6 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  date_format: ^1.0.8
+  vm_service: ^5.5.0
+  package_info: ^0.4.3+2
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:
@@ -34,16 +38,30 @@ flutter:
         pluginClass: DoraemonkitCsxPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/dokit_ic_close.png
+    - assets/images/dk_frame_hist.png
+    - assets/images/dk_method_channel.png
+    - assets/images/dk_sys_info.png
+    - assets/images/dk_view_check.png
+    - assets/images/dk_log_info.png
+    - assets/images/dk_ram.png
+    - assets/images/dk_view_route.png
+    - assets/images/dk_net_monitor.png
+    - assets/images/dokit_flutter_btn.png
+    - assets/images/dk_channel_check_h.png
+    - assets/images/dk_channel_check_n.png
+    - assets/images/dk_channel_expand_h.png
+    - assets/images/dk_channel_expand_n.png
+    - assets/images/dk_fps_chart.png
+    - assets/images/dk_route_arrow.png
+    - assets/images/dk_memory_search.png
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
