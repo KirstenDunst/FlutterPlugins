@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doraemonkit_csx/util/util.dart';
@@ -30,7 +31,7 @@ class MemoryKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_ram.png';
+    return Images.dk_ram;
   }
 
   @override
@@ -176,7 +177,7 @@ class MemoryPageState extends State<MemoryPage> {
                         child: FlatButton(
                           padding: EdgeInsets.only(
                               left: 15, right: 0, top: 15, bottom: 15),
-                          child: Image.asset('images/dk_memory_search.png',
+                          child: Image.asset(Images.dk_memory_search,
                               package: DoKit.PACKAGE_NAME,
                               height: 16,
                               width: 16),

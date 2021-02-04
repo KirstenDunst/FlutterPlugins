@@ -15,7 +15,7 @@ typedef LogCallback = Function(String);
 typedef ExceptionCallback = Function(dynamic, StackTrace);
 
 class DoKit {
-  static final String PACKAGE_NAME = 'dokit';
+  static final String PACKAGE_NAME = 'doraemonkit_csx';
 
   //默认release模式不开启该功能
   static bool release = kReleaseMode;

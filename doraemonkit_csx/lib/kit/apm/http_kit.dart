@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/engine/dokit_http.dart';
 import 'package:doraemonkit_csx/util/util.dart';
 import 'package:flutter/cupertino.dart';
@@ -93,7 +94,7 @@ class HttpKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_net_monitor.png';
+    return Images.dk_net_monitor;
   }
 
   @override
@@ -397,8 +398,8 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ]))),
               Image.asset(
                   widget.item.expand
-                      ? 'images/dk_channel_expand_h.png'
-                      : 'images/dk_channel_expand_n.png',
+                      ? Images.dk_channel_expand_h
+                      : Images.dk_channel_expand_n,
                   package: DoKit.PACKAGE_NAME,
                   height: 14,
                   width: 9)

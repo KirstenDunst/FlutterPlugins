@@ -1,3 +1,4 @@
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/kit/apm/vm_helper.dart';
 import 'package:doraemonkit_csx/kit/common/common.dart';
 import 'package:flutter/foundation.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 class BasicInfoKit extends CommonKit {
   @override
   String getIcon() {
-    return 'images/dk_sys_info.png';
+    return Images.dk_sys_info;
   }
 
   @override

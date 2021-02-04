@@ -1,3 +1,4 @@
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/ui/dokit_app.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class RouteKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_view_route.png';
+    return Images.dk_view_route;
   }
 
   @override
@@ -163,7 +164,7 @@ class RouteInfoPageState extends State<RouteInfoPage> {
         widgets.add(Container(
           margin: EdgeInsets.only(top: 10, bottom: 10),
           alignment: Alignment.center,
-          child: Image.asset('images/dk_route_arrow.png',
+          child: Image.asset(Images.dk_route_arrow,
               package: DoKit.PACKAGE_NAME, height: 13, width: 12),
         ));
       }

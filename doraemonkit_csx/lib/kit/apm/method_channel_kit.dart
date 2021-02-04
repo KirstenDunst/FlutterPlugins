@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/util/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class MethodChannelKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_method_channel.png';
+    return Images.dk_method_channel;
   }
 
   @override
@@ -181,8 +182,8 @@ class ChannelPageState extends State<ChannelPage> {
                     padding: EdgeInsets.only(left: 16),
                     child: Image.asset(
                         showSystemChannel
-                            ? 'images/dk_channel_check_h.png'
-                            : 'images/dk_channel_check_n.png',
+                            ? Images.dk_channel_check_h
+                            : Images.dk_channel_check_n,
                         package: DoKit.PACKAGE_NAME,
                         height: 13,
                         width: 13),
@@ -414,8 +415,8 @@ class _ChannelItemWidgetState extends State<ChannelItemWidget> {
                       ]))),
               Image.asset(
                   widget.item.expand
-                      ? 'images/dk_channel_expand_h.png'
-                      : 'images/dk_channel_expand_n.png',
+                      ? Images.dk_channel_expand_h
+                      : Images.dk_channel_expand_n,
                   package: DoKit.PACKAGE_NAME,
                   height: 14,
                   width: 9)

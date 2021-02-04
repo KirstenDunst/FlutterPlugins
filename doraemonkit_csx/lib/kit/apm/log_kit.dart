@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -34,7 +35,7 @@ class LogKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_log_info.png';
+    return Images.dk_log_info;
   }
 
   @override
@@ -208,8 +209,8 @@ class LogPageState extends State<LogPage> {
                 padding: EdgeInsets.only(left: 16),
                 child: Image.asset(
                     _showError
-                        ? 'images/dk_channel_check_h.png'
-                        : 'images/dk_channel_check_n.png',
+                        ? Images.dk_channel_check_h
+                        : Images.dk_channel_check_n,
                     package: DoKit.PACKAGE_NAME,
                     height: 13,
                     width: 13),

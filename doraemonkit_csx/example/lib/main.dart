@@ -8,14 +8,15 @@ import 'package:flutter/services.dart';
 
 void main() {
   DoKit.runApp(
-      app: DoKitApp(MyApp()),
-      useInRelease: true,
-      logCallback: (log) {
-        String i = log;
-      },
-      exceptionCallback: (obj, trace) {
-        print('ttt$obj');
-      });
+    app: DoKitApp(MyApp()),
+    useInRelease: true,
+    logCallback: (log) {
+      String i = log;
+    },
+    exceptionCallback: (obj, trace) {
+      print('ttt$obj');
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -39,23 +39,7 @@ flutter:
 
   # To add assets to your plugin package, add an assets section, like this:
   assets:
-    - assets/images/dokit_ic_close.png
-    - assets/images/dk_frame_hist.png
-    - assets/images/dk_method_channel.png
-    - assets/images/dk_sys_info.png
-    - assets/images/dk_view_check.png
-    - assets/images/dk_log_info.png
-    - assets/images/dk_ram.png
-    - assets/images/dk_view_route.png
-    - assets/images/dk_net_monitor.png
-    - assets/images/dokit_flutter_btn.png
-    - assets/images/dk_channel_check_h.png
-    - assets/images/dk_channel_check_n.png
-    - assets/images/dk_channel_expand_h.png
-    - assets/images/dk_channel_expand_n.png
-    - assets/images/dk_fps_chart.png
-    - assets/images/dk_route_arrow.png
-    - assets/images/dk_memory_search.png
+    - assets/images/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

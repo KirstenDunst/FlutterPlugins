@@ -1,3 +1,4 @@
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class DoKitBtnState extends State<DoKitBtn> {
               alignment: Alignment.center,
               child: FlatButton(
                 padding: EdgeInsets.all(0),
-                child: Image.asset('images/dokit_flutter_btn.png',
+                child: Image.asset(Images.dokit_flutter_btn,
                     package: DoKit.PACKAGE_NAME, height: 70, width: 70),
                 onPressed: openDebugPage,
               ),
@@ -61,7 +62,7 @@ class DoKitBtnState extends State<DoKitBtn> {
               alignment: Alignment.center,
               child: FlatButton(
                 padding: EdgeInsets.all(0),
-                child: Image.asset('images/dokit_flutter_btn.png',
+                child: Image.asset(Images.dokit_flutter_btn,
                     package: DoKit.PACKAGE_NAME, height: 70, width: 70),
                 onPressed: openDebugPage,
               ),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class FpsKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_frame_hist.png';
+    return Images.dk_frame_hist;
   }
 }
 
@@ -90,7 +91,7 @@ class FpsPageState extends State<FpsPage> {
               child: Row(
                 children: [
                   Container(
-                    child: Image.asset('images/dk_fps_chart.png',
+                    child: Image.asset(Images.dk_fps_chart,
                         package: DoKit.PACKAGE_NAME, height: 16, width: 16),
                     margin: EdgeInsets.only(left: 22, right: 6),
                   ),

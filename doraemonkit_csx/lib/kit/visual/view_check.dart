@@ -1,3 +1,4 @@
+import 'package:doraemonkit_csx/common/assets.dart';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:doraemonkit_csx/kit/visual/visual.dart';
 import 'package:doraemonkit_csx/ui/dokit_app.dart';
@@ -74,7 +75,7 @@ class ViewCheckerKit extends VisualKit {
 
   @override
   String getIcon() {
-    return 'images/dk_view_check.png';
+    return Images.dk_view_check;
   }
 
   @override
@@ -160,7 +161,7 @@ class _InfoWidgetState extends State<InfoWidget> {
                 alignment: Alignment.centerRight,
                 width: size.width - 40,
                 child: GestureDetector(
-                  child: Image.asset('images/dokit_ic_close.png',
+                  child: Image.asset(Images.dokit_ic_close,
                       package: DoKit.PACKAGE_NAME, height: 22, width: 22),
                   onTap: () => {ViewCheckerKit.hide(context)},
                 )),
