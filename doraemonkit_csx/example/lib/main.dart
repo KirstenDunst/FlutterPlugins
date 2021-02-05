@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doraemonkit_csx/doraemonkit_csx.dart';
 import 'package:flutter/material.dart';
-import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -49,6 +49,12 @@ class _DoKitTestPageState extends State<DoKitTestPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            StreamBuilder(
+              stream: DoraemonkitCsx.platformVersion.asStream(),
+              builder: (context, asyncshot) {
+                return Text(asyncshot.data.toString());
+              },
+            ),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(4)),
