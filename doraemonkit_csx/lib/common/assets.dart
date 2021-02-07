@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-04 18:10:20
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-04 18:16:41
+ * @LastEditTime: 2021-02-05 14:58:10
  * @Description: 资源库
  */
 const String _assets = 'assets/';
@@ -27,4 +27,7 @@ class Images {
   static const String dk_view_route = '${prefix}dk_view_route.png';
   static const String dokit_flutter_btn = '${prefix}dokit_flutter_btn.png';
   static const String dokit_ic_close = '${prefix}dokit_ic_close.png';
+  static const String dokit_setting = '${prefix}dokit_setting.png';
+  static const String dk_kit_devlop = '${prefix}dk_kit_devlop.png';
+  static const String dk_kit_local_lang = '${prefix}dk_kit_local_lang.png';
 }

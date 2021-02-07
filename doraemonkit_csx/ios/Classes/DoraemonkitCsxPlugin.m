@@ -1,4 +1,5 @@
 #import "DoraemonkitCsxPlugin.h"
+#import "CommonTool.h"
 
 @implementation DoraemonkitCsxPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -12,9 +13,16 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-  } else {
+  } else if ([@"openSettingPage" isEqualToString:call.method]) {
+      bool openResult = [CommonTool openAppSetting];
+      result([NSNumber numberWithBool:openResult]);
+  } else if ([@"getIosDeviceInfo" isEqualToString:call.method]) {
+      result([CommonTool getDeviceInfo]);
+  }else {
     result(FlutterMethodNotImplemented);
   }
 }
+
+
 
 @end

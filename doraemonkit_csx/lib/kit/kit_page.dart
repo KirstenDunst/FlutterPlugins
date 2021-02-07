@@ -31,89 +31,163 @@ class _KitPage extends State<KitPage> {
     double width = MediaQuery.of(context).size.width;
 
     return SingleChildScrollView(
-        child: Container(
-            color: Color(0xffffffff),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-                  child: Container(
-                    key: _residentContainerKey,
-                    decoration: onDrag
-                        ? DashedDecoration(
-                            dashedColor: Colors.red,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8.0)))
-                        : null,
-                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin:
-                              EdgeInsets.only(left: 10, top: 10, bottom: 15),
-                          child: RichText(
-                              text: TextSpan(children: [
+      child: Container(
+        color: Color(0xffffffff),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+              child: Container(
+                key: _residentContainerKey,
+                decoration: onDrag
+                    ? DashedDecoration(
+                        dashedColor: Colors.red,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8.0)))
+                    : null,
+                padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
+                      child: RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: '常驻工具',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff333333),
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: '  [最多放置4个]',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xff333333),
+                            )),
+                      ])),
+                    ),
+                    buildResidentView(context)
+                  ],
+                ),
+                alignment: Alignment.center,
+              ),
+            ),
+            Container(width: width, height: 12, color: Color(0xfff5f6f7)),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
                             TextSpan(
-                                text: '常驻工具',
+                                text: '基本工具',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Color(0xff333333),
                                     fontWeight: FontWeight.bold)),
                             TextSpan(
-                                text: '  [最多放置4个]',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff333333),
-                                )),
-                          ])),
+                              text: '  [拖动图标放入常驻工具]',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff333333),
+                              ),
+                            ),
+                          ],
                         ),
-                        buildResidentView(context)
-                      ],
+                      ),
                     ),
-                    alignment: Alignment.center,
-                  ),
+                    buildNormalView(context)
+                  ],
                 ),
-                Container(width: width, height: 12, color: Color(0xfff5f6f7)),
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin:
-                              EdgeInsets.only(left: 10, top: 10, bottom: 15),
-                          child: RichText(
-                              text: TextSpan(children: [
+                alignment: Alignment.center,
+              ),
+            ),
+            Container(width: width, height: 12, color: Color(0xfff5f6f7)),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
                             TextSpan(
-                                text: '其他工具',
+                                text: '性能检测工具',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Color(0xff333333),
                                     fontWeight: FontWeight.bold)),
                             TextSpan(
-                                text: '  [拖动图标放入常驻工具]',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff333333),
-                                )),
-                          ])),
+                              text: '  [拖动图标放入常驻工具]',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff333333),
+                              ),
+                            ),
+                          ],
                         ),
-                        buildOtherView(context)
-                      ],
+                      ),
                     ),
-                    alignment: Alignment.center,
-                  ),
+                    buildApmView(context)
+                  ],
                 ),
-              ],
-            )));
+                alignment: Alignment.center,
+              ),
+            ),
+            Container(width: width, height: 12, color: Color(0xfff5f6f7)),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '视觉工具',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff333333),
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: '  [拖动图标放入常驻工具]',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff333333),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    buildVisualView(context)
+                  ],
+                ),
+                alignment: Alignment.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   bool inResidentContainerEdge(Offset offset) {
@@ -181,10 +255,106 @@ class _KitPage extends State<KitPage> {
     return wrap;
   }
 
-  Widget buildOtherView(context) {
+  Widget buildNormalView(context) {
     List<Widget> widgets = <Widget>[];
     double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
-    KitPageManager.instance.getOtherKit().forEach((key, value) {
+    KitPageManager.instance.getNormalKit().forEach((key, value) {
+      widgets.add(
+        Draggable(
+          child: MaterialButton(
+              child: KitItem(value),
+              onPressed: () {
+                setState(() {
+                  value.tabAction();
+                });
+              },
+              padding: EdgeInsets.all(0),
+              minWidth: 40),
+          feedback: KitItem(value),
+          onDragStarted: () => {
+            setState(() {
+              onDrag = true;
+            })
+          },
+          onDragEnd: (detail) => {
+            setState(() {
+              if (inResidentContainerEdge(detail.offset)) {
+                KitPageManager.instance.addResidentKit(key);
+              }
+              onDrag = false;
+            })
+          },
+          onDraggableCanceled: (v, offset) => {
+            setState(() {
+              if (inResidentContainerEdge(offset)) {
+                KitPageManager.instance.addResidentKit(key);
+              }
+              onDrag = false;
+            })
+          },
+        ),
+      );
+    });
+    Wrap wrap = Wrap(
+      spacing: round,
+      runSpacing: 15,
+      children: widgets,
+    );
+    return wrap;
+  }
+
+  Widget buildApmView(context) {
+    List<Widget> widgets = <Widget>[];
+    double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
+    KitPageManager.instance.getApmKit().forEach((key, value) {
+      widgets.add(
+        Draggable(
+          child: MaterialButton(
+              child: KitItem(value),
+              onPressed: () {
+                setState(() {
+                  value.tabAction();
+                });
+              },
+              padding: EdgeInsets.all(0),
+              minWidth: 40),
+          feedback: KitItem(value),
+          onDragStarted: () => {
+            setState(() {
+              onDrag = true;
+            })
+          },
+          onDragEnd: (detail) => {
+            setState(() {
+              if (inResidentContainerEdge(detail.offset)) {
+                KitPageManager.instance.addResidentKit(key);
+              }
+              onDrag = false;
+            })
+          },
+          onDraggableCanceled: (v, offset) => {
+            setState(() {
+              if (inResidentContainerEdge(offset)) {
+                KitPageManager.instance.addResidentKit(key);
+              }
+              onDrag = false;
+            })
+          },
+        ),
+      );
+    });
+    Wrap wrap = Wrap(
+      spacing: round,
+      runSpacing: 15,
+      children: widgets,
+    );
+    return wrap;
+  }
+
+  Widget buildVisualView(context) {
+    List<Widget> widgets = <Widget>[];
+    double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
+    KitPageManager.instance.getVisualKit().forEach((key, value) {
       widgets.add(
         Draggable(
           child: MaterialButton(
@@ -311,18 +481,29 @@ class KitPageManager {
     return false;
   }
 
-  Map<String, IKit> getOtherKit() {
+  Map<String, IKit> getNormalKit() {
     Map<String, IKit> kits = {};
     CommonKitManager.instance.kitMap.forEach((key, value) {
       if (!residentList.contains(key)) {
         kits[key] = value;
       }
     });
+    return kits;
+  }
+
+  Map<String, IKit> getApmKit() {
+    Map<String, IKit> kits = {};
     ApmKitManager.instance.kitMap.forEach((key, value) {
       if (!residentList.contains(key)) {
         kits[key] = value;
       }
     });
+
+    return kits;
+  }
+
+  Map<String, IKit> getVisualKit() {
+    Map<String, IKit> kits = {};
     VisualKitManager.instance.kitMap.forEach((key, value) {
       if (!residentList.contains(key)) {
         kits[key] = value;

@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/dokitchannel.dart';
 import 'package:doraemonkit_csx/kit/apm/vm_helper.dart';
 import 'package:doraemonkit_csx/kit/common/common.dart';
+import 'package:doraemonkit_csx/model/android_device_info.dart';
+import 'package:doraemonkit_csx/model/ios_device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -25,21 +30,55 @@ class BasicInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Container(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            color: Color(0xffffff),
-            child: Column(
-              children: buildAppInfo(),
-            )));
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        color: Color(0xffffff),
+        child: StreamBuilder(
+            // initialData: Platform.isIOS ? IosDeviceInfo() : AndroidDeviceInfo(),
+            stream: Platform.isIOS
+                ? DoraemonkitCsx.iosInfo().asStream()
+                : DoraemonkitCsx.androidInfo().asStream(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              var tempWidgets = buildAppInfo();
+              tempWidgets.add(Container(
+                  height: 56,
+                  alignment: Alignment.centerLeft,
+                  child: Text('设备信息',
+                      style:
+                          TextStyle(fontSize: 14, color: Color(0xff999999)))));
+              if (snapshot.data != null) {
+                var resultData = Platform.isIOS
+                    ? (snapshot.data as IosDeviceInfo).toJson()
+                    : (snapshot.data as AndroidDeviceInfo).toJson();
+                resultData.forEach((key, value) {
+                  tempWidgets.add(InfoItem('$key', '$value'));
+                  tempWidgets
+                      .add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+                });
+              }
+              return Column(
+                children: tempWidgets,
+              );
+            }),
+      ),
+    );
   }
 
   List<Widget> buildAppInfo() {
     List<Widget> list = [];
-    list.add(Container(
+    list.add(
+      Container(
         height: 56,
         alignment: Alignment.centerLeft,
-        child: Text('VM信息 ' + (!kReleaseMode ? '' : '[release模式下不可用]'),
-            style: TextStyle(fontSize: 14, color: Color(0xff999999)))));
+        child: Text(
+          'VM信息 ' + (kReleaseMode ? '[release模式下不可用]' : ''),
+          style: TextStyle(
+            fontSize: 14,
+            color: Color(0xff999999),
+          ),
+        ),
+      ),
+    );
     list.add(InfoItem('CPU', VmHelper.instance.vm?.hostCPU));
     list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
     list.add(InfoItem('Dart虚拟机', VmHelper.instance.vm?.version));
@@ -87,31 +126,33 @@ class InfoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 14, bottom: 14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff333333),
+      padding: EdgeInsets.only(top: 14, bottom: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xff333333),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                text ?? '-',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff666666),
+                ),
               ),
             ),
-            Expanded(
-              child: Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    text ?? '-',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff666666),
-                    ),
-                  )),
-            )
-          ],
-        ));
+          )
+        ],
+      ),
+    );
   }
 }

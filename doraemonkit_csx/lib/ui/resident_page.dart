@@ -65,66 +65,70 @@ class ResidentPageState extends State<ResidentPage> {
       return Container();
     }
     return Positioned(
-        child: Container(
-      width: width,
-      color: Color(0x88000000),
-      height: height - topMargin,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Container(
+      child: Container(
+        width: width,
+        color: Color(0x88000000),
+        height: height - topMargin,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Container(
               alignment: Alignment.topCenter,
               width: width,
               height: height - topMargin - 50,
               //todo Scaffold在ios 11上会出现顶部组件点击事件失效问题（应该是在计算触摸事件的时候计算了刘海屏的高度，在这个高度内的控件不响应事件），这里修改了层级把标题放到了Scaffold内部
               child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Stack(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: width,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Color(0xfff6f6f7),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12)),
-                        ),
-                        child: Text(getTitle(),
-                            style: TextStyle(
-                                fontFamily: 'PingFang SC',
-                                color: Color(0xff000000),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.none)),
+                backgroundColor: Colors.transparent,
+                body: Stack(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: width,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Color(0xfff6f6f7),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12)),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 50),
-                        height: height - topMargin - 100,
-                        color: Colors.white,
-                        child: getPage(),
-                      ),
-                      Container(
-                        height: 0.5,
-                        color: Color(0xffeae6ea),
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(top: 50),
-                      )
-                    ],
-                  ))),
-          Divider(height: 0.5, color: Color(0xffeae6ea)),
-          Container(
-            height: 49,
-            width: width,
-            color: Color(0xfff6f6f7),
-            child: Row(
+                      child: Text(getTitle(),
+                          style: TextStyle(
+                              fontFamily: 'PingFang SC',
+                              color: Color(0xff000000),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 50),
+                      height: height - topMargin - 100,
+                      color: Colors.white,
+                      child: getPage(),
+                    ),
+                    Container(
+                      height: 0.5,
+                      color: Color(0xffeae6ea),
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 50),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Divider(height: 0.5, color: Color(0xffeae6ea)),
+            Container(
+              height: 49,
+              width: width,
+              color: Color(0xfff6f6f7),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: buildBottomWidgets()),
-          )
-        ],
+                children: buildBottomWidgets(),
+              ),
+            )
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   List<Widget> buildBottomWidgets() {

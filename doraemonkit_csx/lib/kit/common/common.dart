@@ -1,6 +1,10 @@
-
 // 视觉功能
+import 'dart:io';
+
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
+import 'package:doraemonkit_csx/kit/common/basic_dev_options.dart';
+import 'package:doraemonkit_csx/kit/common/basic_languages.dart';
+import 'package:doraemonkit_csx/kit/common/basic_setting.dart';
 import 'package:doraemonkit_csx/ui/resident_page.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +17,21 @@ abstract class CommonKit implements IKit {
       ResidentPage.tag = getKitName();
     });
   }
+
   Widget createDisplayPage();
 }
 
 class CommonKitManager {
-  Map<String, CommonKit> kitMap = {
-    CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
-  };
+  Map<String, CommonKit> kitMap = Platform.isIOS
+      ? {
+          CommonKitName.KIT_BASE_SETTING: BasicSettingKit(),
+          CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
+        }
+      : {
+          CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
+          CommonKitName.KIT_BASE_DEVOPTIONS: BasicDevOptionsKit(),
+          CommonKitName.KIT_BASE_LANGUAGE: BasicLanguagesKit(),
+        };
 
   CommonKitManager._privateConstructor() {}
 
@@ -45,4 +57,7 @@ class CommonKitManager {
 
 class CommonKitName {
   static const String KIT_BASIC_INFO = '基本信息';
+  static const String KIT_BASE_SETTING = '设置';
+  static const String KIT_BASE_DEVOPTIONS = '开发者选项';
+  static const String KIT_BASE_LANGUAGE = '本地语言';
 }
