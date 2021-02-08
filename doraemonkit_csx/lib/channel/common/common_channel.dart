@@ -1,19 +1,17 @@
 /*
  * @Author: Cao Shixin
- * @Date: 2021-02-05 11:05:51
+ * @Date: 2021-02-07 11:59:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-07 09:45:08
+ * @LastEditTime: 2021-02-08 14:33:19
  * @Description: 
  */
-
 import 'dart:async';
 
+import 'package:doraemonkit_csx/model/android_device_info.dart';
+import 'package:doraemonkit_csx/model/ios_device_info.dart';
 import 'package:flutter/services.dart';
 
-import 'model/android_device_info.dart';
-import 'model/ios_device_info.dart';
-
-class DoraemonkitCsx {
+class DoKitCommonCsx {
   static const MethodChannel _channel = const MethodChannel('doraemonkit_csx');
 //公共桥接
   /*
@@ -22,6 +20,21 @@ class DoraemonkitCsx {
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
+  }
+
+  /*
+   * 获取UserDefault的所有存储
+   */
+  static Future<Map> get getUserDefaults async {
+    final Map result = await _channel.invokeMethod('getUserDefaults');
+    return result;
+  }
+
+  /*
+   * 修改本地存储
+   */
+  static Future setUserDefault(Map<String, dynamic> tempJson) async {
+    await _channel.invokeMethod('setUserDefault', tempJson);
   }
 
 // iOS

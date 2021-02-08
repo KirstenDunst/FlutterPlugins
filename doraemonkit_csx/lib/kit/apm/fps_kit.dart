@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +64,7 @@ class FpsKit extends ApmKit {
   String getIcon() {
     return Images.dk_frame_hist;
   }
+
 }
 
 class FpsPage extends StatefulWidget {

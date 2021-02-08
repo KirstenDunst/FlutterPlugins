@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

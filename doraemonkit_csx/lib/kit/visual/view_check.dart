@@ -1,4 +1,4 @@
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:doraemonkit_csx/kit/visual/visual.dart';
 import 'package:doraemonkit_csx/ui/dokit_app.dart';

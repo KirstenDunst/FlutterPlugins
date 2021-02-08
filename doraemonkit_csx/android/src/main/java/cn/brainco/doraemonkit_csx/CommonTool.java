@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,7 +197,6 @@ public class CommonTool {
     }
 
     private static final String[] EMPTY_STRING_LIST = new String[]{};
-
     public static Map<String, Object> getAndroidDeviceInfo(Context context, ContentResolver contentResolver, PackageManager packageManager) {
         Map<String, Object> build = new HashMap<>();
         build.put("board", Build.BOARD);

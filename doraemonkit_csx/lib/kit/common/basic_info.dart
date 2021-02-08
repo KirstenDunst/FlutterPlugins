@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:doraemonkit_csx/common/assets.dart';
-import 'package:doraemonkit_csx/dokitchannel.dart';
+import 'package:doraemonkit_csx/channel/channel.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/kit/apm/vm_helper.dart';
 import 'package:doraemonkit_csx/kit/common/common.dart';
 import 'package:doraemonkit_csx/model/android_device_info.dart';
@@ -36,8 +36,8 @@ class BasicInfoPage extends StatelessWidget {
         child: StreamBuilder(
             // initialData: Platform.isIOS ? IosDeviceInfo() : AndroidDeviceInfo(),
             stream: Platform.isIOS
-                ? DoraemonkitCsx.iosInfo().asStream()
-                : DoraemonkitCsx.androidInfo().asStream(),
+                ? DoKitCommonCsx.iosInfo().asStream()
+                : DoKitCommonCsx.androidInfo().asStream(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               var tempWidgets = buildAppInfo();
               tempWidgets.add(Container(

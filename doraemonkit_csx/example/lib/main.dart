@@ -50,7 +50,7 @@ class _DoKitTestPageState extends State<DoKitTestPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             StreamBuilder(
-              stream: DoraemonkitCsx.platformVersion.asStream(),
+              stream: DoKitCommonCsx.platformVersion.asStream(),
               builder: (context, asyncshot) {
                 return Text(asyncshot.data.toString());
               },

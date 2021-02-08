@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/engine/dokit_http.dart';
 import 'package:doraemonkit_csx/util/util.dart';
 import 'package:flutter/cupertino.dart';

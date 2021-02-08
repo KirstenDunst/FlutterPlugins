@@ -1,7 +1,6 @@
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
 import 'package:doraemonkit_csx/kit/common/common.dart';
 import 'package:doraemonkit_csx/kit/visual/visual.dart';
-import 'package:doraemonkit_csx/ui/resident_page.dart';
 import 'package:doraemonkit_csx/widget/dash_decoration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,6 @@ class _KitPage extends State<KitPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     return SingleChildScrollView(
       child: Container(
         color: Color(0xffffffff),
@@ -77,120 +75,68 @@ class _KitPage extends State<KitPage> {
               ),
             ),
             Container(width: width, height: 12, color: Color(0xfff5f6f7)),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '基本工具',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff333333),
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(
-                              text: '  [拖动图标放入常驻工具]',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff333333),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    buildNormalView(context)
-                  ],
-                ),
-                alignment: Alignment.center,
-              ),
-            ),
-            Container(width: width, height: 12, color: Color(0xfff5f6f7)),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '性能检测工具',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff333333),
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(
-                              text: '  [拖动图标放入常驻工具]',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff333333),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    buildApmView(context)
-                  ],
-                ),
-                alignment: Alignment.center,
-              ),
-            ),
-            Container(width: width, height: 12, color: Color(0xfff5f6f7)),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '视觉工具',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff333333),
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(
-                              text: '  [拖动图标放入常驻工具]',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff333333),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    buildVisualView(context)
-                  ],
-                ),
-                alignment: Alignment.center,
-              ),
-            ),
+            _getContentWidget(
+                '基本工具', '  [拖动图标放入常驻工具]', buildNormalView(context), width,
+                needBottomSpace: true),
+            _getContentWidget(
+                '性能检测工具', '  [拖动图标放入常驻工具]', buildApmView(context), width,
+                needBottomSpace: true),
+            _getContentWidget(
+                '视觉工具', '  [拖动图标放入常驻工具]', buildVisualView(context), width),
           ],
         ),
       ),
     );
   }
 
-  bool inResidentContainerEdge(Offset offset) {
+  Widget _getContentWidget(
+      String titleStr, String subTitle, Widget contentWidget, double width,
+      {bool needBottomSpace = false}) {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(left: 10, top: 10, bottom: 15),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: titleStr ?? '',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff333333),
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                          text: subTitle ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xff333333),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                contentWidget,
+              ],
+            ),
+            alignment: Alignment.center,
+          ),
+        ),
+        if (needBottomSpace) ...[
+          Container(width: width, height: 12, color: Color(0xfff5f6f7)),
+        ]
+      ],
+    );
+  }
+
+  bool _inResidentContainerEdge(Offset offset) {
     if (offset == null) {
       return false;
     }
@@ -231,7 +177,7 @@ class _KitPage extends State<KitPage> {
           onDraggableCanceled: (velocity, offset) => {
             setState(() {
               onDrag = false;
-              if (!inResidentContainerEdge(offset)) {
+              if (!_inResidentContainerEdge(offset)) {
                 KitPageManager.instance.removeResidentKit(key);
               }
             })
@@ -239,7 +185,7 @@ class _KitPage extends State<KitPage> {
           onDragEnd: (detail) => {
             setState(() {
               onDrag = false;
-              if (!inResidentContainerEdge(detail.offset)) {
+              if (!_inResidentContainerEdge(detail.offset)) {
                 KitPageManager.instance.removeResidentKit(key);
               }
             })
@@ -278,7 +224,7 @@ class _KitPage extends State<KitPage> {
           },
           onDragEnd: (detail) => {
             setState(() {
-              if (inResidentContainerEdge(detail.offset)) {
+              if (_inResidentContainerEdge(detail.offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -286,7 +232,7 @@ class _KitPage extends State<KitPage> {
           },
           onDraggableCanceled: (v, offset) => {
             setState(() {
-              if (inResidentContainerEdge(offset)) {
+              if (_inResidentContainerEdge(offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -326,7 +272,7 @@ class _KitPage extends State<KitPage> {
           },
           onDragEnd: (detail) => {
             setState(() {
-              if (inResidentContainerEdge(detail.offset)) {
+              if (_inResidentContainerEdge(detail.offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -334,7 +280,7 @@ class _KitPage extends State<KitPage> {
           },
           onDraggableCanceled: (v, offset) => {
             setState(() {
-              if (inResidentContainerEdge(offset)) {
+              if (_inResidentContainerEdge(offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -374,7 +320,7 @@ class _KitPage extends State<KitPage> {
           },
           onDragEnd: (detail) => {
             setState(() {
-              if (inResidentContainerEdge(detail.offset)) {
+              if (_inResidentContainerEdge(detail.offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -382,7 +328,7 @@ class _KitPage extends State<KitPage> {
           },
           onDraggableCanceled: (v, offset) => {
             setState(() {
-              if (inResidentContainerEdge(offset)) {
+              if (_inResidentContainerEdge(offset)) {
                 KitPageManager.instance.addResidentKit(key);
               }
               onDrag = false;
@@ -539,10 +485,10 @@ class KitPageManager {
                       .split(',')
                 }
             },
-          if (KitPageManager.instance.residentList.length > 0)
-            {ResidentPage.tag = KitPageManager.instance.residentList.first}
-          else
-            {ResidentPage.tag = KitPageManager.KIT_ALL}
+          // if (KitPageManager.instance.residentList.length > 0)
+          //   {ResidentPage.tag = KitPageManager.instance.residentList.first}
+          // else
+          //   {ResidentPage.tag = KitPageManager.KIT_ALL}
         });
   }
 }

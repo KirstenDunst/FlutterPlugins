@@ -68,6 +68,24 @@
           },
         };
 }
+
+//获取所有userdefault存储的数据
++ (NSDictionary *)getUserDefaults {
+    NSDictionary* tempDic = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    return tempDic;
+}
+
+//本地存储
++ (void)setUserDefault:(NSDictionary *)dic {
+    if (dic != nil) {
+        for (NSString *keyStr in dic.allKeys) {
+            id value = dic[keyStr];
+            [[NSUserDefaults standardUserDefaults] setValue:value forKey:keyStr];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 // return value is false if code is run on a simulator
 + (NSString*)isDevicePhysical {
   #if TARGET_OS_SIMULATOR

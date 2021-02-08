@@ -13,6 +13,10 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -52,6 +56,16 @@ public class DoraemonkitCsxPlugin implements FlutterPlugin, MethodCallHandler {
             CommonTool.startLocalActivity(context);
         } else if (call.method.equals("getAndroidDeviceInfo")) {
             result.success(CommonTool.getAndroidDeviceInfo(context, contentResolver, packageManager));
+        } else if (call.method.equals("getUserDefaults")) {
+            Map<String, ?> allPrefs = new HashMap<>();
+            try {
+                allPrefs = SharedPreferencesPlugin.getUserDefaults(context);
+            } catch (IOException e) {
+
+            }
+            result.success(allPrefs);
+        } else if (call.method.equals("setUserDefault")) {
+            SharedPreferencesPlugin.setUserDefault(context,((HashMap<String, ?>) call.arguments));
         } else {
             result.notImplemented();
         }

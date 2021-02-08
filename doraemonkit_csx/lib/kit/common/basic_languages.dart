@@ -2,11 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-05 14:59:11
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-05 15:10:00
+ * @LastEditTime: 2021-02-07 15:22:27
  * @Description: 
  */
-import 'package:doraemonkit_csx/common/assets.dart';
-import 'package:doraemonkit_csx/doraemonkit_csx.dart';
+import 'package:doraemonkit_csx/channel/common/common_channel.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:flutter/material.dart';
 
 import 'common.dart';
@@ -25,7 +25,7 @@ class BasicLanguagesKit extends CommonKit {
 
   @override
   void tabAction() {
-    DoraemonkitCsx.openLocalLanguagesPage();
+    DoKitCommonCsx.openLocalLanguagesPage();
   }
 
   @override

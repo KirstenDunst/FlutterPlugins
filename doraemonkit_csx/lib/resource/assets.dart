@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-04 18:10:20
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-05 14:58:10
+ * @LastEditTime: 2021-02-07 17:35:02
  * @Description: 资源库
  */
 const String _assets = 'assets/';
@@ -30,4 +30,18 @@ class Images {
   static const String dokit_setting = '${prefix}dokit_setting.png';
   static const String dk_kit_devlop = '${prefix}dk_kit_devlop.png';
   static const String dk_kit_local_lang = '${prefix}dk_kit_local_lang.png';
+  static const String dk_web_door_history_qrcode =
+      '${prefix}dk_web_door_history_qrcode.png';
+  static const String dk_web_door = '${prefix}dk_web_door.png';
+  static const String dk_gps_mock = '${prefix}dk_gps_mock.png';
+  static const String dk_file_explorer = '${prefix}dk_file_explorer.png';
+  static const String dk_db_view = '${prefix}dk_db_view.png';
+  static const String dk_data_clean = '${prefix}dk_data_clean.png';
+  static const String dk_crash_catch = '${prefix}dk_crash_catch.png';
+  static const String dk_cpu = '${prefix}dk_cpu.png';
+  static const String dk_color_picker = '${prefix}dk_color_picker.png';
+  static const String dk_align_ruler = '${prefix}dk_align_ruler.png';
+  static const String dokit_dir = '${prefix}dokit_dir.png';
+  static const String dokit_expand_no = '${prefix}dokit_expand_no.png';
+  static const String dokit_file = '${prefix}dokit_file.png';
 }

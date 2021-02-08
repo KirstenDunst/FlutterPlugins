@@ -1,4 +1,4 @@
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
 import 'package:flutter/material.dart';
 

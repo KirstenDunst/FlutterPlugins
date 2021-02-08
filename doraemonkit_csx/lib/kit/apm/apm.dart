@@ -65,7 +65,8 @@ abstract class IKit {
   String getKitName();
 
   String getIcon();
-
+  
+  // Widget nextVC();
   void tabAction();
 }
 
@@ -117,11 +118,7 @@ abstract class ApmKit implements IKit {
   }
 
   @override
-  void tabAction() {
-    ResidentPage.residentPageKey.currentState.setState(() {
-      ResidentPage.tag = getKitName();
-    });
-  }
+  void tabAction() {}
 
   @override
   bool save(IInfo info) {

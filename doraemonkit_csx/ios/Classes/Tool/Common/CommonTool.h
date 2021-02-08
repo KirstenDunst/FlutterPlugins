@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 //获取iOS设备的信息
 + (NSDictionary *)getDeviceInfo;
 
+//获取所有userdefault存储的数据
++ (NSDictionary *)getUserDefaults;
+
+//本地存储
++ (void)setUserDefault:(NSDictionary *)dic;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,39 +1,66 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2021-02-04 15:25:31
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2021-02-08 16:28:53
+ * @Description: 
+ */
 // 视觉功能
 import 'dart:io';
 
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
+import 'package:doraemonkit_csx/kit/common/basic_clear_cache.dart';
 import 'package:doraemonkit_csx/kit/common/basic_dev_options.dart';
+import 'package:doraemonkit_csx/kit/common/basic_file_sync.dart';
+import 'package:doraemonkit_csx/kit/common/basic_h5.dart';
 import 'package:doraemonkit_csx/kit/common/basic_languages.dart';
+import 'package:doraemonkit_csx/kit/common/basic_sandbox.dart';
 import 'package:doraemonkit_csx/kit/common/basic_setting.dart';
+import 'package:doraemonkit_csx/kit/common/basic_userdefaults.dart';
 import 'package:doraemonkit_csx/ui/resident_page.dart';
 import 'package:flutter/material.dart';
 
 import 'basic_info.dart';
+import 'basic_location.dart';
 
 abstract class CommonKit implements IKit {
+  static BuildContext rootNavigatorContext =
+      rootNavigatorKey.currentState.overlay.context;
   @override
   void tabAction() {
-    ResidentPage.residentPageKey.currentState.setState(() {
-      ResidentPage.tag = getKitName();
-    });
+    Navigator.push(rootNavigatorContext, MaterialPageRoute(builder: (_) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(getKitName()),
+          ),
+          body: createDisplayPage());
+    }));
   }
 
   Widget createDisplayPage();
 }
 
 class CommonKitManager {
-  Map<String, CommonKit> kitMap = Platform.isIOS
+  Map<String, CommonKit> kitMap = (Platform.isIOS
       ? {
           CommonKitName.KIT_BASE_SETTING: BasicSettingKit(),
-          CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
         }
       : {
-          CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
           CommonKitName.KIT_BASE_DEVOPTIONS: BasicDevOptionsKit(),
           CommonKitName.KIT_BASE_LANGUAGE: BasicLanguagesKit(),
-        };
+        });
 
-  CommonKitManager._privateConstructor() {}
+  CommonKitManager._privateConstructor() {
+    kitMap.addAll({
+      CommonKitName.KIT_BASIC_INFO: BasicInfoKit(),
+      CommonKitName.KIT_BASE_SANDBOX: BasicSandBoxKit(),
+      CommonKitName.KIT_BASE_LOCATION: BasicLocationsKit(),
+      CommonKitName.KIT_BASE_H5: BasicH5Kit(),
+      CommonKitName.KIT_BASE_CLEARCACHE: BasicClearCacheKit(),
+      CommonKitName.KIT_BASE_USERDEFAULTS: BasicUserDefaultsKit(),
+      CommonKitName.KIT_BASE_FILESYNC: BasicFileSyncKit(),
+    });
+  }
 
   static final CommonKitManager _instance =
       CommonKitManager._privateConstructor();
@@ -57,7 +84,17 @@ class CommonKitManager {
 
 class CommonKitName {
   static const String KIT_BASIC_INFO = '基本信息';
-  static const String KIT_BASE_SETTING = '设置';
+  static const String KIT_BASE_SANDBOX = '沙盒浏览';
+  static const String KIT_BASE_LOCATION = '位置模拟';
+  static const String KIT_BASE_H5 = 'H5任意门';
+  static const String KIT_BASE_CLEARCACHE = '清理缓存';
+  static const String KIT_BASE_USERDEFAULTS = 'UserDefaults';
+  static const String KIT_BASE_FILESYNC = 'DBView'; //文件同步助手
+
+  //专属于安卓的
   static const String KIT_BASE_DEVOPTIONS = '开发者选项';
   static const String KIT_BASE_LANGUAGE = '本地语言';
+
+  //专属于iOS的
+  static const String KIT_BASE_SETTING = '应用设置';
 }

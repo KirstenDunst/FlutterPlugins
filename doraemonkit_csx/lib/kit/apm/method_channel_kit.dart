@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:doraemonkit_csx/common/assets.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/util/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

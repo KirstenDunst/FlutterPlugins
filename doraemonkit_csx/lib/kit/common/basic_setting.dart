@@ -2,11 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-05 11:38:17
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-05 15:03:13
+ * @LastEditTime: 2021-02-07 15:22:35
  * @Description: 
  */
-import 'package:doraemonkit_csx/common/assets.dart';
-import 'package:doraemonkit_csx/dokitchannel.dart';
+import 'package:doraemonkit_csx/channel/common/common_channel.dart';
+import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:flutter/material.dart';
 
 import 'common.dart';
@@ -25,7 +25,7 @@ class BasicSettingKit extends CommonKit {
 
   @override
   void tabAction() {
-    DoraemonkitCsx.openSettingPage();
+    DoKitCommonCsx.openSettingPage();
   }
 
   @override
