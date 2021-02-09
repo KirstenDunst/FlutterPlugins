@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-04 15:25:31
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 16:28:53
+ * @LastEditTime: 2021-02-09 14:42:41
  * @Description: 
  */
 // 视觉功能
@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 
 import 'basic_info.dart';
 import 'basic_location.dart';
+import 'basic_qr.dart';
 
 abstract class CommonKit implements IKit {
   static BuildContext rootNavigatorContext =
@@ -30,6 +31,7 @@ abstract class CommonKit implements IKit {
   void tabAction() {
     Navigator.push(rootNavigatorContext, MaterialPageRoute(builder: (_) {
       return Scaffold(
+          resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             title: Text(getKitName()),
           ),
@@ -59,6 +61,7 @@ class CommonKitManager {
       CommonKitName.KIT_BASE_CLEARCACHE: BasicClearCacheKit(),
       CommonKitName.KIT_BASE_USERDEFAULTS: BasicUserDefaultsKit(),
       CommonKitName.KIT_BASE_FILESYNC: BasicFileSyncKit(),
+      CommonKitName.KIT_BASE_QR: BasicQRKit(),
     });
   }
 
@@ -90,6 +93,7 @@ class CommonKitName {
   static const String KIT_BASE_CLEARCACHE = '清理缓存';
   static const String KIT_BASE_USERDEFAULTS = 'UserDefaults';
   static const String KIT_BASE_FILESYNC = 'DBView'; //文件同步助手
+  static const String KIT_BASE_QR = '二维码生成器';
 
   //专属于安卓的
   static const String KIT_BASE_DEVOPTIONS = '开发者选项';

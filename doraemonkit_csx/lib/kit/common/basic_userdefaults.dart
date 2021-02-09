@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 13:46:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 18:19:21
+ * @LastEditTime: 2021-02-09 14:18:38
  * @Description: 
  */
 import 'package:doraemonkit_csx/channel/common/common_channel.dart';
@@ -10,7 +10,6 @@ import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/model/userdefaults_model.dart';
 import 'package:doraemonkit_csx/widget/user_default_cell.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common.dart';
 

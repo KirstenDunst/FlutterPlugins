@@ -18,6 +18,11 @@ dependencies:
   path_provider: ^1.6.11
   share: ^0.6.5+4
   bot_toast: ^3.0.5
+  qr_flutter: ^3.2.0 # 二维码生成器
+  qr_code_scanner: ^0.3.2 # 二维码扫描
+  permission_handler: ^5.0.1+1 # 权限管理
+  webview_flutter: ^1.0.7
+
 
 dev_dependencies:
   flutter_test:
