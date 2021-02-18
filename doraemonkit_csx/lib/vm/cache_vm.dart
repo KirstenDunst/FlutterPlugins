@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-09 09:27:42
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 10:50:47
+ * @LastEditTime: 2021-02-18 15:34:22
  * @Description: 
  */
 
@@ -28,7 +28,7 @@ class CacheVM {
     if (await tempDir.exists()) {
       value = await _getTotalSizeOfFilesInDir(tempDir);
     }
-    var cacheSizeStr = ByteUtil.toByteString(value);
+    var cacheSizeStr = value.byteFormat();
     return cacheSizeStr;
   }
 

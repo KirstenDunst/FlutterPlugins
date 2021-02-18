@@ -324,7 +324,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                         TextSpan(
                             text: '  ${widget.item.method}'
                                 '  Cost:${widget.item.response.endTimestamp > 0 ? ((widget.item.response.endTimestamp - widget.item.startTimestamp).toString() + 'ms') : '-'} '
-                                '  Size:${widget.item.response.size > 0 ? (ByteUtil.toByteString(widget.item.response.size)) : '-'}',
+                                '  Size:${widget.item.response.size > 0 ? (widget.item.response.size.byteFormat()) : '-'}',
                             style: TextStyle(
                               fontSize: 9,
                               color: Color(0xff666666),

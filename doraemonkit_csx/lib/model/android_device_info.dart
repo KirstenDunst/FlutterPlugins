@@ -1,4 +1,4 @@
-import 'num_util.dart';
+import 'package:doraemonkit_csx/util/util.dart';
 
 /// Information derived from `android.os.Build`.
 ///
@@ -379,11 +379,11 @@ class AndroidStorage {
 
   @override
   String toString() {
-    return 'AndroidStorage{单位(Byte) 进程占内存总大小: ${totalPssB.sizeFormat()}, '
-        '其中:native内存:${summaryNativeHeap.sizeFormat()},系统内存:${summarySystem.sizeFormat()},总 swap 内存:${summaryTotalSwap.sizeFormat()},显存:${summaryGraphics.sizeFormat()},'
-        'java 内存:${summaryJavaHeap.sizeFormat()},其他私有内存:${summaryPrivateOther.sizeFormat()},静态代码、资源内存:${summaryCode.sizeFormat()},栈内存:${summaryStack.sizeFormat()}, '
-        '已使用的RAM: ${ramUseB.sizeFormat()}, 全部的RAM容量: ${ramAllB.sizeFormat()}, 可用RAM容量清理阈值: ${ramThreshold.sizeFormat()}, 设备空闲RAM: ${ramAvailableB.sizeFormat()}, lowMemory: $lowMemory, '
-        '已使用的ROM: ${romUseB.sizeFormat()}, 全部的ROM容量: ${romAllB.sizeFormat()}, '
-        '虚拟机已使用内存: ${jvmUseB.sizeFormat()}, 当前虚拟机可用的最大内存: ${jvmMaxB.sizeFormat()}, 当前虚拟机已分配的内存: ${jvmTotalB.sizeFormat()}, 当前虚拟机已分配内存中未使用的部分: ${jvmFreeB.sizeFormat()}}';
+    return 'AndroidStorage{单位(Byte) 进程占内存总大小: ${totalPssB.byteFormat()}, '
+        '其中:native内存:${summaryNativeHeap.byteFormat()},系统内存:${summarySystem.byteFormat()},总 swap 内存:${summaryTotalSwap.byteFormat()},显存:${summaryGraphics.byteFormat()},'
+        'java 内存:${summaryJavaHeap.byteFormat()},其他私有内存:${summaryPrivateOther.byteFormat()},静态代码、资源内存:${summaryCode.byteFormat()},栈内存:${summaryStack.byteFormat()}, '
+        '已使用的RAM: ${ramUseB.byteFormat()}, 全部的RAM容量: ${ramAllB.byteFormat()}, 可用RAM容量清理阈值: ${ramThreshold.byteFormat()}, 设备空闲RAM: ${ramAvailableB.byteFormat()}, lowMemory: $lowMemory, '
+        '已使用的ROM: ${romUseB.byteFormat()}, 全部的ROM容量: ${romAllB.byteFormat()}, '
+        '虚拟机已使用内存: ${jvmUseB.byteFormat()}, 当前虚拟机可用的最大内存: ${jvmMaxB.byteFormat()}, 当前虚拟机已分配的内存: ${jvmTotalB.byteFormat()}, 当前虚拟机已分配内存中未使用的部分: ${jvmFreeB.byteFormat()}}';
   }
 }

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 13:44:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 17:22:30
+ * @LastEditTime: 2021-02-18 15:10:38
  * @Description: 
  */
 import 'dart:async';
@@ -82,6 +82,7 @@ class _WebPageState extends State<WebPage> {
                   valueChanged: (text) {
                     _contentStr = text;
                   },
+                  skipBtnCall: _onTapSkipBtn,
                 ),
                 Positioned(
                   child: InkWell(
@@ -95,8 +96,8 @@ class _WebPageState extends State<WebPage> {
                         ),
                       ).then((result) {
                         if (result != null) {
-                          print('////////$result');
-                          // editKey.currentState.changeValue(result.toString());
+                          _contentStr = result.toString();
+                          editKey.currentState.changeValue(_contentStr);
                         }
                       });
                     },
@@ -149,18 +150,7 @@ class _WebPageState extends State<WebPage> {
 
   Widget _enterWebDetail() {
     return InkWell(
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode());
-        if (_contentStr == null || _contentStr.isEmpty) {
-          BotToast.showText(text: '内容不能为空');
-        } else if (!_contentStr.isWeb()) {
-          BotToast.showText(text: 'web地址格式不正确');
-        } else {
-          await WebVM.addSearchList(_contentStr);
-          _streamController.addStream(WebVM.getLocalWebSearchList().asStream());
-          EnterWebTool.enterWeb(context, _contentStr);
-        }
-      },
+      onTap: _onTapSkipBtn,
       child: Container(
         padding: EdgeInsets.only(right: 15),
         alignment: Alignment.center,
@@ -171,5 +161,18 @@ class _WebPageState extends State<WebPage> {
         ),
       ),
     );
+  }
+
+  Future _onTapSkipBtn() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    if (_contentStr == null || _contentStr.isEmpty) {
+      BotToast.showText(text: '内容不能为空');
+    } else if (!_contentStr.isWeb()) {
+      BotToast.showText(text: 'web地址格式不正确');
+    } else {
+      await WebVM.addSearchList(_contentStr);
+      _streamController.addStream(WebVM.getLocalWebSearchList().asStream());
+      EnterWebTool.enterWeb(context, _contentStr);
+    }
   }
 }

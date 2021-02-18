@@ -2,10 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-09 11:48:49
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 17:20:03
+ * @LastEditTime: 2021-02-18 16:12:42
  * @Description: 
  */
 import 'package:doraemonkit_csx/dokit.dart';
+import 'package:doraemonkit_csx/model/dokit_model.dart';
 import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/vm/web_vm.dart';
 import 'package:flutter/material.dart';
@@ -82,13 +83,14 @@ typedef ValueChanged = Function(String value);
 
 class EditView extends StatefulWidget {
   final ValueChanged valueChanged;
-  EditView({Key key, this.valueChanged}) : super(key: key);
+  final VoidCallback skipBtnCall;
+  EditView({Key key, this.valueChanged, this.skipBtnCall}) : super(key: key);
   @override
   EditViewState createState() => EditViewState();
 }
 
 class EditViewState extends State<EditView> {
-  var _contentStr;
+  String _contentStr;
 
   @override
   void initState() {
@@ -109,19 +111,47 @@ class EditViewState extends State<EditView> {
       child: TextFormField(
         decoration: InputDecoration(fillColor: Colors.blueGrey),
         maxLines: 900,
-        controller: TextEditingController(text: _contentStr ?? ''),
-        onChanged: (text) {
-          if (widget.valueChanged != null) {
-            widget.valueChanged(text);
+        textInputAction: TextInputAction.done,
+        onFieldSubmitted: (text) {
+          FocusScope.of(context).requestFocus(FocusNode());
+          _textChange(text);
+          if (widget.skipBtnCall != null) {
+            widget.skipBtnCall();
           }
         },
+        controller: TextEditingController.fromValue(
+          TextEditingValue(
+            text: _contentStr ?? '',
+            selection: TextSelection.fromPosition(
+              TextPosition(
+                  affinity: TextAffinity.downstream,
+                  offset: _contentStr.isEmpty ? 0 : _contentStr.length),
+            ),
+          ),
+        ),
+        onChanged: _textChange,
       ),
     );
+  }
+
+  void _textChange(String text) {
+    _contentStr = text;
+    if (widget.valueChanged != null) {
+      widget.valueChanged(_contentStr);
+    }
   }
 }
 
 class EnterWebTool {
   static void enterWeb(BuildContext context, String url) {
+    if (DoKit.doCustomCallMap != null &&
+        DoKit.doCustomCallMap.containsKey(DokitCallType.BASE_WEB)) {
+      CustomCallback callback = DoKit.doCustomCallMap[DokitCallType.BASE_WEB];
+      if (callback != null) {
+        callback(context, url);
+        return;
+      }
+    }
     Navigator.push(
       context,
       MaterialPageRoute(

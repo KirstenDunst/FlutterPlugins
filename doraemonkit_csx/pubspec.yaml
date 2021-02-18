@@ -22,6 +22,7 @@ dependencies:
   qr_code_scanner: ^0.3.2 # 二维码扫描
   permission_handler: ^5.0.1+1 # 权限管理
   webview_flutter: ^1.0.7
+  wakelock: ^0.2.1+1
 
 
 dev_dependencies:

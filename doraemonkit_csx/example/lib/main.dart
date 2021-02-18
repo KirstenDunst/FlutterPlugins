@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:doraemonkit_csx/doraemonkit_csx.dart';
+import 'package:doraemonkit_csx/model/dokit_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,6 +11,7 @@ void main() {
   DoKit.runApp(
     app: DoKitApp(MyApp()),
     useInRelease: true,
+    customCallMap: {DokitCallType.BASE_WEB: null},
     logCallback: (log) {
       String i = log;
     },

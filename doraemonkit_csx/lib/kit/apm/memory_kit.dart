@@ -289,7 +289,7 @@ class MemoryPageState extends State<MemoryPage> {
             style:
                 TextStyle(height: 1.5, fontSize: 10, color: Color(0xff333333))),
         TextSpan(
-            text: '${ByteUtil.toByteString(value.heapUsage)}',
+            text: '${value.heapUsage.byteFormat()}',
             style:
                 TextStyle(fontSize: 10, height: 1.5, color: Color(0xff666666))),
         TextSpan(
@@ -297,7 +297,7 @@ class MemoryPageState extends State<MemoryPage> {
             style:
                 TextStyle(fontSize: 10, height: 1.5, color: Color(0xff333333))),
         TextSpan(
-            text: '${ByteUtil.toByteString(value.heapCapacity)}',
+            text: '${value.heapCapacity.byteFormat()}',
             style:
                 TextStyle(fontSize: 10, height: 1.5, color: Color(0xff666666))),
         TextSpan(
@@ -305,7 +305,7 @@ class MemoryPageState extends State<MemoryPage> {
             style:
                 TextStyle(fontSize: 10, height: 1.5, color: Color(0xff333333))),
         TextSpan(
-            text: '${ByteUtil.toByteString(value.externalUsage)}',
+            text: '${value.externalUsage.byteFormat()}',
             style:
                 TextStyle(fontSize: 10, height: 1.5, color: Color(0xff666666))),
       ])));
@@ -332,7 +332,7 @@ class HeapItemWidget extends StatelessWidget {
           Container(
             width: 80,
             alignment: Alignment.center,
-            child: Text('${ByteUtil.toByteString(item.bytesCurrent)}',
+            child: Text('${item.bytesCurrent.byteFormat()}',
                 style: TextStyle(color: Color(0xff333333), fontSize: 12)),
           ),
           Container(

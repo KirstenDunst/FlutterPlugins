@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-09 11:44:07
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 16:37:45
+ * @LastEditTime: 2021-02-18 15:19:27
  * @Description: 
  */
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +20,7 @@ class WebVM {
   }
 
   /*
-   * 添加搜索历史
+   * 添加搜索历史,最多十条
    */
   static Future<bool> addSearchList(String url) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

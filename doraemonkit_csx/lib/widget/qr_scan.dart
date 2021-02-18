@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-09 16:54:34
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 17:49:24
+ * @LastEditTime: 2021-02-18 15:09:04
  * @Description: 
  */
 import 'dart:io';
@@ -18,15 +18,23 @@ class _QRControllerState extends State<QRController> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController _qrController;
+  bool _isOver;
 
   @override
   void reassemble() {
     super.reassemble();
+    print('触发。。。。。');
     if (Platform.isAndroid) {
       _qrController.pauseCamera();
     } else if (Platform.isIOS) {
       _qrController.resumeCamera();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isOver = false;
   }
 
   @override
@@ -49,11 +57,12 @@ class _QRControllerState extends State<QRController> {
   }
 
   void _onQRViewCreated(QRViewController controller) async {
-    this._qrController = controller;
+    _qrController = controller;
     controller.scannedDataStream.listen((scanData) {
-      Future.delayed(Duration.zero, () {
+      if (!_isOver) {
+        _isOver = true;
         Navigator.of(context, rootNavigator: true).pop(scanData.code);
-      });
+      }
     });
   }
 

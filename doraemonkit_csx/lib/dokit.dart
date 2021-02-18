@@ -8,11 +8,14 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:flutter/widgets.dart' as dart;
 import 'package:doraemonkit_csx/kit/kit_page.dart';
-export 'package:doraemonkit_csx/ui/dokit_app.dart';
+import 'package:wakelock/wakelock.dart';
+
+import 'model/dokit_model.dart';
 
 typedef DoKitAppCreator = Function();
 typedef LogCallback = Function(String);
 typedef ExceptionCallback = Function(dynamic, StackTrace);
+typedef CustomCallback = Function(BuildContext context, dynamic value);
 
 class DoKit {
   static final String PACKAGE_NAME = 'doraemonkit_csx';
@@ -22,6 +25,9 @@ class DoKit {
 
   //记录当前zone
   static Zone _zone;
+
+  //记录外附回调
+  static Map<DokitCallType, CustomCallback> doCustomCallMap;
 
   // 如果在runApp之前执行了WidgetsFlutterBinding.ensureInitialized，会导致methodchannel功能不可用，可以在runApp前先调用一下ensureDoKitBinding
   static void _ensureDoKitBinding({bool useInRelease = false}) {
@@ -36,6 +42,7 @@ class DoKit {
       DoKitAppCreator appCreator,
       bool useInRelease = false,
       LogCallback logCallback,
+      Map<DokitCallType, CustomCallback> customCallMap,
       ExceptionCallback exceptionCallback,
       Function releaseAction}) async {
     assert(
@@ -52,6 +59,7 @@ class DoKit {
       }
       return;
     }
+    doCustomCallMap = customCallMap;
     runZoned(
       () async => {
         _ensureDoKitBinding(useInRelease: useInRelease),
@@ -80,7 +88,8 @@ class DoKit {
     DoKitWidgetsFlutterBinding.ensureInitialized()
       ..scheduleAttachRootWidget(wrapper)
       ..scheduleWarmUpFrame();
-    addEntrance();
+    Wakelock.enable();
+    _addEntrance();
   }
 
   static void _collectLog(String line) {
@@ -92,7 +101,7 @@ class DoKit {
         LogBean.TYPE_ERROR, '${details?.toString()}\n${stack?.toString()}');
   }
 
-  static void addEntrance() {
+  static void _addEntrance() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DoKitBtn floatBtn = DoKitBtn();
       floatBtn.addToOverlay();
