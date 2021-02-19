@@ -1,3 +1,10 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2021-02-04 15:25:31
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2021-02-19 10:44:12
+ * @Description: 
+ */
 // 视觉功能
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
 import 'package:doraemonkit_csx/kit/visual/view_check.dart';
@@ -9,7 +16,7 @@ class VisualKitManager {
     VisualKitName.KIT_VIEW_CHECK: ViewCheckerKit.instance,
   };
 
-  VisualKitManager._privateConstructor() {}
+  VisualKitManager._privateConstructor();
 
   static final VisualKitManager _instance =
       VisualKitManager._privateConstructor();

@@ -5,6 +5,7 @@ import 'package:doraemonkit_csx/widget/dash_decoration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vm_service/vm_service.dart';
 
 import '../dokit.dart';
 
@@ -68,21 +69,21 @@ class _KitPage extends State<KitPage> {
                             )),
                       ])),
                     ),
-                    buildResidentView(context)
+                    _buildResidentView(context)
                   ],
                 ),
                 alignment: Alignment.center,
               ),
             ),
             Container(width: width, height: 12, color: Color(0xfff5f6f7)),
-            _getContentWidget(
-                '基本工具', '  [拖动图标放入常驻工具]', buildNormalView(context), width,
+            _getContentWidget('基本工具', '  [拖动图标放入常驻工具]',
+                KitPageManager.instance.getNormalKit(), width,
                 needBottomSpace: true),
-            _getContentWidget(
-                '性能检测工具', '  [拖动图标放入常驻工具]', buildApmView(context), width,
+            _getContentWidget('性能检测工具', '  [拖动图标放入常驻工具]',
+                KitPageManager.instance.getApmKit(), width,
                 needBottomSpace: true),
-            _getContentWidget(
-                '视觉工具', '  [拖动图标放入常驻工具]', buildVisualView(context), width),
+            _getContentWidget('视觉工具', '  [拖动图标放入常驻工具]',
+                KitPageManager.instance.getVisualKit(), width),
           ],
         ),
       ),
@@ -90,7 +91,7 @@ class _KitPage extends State<KitPage> {
   }
 
   Widget _getContentWidget(
-      String titleStr, String subTitle, Widget contentWidget, double width,
+      String titleStr, String subTitle, Map<String, IKit> kitMap, double width,
       {bool needBottomSpace = false}) {
     return Column(
       children: [
@@ -123,7 +124,7 @@ class _KitPage extends State<KitPage> {
                     ),
                   ),
                 ),
-                contentWidget,
+                _buildIKitView(kitMap),
               ],
             ),
             alignment: Alignment.center,
@@ -136,24 +137,7 @@ class _KitPage extends State<KitPage> {
     );
   }
 
-  bool _inResidentContainerEdge(Offset offset) {
-    if (offset == null) {
-      return false;
-    }
-    Size size = _residentContainerKey.currentContext.size;
-    Offset position =
-        (_residentContainerKey.currentContext.findRenderObject() as RenderBox)
-            .localToGlobal(Offset.zero);
-    Rect rc1 = Rect.fromLTWH(offset.dx, offset.dy, 80, 80);
-    Rect rc2 = Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
-
-    return (rc1.left + rc1.width > rc2.left &&
-        rc2.left + rc2.width > rc1.left &&
-        rc1.top + rc1.height > rc2.top &&
-        rc2.top + rc2.height > rc1.top);
-  }
-
-  Widget buildResidentView(context) {
+  Widget _buildResidentView(context) {
     List<Widget> widgets = <Widget>[];
     double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
     KitPageManager.instance.getResidentKit().forEach((key, value) {
@@ -201,10 +185,10 @@ class _KitPage extends State<KitPage> {
     return wrap;
   }
 
-  Widget buildNormalView(context) {
+  Widget _buildIKitView(Map<String, IKit> kitMap) {
     List<Widget> widgets = <Widget>[];
     double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
-    KitPageManager.instance.getNormalKit().forEach((key, value) {
+    kitMap.forEach((key, value) {
       widgets.add(
         Draggable(
           child: MaterialButton(
@@ -249,100 +233,21 @@ class _KitPage extends State<KitPage> {
     return wrap;
   }
 
-  Widget buildApmView(context) {
-    List<Widget> widgets = <Widget>[];
-    double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
-    KitPageManager.instance.getApmKit().forEach((key, value) {
-      widgets.add(
-        Draggable(
-          child: MaterialButton(
-              child: KitItem(value),
-              onPressed: () {
-                setState(() {
-                  value.tabAction();
-                });
-              },
-              padding: EdgeInsets.all(0),
-              minWidth: 40),
-          feedback: KitItem(value),
-          onDragStarted: () => {
-            setState(() {
-              onDrag = true;
-            })
-          },
-          onDragEnd: (detail) => {
-            setState(() {
-              if (_inResidentContainerEdge(detail.offset)) {
-                KitPageManager.instance.addResidentKit(key);
-              }
-              onDrag = false;
-            })
-          },
-          onDraggableCanceled: (v, offset) => {
-            setState(() {
-              if (_inResidentContainerEdge(offset)) {
-                KitPageManager.instance.addResidentKit(key);
-              }
-              onDrag = false;
-            })
-          },
-        ),
-      );
-    });
-    Wrap wrap = Wrap(
-      spacing: round,
-      runSpacing: 15,
-      children: widgets,
-    );
-    return wrap;
-  }
+  bool _inResidentContainerEdge(Offset offset) {
+    if (offset == null) {
+      return false;
+    }
+    Size size = _residentContainerKey.currentContext.size;
+    Offset position =
+        (_residentContainerKey.currentContext.findRenderObject() as RenderBox)
+            .localToGlobal(Offset.zero);
+    Rect rc1 = Rect.fromLTWH(offset.dx, offset.dy, 80, 80);
+    Rect rc2 = Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
 
-  Widget buildVisualView(context) {
-    List<Widget> widgets = <Widget>[];
-    double round = (MediaQuery.of(context).size.width - 80 * 4 - 30) / 3;
-    KitPageManager.instance.getVisualKit().forEach((key, value) {
-      widgets.add(
-        Draggable(
-          child: MaterialButton(
-              child: KitItem(value),
-              onPressed: () {
-                setState(() {
-                  value.tabAction();
-                });
-              },
-              padding: EdgeInsets.all(0),
-              minWidth: 40),
-          feedback: KitItem(value),
-          onDragStarted: () => {
-            setState(() {
-              onDrag = true;
-            })
-          },
-          onDragEnd: (detail) => {
-            setState(() {
-              if (_inResidentContainerEdge(detail.offset)) {
-                KitPageManager.instance.addResidentKit(key);
-              }
-              onDrag = false;
-            })
-          },
-          onDraggableCanceled: (v, offset) => {
-            setState(() {
-              if (_inResidentContainerEdge(offset)) {
-                KitPageManager.instance.addResidentKit(key);
-              }
-              onDrag = false;
-            })
-          },
-        ),
-      );
-    });
-    Wrap wrap = Wrap(
-      spacing: round,
-      runSpacing: 15,
-      children: widgets,
-    );
-    return wrap;
+    return (rc1.left + rc1.width > rc2.left &&
+        rc2.left + rc2.width > rc1.left &&
+        rc1.top + rc1.height > rc2.top &&
+        rc2.top + rc2.height > rc1.top);
   }
 }
 

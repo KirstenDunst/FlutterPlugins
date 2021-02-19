@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 13:46:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 14:18:38
+ * @LastEditTime: 2021-02-18 17:36:01
  * @Description: 
  */
 import 'package:doraemonkit_csx/channel/common/common_channel.dart';
@@ -41,8 +41,8 @@ class UserDefaultsPage extends StatefulWidget {
 class _UserDefaultsPageState extends State<UserDefaultsPage> {
   @override
   void initState() {
-    super.initState();
     _getUserDefault();
+    super.initState();
   }
 
   @override
@@ -53,7 +53,7 @@ class _UserDefaultsPageState extends State<UserDefaultsPage> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         List<UserDefaultModel> result = snapshot.data;
         return ListView.separated(
-          itemCount: result.length,
+          itemCount: result?.length ?? 0,
           itemBuilder: (BuildContext context, int index) {
             return UserDefaultCellPage(result[index]);
           },
@@ -85,4 +85,3 @@ class _UserDefaultsPageState extends State<UserDefaultsPage> {
     return tempResult;
   }
 }
-

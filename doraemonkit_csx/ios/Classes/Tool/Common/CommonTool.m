@@ -72,7 +72,12 @@
 //获取所有userdefault存储的数据
 + (NSDictionary *)getUserDefaults {
     NSDictionary* tempDic = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-    return tempDic;
+    //解决语言跨域问题，全部valu转化字符串处理：'NSInternalInconsistencyException', reason: 'Unsupported value for standard codec'
+    NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
+    for (NSString *key in tempDic.allKeys) {
+        [resultDic setValue:[NSString stringWithFormat:@"%@",tempDic[key]] forKey:key];
+    }
+    return resultDic;
 }
 
 //本地存储

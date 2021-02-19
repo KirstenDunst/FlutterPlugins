@@ -57,7 +57,7 @@ class FpsKit extends ApmKit {
 
   @override
   Widget createDisplayPage() {
-    return new FpsPage();
+    return FpsPage();
   }
 
   @override

@@ -82,10 +82,10 @@ class SharedPreferencesPlugin {
     }
 
     // Filter preferences to only those set by the flutter app.
-    public static Map<String, Object> getUserDefaults(Context context) throws IOException {
+    public static Map<String, String> getUserDefaults(Context context) throws IOException {
         android.content.SharedPreferences preferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         Map<String, ?> allPrefs = preferences.getAll();
-        Map<String, Object> filteredPrefs = new HashMap<>();
+        Map<String, String> filteredPrefs = new HashMap<>();
         for (String key : allPrefs.keySet()) {
             if (key.startsWith("flutter.")) {
                 Object value = allPrefs.get(key);
@@ -117,7 +117,7 @@ class SharedPreferencesPlugin {
                     }
                     value = listValue;
                 }
-                filteredPrefs.put(key, value);
+                filteredPrefs.put(key, value.toString());
             }
         }
         return filteredPrefs;

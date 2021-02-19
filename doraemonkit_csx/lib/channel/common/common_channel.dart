@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 11:59:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 14:33:19
+ * @LastEditTime: 2021-02-18 17:36:49
  * @Description: 
  */
 import 'dart:async';
@@ -23,7 +23,7 @@ class DoKitCommonCsx {
   }
 
   /*
-   * 获取UserDefault的所有存储
+   * 获取UserDefault的所有存储(这里为了避免特殊不同语言类型的问题，key和value已经都强制转为字符串传输接收了)
    */
   static Future<Map> get getUserDefaults async {
     final Map result = await _channel.invokeMethod('getUserDefaults');

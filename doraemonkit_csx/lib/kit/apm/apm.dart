@@ -20,7 +20,7 @@ class ApmKitManager {
     ApmKitName.KIT_HTTP: HttpKit(),
   };
 
-  ApmKitManager._privateConstructor() {}
+  ApmKitManager._privateConstructor();
 
   static final ApmKitManager _instance = ApmKitManager._privateConstructor();
 
@@ -65,7 +65,7 @@ abstract class IKit {
   String getKitName();
 
   String getIcon();
-  
+
   // Widget nextVC();
   void tabAction();
 }
@@ -118,7 +118,21 @@ abstract class ApmKit implements IKit {
   }
 
   @override
-  void tabAction() {}
+  void tabAction() {
+    Navigator.push(
+      rootNavigatorKey.currentState.overlay.context,
+      MaterialPageRoute(
+        builder: (_) {
+          return Scaffold(
+              resizeToAvoidBottomPadding: false,
+              appBar: AppBar(
+                title: Text(getKitName()),
+              ),
+              body: createDisplayPage());
+        },
+      ),
+    );
+  }
 
   @override
   bool save(IInfo info) {

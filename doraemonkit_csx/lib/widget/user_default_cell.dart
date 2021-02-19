@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-08 17:37:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 17:42:46
+ * @LastEditTime: 2021-02-18 18:04:28
  * @Description: 
  */
 import 'package:doraemonkit_csx/channel/common/common_channel.dart';
@@ -34,7 +34,11 @@ class _UserDefaultCellPageState extends State<UserDefaultCellPage> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         alignment: Alignment.centerLeft,
-        child: Text(widget.userModel.key),
+        child: Text(
+          widget.userModel.key,
+          style: TextStyle(
+              color: widget.userModel.isFlutter ? Colors.orange : Colors.black),
+        ),
       ),
     );
   }
