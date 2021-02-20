@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-09 11:06:31
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-18 18:26:36
+ * @LastEditTime: 2021-02-19 10:58:29
  * @Description: 
  */
 import 'package:doraemonkit_csx/resource/assets.dart';
@@ -14,7 +14,7 @@ import 'common.dart';
 class BasicQRKit extends CommonKit {
   @override
   String getIcon() {
-    return Images.dk_web_door_history_qrcode;
+    return Images.dk_qr;
   }
 
   @override

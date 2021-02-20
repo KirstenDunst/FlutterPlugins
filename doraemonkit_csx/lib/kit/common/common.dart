@@ -2,10 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-04 15:25:31
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-09 14:42:41
+ * @LastEditTime: 2021-02-20 13:09:10
  * @Description: 
  */
-// 视觉功能
+
+// 基本工具
 import 'dart:io';
 
 import 'package:doraemonkit_csx/kit/apm/apm.dart';
@@ -29,14 +30,19 @@ abstract class CommonKit implements IKit {
       rootNavigatorKey.currentState.overlay.context;
   @override
   void tabAction() {
-    Navigator.push(rootNavigatorContext, MaterialPageRoute(builder: (_) {
-      return Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Text(getKitName()),
-          ),
-          body: createDisplayPage());
-    }));
+    Navigator.push(
+      rootNavigatorContext,
+      MaterialPageRoute(
+        builder: (_) {
+          return Scaffold(
+              resizeToAvoidBottomPadding: false,
+              appBar: AppBar(
+                title: Text(getKitName()),
+              ),
+              body: createDisplayPage());
+        },
+      ),
+    );
   }
 
   Widget createDisplayPage();

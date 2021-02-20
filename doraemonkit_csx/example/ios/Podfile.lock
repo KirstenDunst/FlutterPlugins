@@ -1,7 +1,10 @@
 PODS:
   - doraemonkit_csx (0.0.1):
     - Flutter
+    - Masonry (~> 1.1.0)
+    - ReactiveObjC (~> 3.1.1)
   - Flutter (1.0.0)
+  - Masonry (1.1.0)
   - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
     - Flutter
@@ -12,6 +15,7 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
+  - ReactiveObjC (3.1.1)
   - share (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -35,7 +39,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Masonry
     - MTBBarcodeScanner
+    - ReactiveObjC
 
 EXTERNAL SOURCES:
   doraemonkit_csx:
@@ -60,13 +66,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  doraemonkit_csx: 7b631b6f3e98a29907f13db3d1ce57f270270d9f
+  doraemonkit_csx: 26f84bc338c35b2945143e3bbb991244496b52b5
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107

@@ -13,9 +13,12 @@ A new flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
+  s.resources = 'Assets/*.png'
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency 'ReactiveObjC', '~> 3.1.1'
+  s.dependency 'Masonry', '~> 1.1.0'
   s.platform = :ios, '8.0'
 
 end

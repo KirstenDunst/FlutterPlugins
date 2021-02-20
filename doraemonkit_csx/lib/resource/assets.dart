@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-04 18:10:20
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-07 17:35:02
+ * @LastEditTime: 2021-02-19 10:57:36
  * @Description: 资源库
  */
 const String _assets = 'assets/';
@@ -44,4 +44,5 @@ class Images {
   static const String dokit_dir = '${prefix}dokit_dir.png';
   static const String dokit_expand_no = '${prefix}dokit_expand_no.png';
   static const String dokit_file = '${prefix}dokit_file.png';
+  static const String dk_qr = '${prefix}dk_qr.png';
 }

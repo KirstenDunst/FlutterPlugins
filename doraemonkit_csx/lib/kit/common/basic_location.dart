@@ -2,13 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 13:42:11
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-07 13:48:37
+ * @LastEditTime: 2021-02-19 17:13:47
  * @Description: 
  */
 
+import 'dart:io';
+
 import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:flutter/material.dart';
-
 import 'common.dart';
 
 class BasicLocationsKit extends CommonKit {
@@ -24,6 +25,15 @@ class BasicLocationsKit extends CommonKit {
 
   @override
   Widget createDisplayPage() {
-    return Container();
+    if (Platform.isAndroid) {
+      return AndroidView(
+        viewType: 'MyLocationPlatformView',
+      );
+    } else if (Platform.isIOS) {
+      return UiKitView(
+        viewType: 'MyLocationPlatformView',
+      );
+    }
+    return Text('platform is not yet supported by this plugin');
   }
 }
