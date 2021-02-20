@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-08 11:58:36
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 16:57:03
+ * @LastEditTime: 2021-02-20 18:36:39
  * @Description: 
  */
 import 'dart:convert';
@@ -83,7 +83,9 @@ class _SandboxCellState extends State<SandboxCell> {
               appBar: AppBar(
                 title: Text(widget.model.name),
               ),
-              body: Text(str),
+              body: SingleChildScrollView(
+                child: Text(str),
+              ),
             );
           }));
         });
