@@ -1,11 +1,17 @@
 PODS:
+  - AvoidCrash (2.5.2)
   - device_info_csx (0.0.1):
+    - AvoidCrash
     - Flutter
   - Flutter (1.0.0)
 
 DEPENDENCIES:
   - device_info_csx (from `.symlinks/plugins/device_info_csx/ios`)
   - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - AvoidCrash
 
 EXTERNAL SOURCES:
   device_info_csx:
@@ -14,9 +20,10 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  device_info_csx: b6081dc9b13bb71b90383587da54264993c0ed46
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  AvoidCrash: 28c6916fe19bd2b84126b8dec7cbe61c9a12741d
+  device_info_csx: b79c894a872620ea942a75697b149751c7d53a83
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

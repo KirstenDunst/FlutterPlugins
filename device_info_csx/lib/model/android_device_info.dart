@@ -1,3 +1,5 @@
+import 'num_util.dart';
+
 /// Information derived from `android.os.Build`.
 ///
 /// See: https://developer.android.com/reference/android/os/Build.html
@@ -17,14 +19,14 @@ class AndroidDeviceInfo {
     this.manufacturer,
     this.model,
     this.product,
-    List<String> supported32BitAbis,
-    List<String> supported64BitAbis,
-    List<String> supportedAbis,
+    required List<String> supported32BitAbis,
+    required List<String> supported64BitAbis,
+    required List<String> supportedAbis,
     this.tags,
     this.type,
     this.isPhysicalDevice,
     this.androidId,
-    List<String> systemFeatures,
+    required List<String> systemFeatures,
     this.storage,
   })  : supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
         supported64BitAbis = List<String>.unmodifiable(supported64BitAbis),
@@ -32,43 +34,43 @@ class AndroidDeviceInfo {
         systemFeatures = List<String>.unmodifiable(systemFeatures);
 
   /// Android operating system version values derived from `android.os.Build.VERSION`.
-  final AndroidBuildVersion version;
+  final AndroidBuildVersion? version;
 
   /// The name of the underlying board, like "goldfish".
-  final String board;
+  final String? board;
 
   /// The system bootloader version number.
-  final String bootloader;
+  final String? bootloader;
 
   /// The consumer-visible brand with which the product/hardware will be associated, if any.
-  final String brand;
+  final String? brand;
 
   /// The name of the industrial design.
-  final String device;
+  final String? device;
 
   /// A build ID string meant for displaying to the user.
-  final String display;
+  final String? display;
 
   /// A string that uniquely identifies this build.
-  final String fingerprint;
+  final String? fingerprint;
 
   /// The name of the hardware (from the kernel command line or /proc).
-  final String hardware;
+  final String? hardware;
 
   /// Hostname.
-  final String host;
+  final String? host;
 
   /// Either a changelist number, or a label like "M4-rc20".
-  final String id;
+  final String? id;
 
   /// The manufacturer of the product/hardware.
-  final String manufacturer;
+  final String? manufacturer;
 
   /// The end-user-visible name for the end product.
-  final String model;
+  final String? model;
 
   /// The name of the overall product.
-  final String product;
+  final String? product;
 
   /// An ordered list of 32 bit ABIs supported by this device.
   final List<String> supported32BitAbis;
@@ -80,16 +82,16 @@ class AndroidDeviceInfo {
   final List<String> supportedAbis;
 
   /// Comma-separated tags describing the build, like "unsigned,debug".
-  final String tags;
+  final String? tags;
 
   /// The type of build, like "user" or "eng".
-  final String type;
+  final String? type;
 
   /// `false` if the application is running in an emulator, `true` otherwise.
-  final bool isPhysicalDevice;
+  final bool? isPhysicalDevice;
 
   /// The Android hardware device ID that is unique between the device + user and app signing.
-  final String androidId;
+  final String? androidId;
 
   /// Describes what features are available on the current device.
   ///
@@ -108,7 +110,7 @@ class AndroidDeviceInfo {
   final List<String> systemFeatures;
 
   /// device storage detail.
-  final Storage storage;
+  final AndroidStorage? storage;
 
   /// Deserializes from the message received from [_kChannel].
   static AndroidDeviceInfo fromMap(Map<String, dynamic> map) {
@@ -135,13 +137,13 @@ class AndroidDeviceInfo {
       isPhysicalDevice: map['isPhysicalDevice'],
       androidId: map['androidId'],
       systemFeatures: _fromList(map['systemFeatures']),
-      storage: Storage._fromMap(map['storage'].cast<String, dynamic>()),
+      storage: AndroidStorage._fromMap(map['storage'].cast<String, dynamic>()),
     );
   }
 
   Map<String, dynamic> toJson() {
     var data = <String, dynamic>{};
-    data['version'] = version.toJson();
+    data['version'] = version!.toJson();
     data['board'] = board;
     data['bootloader'] = bootloader;
     data['brand'] = brand;
@@ -162,7 +164,7 @@ class AndroidDeviceInfo {
     data['isPhysicalDevice'] = isPhysicalDevice;
     data['androidId'] = androidId;
     data['systemFeatures'] = systemFeatures;
-    data['storage'] = storage.toJson();
+    data['storage'] = storage!.toJson();
     return data;
   }
 
@@ -190,29 +192,29 @@ class AndroidBuildVersion {
 
   /// The base OS build the product is based on.
   /// This is only available on Android 6.0 or above.
-  String baseOS;
+  String? baseOS;
 
   /// The developer preview revision of a prerelease SDK.
   /// This is only available on Android 6.0 or above.
-  int previewSdkInt;
+  int? previewSdkInt;
 
   /// The user-visible security patch level.
   /// This is only available on Android 6.0 or above.
-  final String securityPatch;
+  final String? securityPatch;
 
   /// The current development codename, or the string "REL" if this is a release build.
-  final String codename;
+  final String? codename;
 
   /// The internal value used by the underlying source control to represent this build.
-  final String incremental;
+  final String? incremental;
 
   /// The user-visible version string.
-  final String release;
+  final String? release;
 
   /// The user-visible SDK version of the framework.
   ///
   /// Possible values are defined in: https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
-  final int sdkInt;
+  final int? sdkInt;
 
   /// Deserializes from the map message received from [_kChannel].
   static AndroidBuildVersion _fromMap(Map<String, dynamic> map) {
@@ -240,38 +242,148 @@ class AndroidBuildVersion {
   }
 }
 
-class Storage {
-  // 已使用的ram，单位byte
-  num ramUseB;
-  // 全部的ram容量，单位byte
-  num ramAllB;
-  // 已使用的rom，单位byte
-  num romUseB;
-  // 全部的rom容量，单位byte
-  num romAllB;
+class AndroidStorage {
+  /// 应用进程占内存总大小
+  final num? totalPssB;
 
-  Storage({
+  /// summary开头字段都是Android 23 及以后能获取
+  ///java 内存
+  final num? summaryJavaHeap;
+
+  ///native 内存
+  final num? summaryNativeHeap;
+
+  ///静态代码，资源内存
+  final num? summaryCode;
+
+  ///栈内存
+  final num? summaryStack;
+
+  ///显存
+  final num? summaryGraphics;
+
+  ///其他私有内存
+  final num? summaryPrivateOther;
+
+  ///系统内存
+  final num? summarySystem;
+
+  ///总 swap 内存
+  final num? summaryTotalSwap;
+
+  /// 已使用的ram，单位byte
+  final num? ramUseB;
+
+  /// 全部的ram容量，单位byte
+  final num? ramAllB;
+
+  /// 可用ram容量小于此值时，系统开始清理进程
+  final num? ramThreshold;
+
+  /// 设备空闲内存,ramAvailableB = ramAllB - ramUseB
+  final num? ramAvailableB;
+
+  /// 是否低内存
+  final bool? lowMemory;
+
+  /// 已使用的rom，单位byte
+  final num? romUseB;
+
+  /// 全部的rom容量，单位byte
+  final num? romAllB;
+
+  /// 虚拟机已使用内存
+  final num? jvmUseB;
+
+  /// 当前虚拟机可用的最大内存
+  final num? jvmMaxB;
+
+  /// 当前虚拟机已分配的内存
+  final num? jvmTotalB;
+
+  /// 当前虚拟机已分配内存中未使用的部分
+  final num? jvmFreeB;
+
+  AndroidStorage({
+    this.totalPssB,
+    this.summaryJavaHeap,
+    this.summaryNativeHeap,
+    this.summaryCode,
+    this.summaryStack,
+    this.summaryGraphics,
+    this.summaryPrivateOther,
+    this.summarySystem,
+    this.summaryTotalSwap,
     this.ramUseB,
     this.ramAllB,
+    this.ramThreshold,
+    this.ramAvailableB,
+    this.lowMemory,
     this.romUseB,
     this.romAllB,
+    this.jvmUseB,
+    this.jvmMaxB,
+    this.jvmTotalB,
+    this.jvmFreeB,
   });
 
-  static Storage _fromMap(Map<String, dynamic> map) {
-    return Storage(
+  static AndroidStorage _fromMap(Map<String, dynamic> map) {
+    return AndroidStorage(
+      totalPssB: map['totalPssB'],
+      summaryJavaHeap: map['summaryJavaHeap'],
+      summaryNativeHeap: map['summaryNativeHeap'],
+      summaryCode: map['summaryCode'],
+      summaryStack: map['summaryStack'],
+      summaryGraphics: map['summaryGraphics'],
+      summaryPrivateOther: map['summaryPrivateOther'],
+      summarySystem: map['summarySystem'],
+      summaryTotalSwap: map['summaryTotalSwap'],
       ramUseB: map['ramUseB'],
       ramAllB: map['ramAllB'],
+      ramThreshold: map['ramThreshold'],
+      ramAvailableB: map['ramAvailableB'],
+      lowMemory: map['lowMemory'],
       romUseB: map['romUseB'],
       romAllB: map['romAllB'],
+      jvmUseB: map['jvmUseB'],
+      jvmMaxB: map['jvmMaxB'],
+      jvmTotalB: map['jvmTotalB'],
+      jvmFreeB: map['jvmFreeB'],
     );
   }
 
   Map<String, dynamic> toJson() {
     var data = <String, dynamic>{};
+    data['totalPssB'] = totalPssB;
+    data['summaryJavaHeap'] = summaryJavaHeap;
+    data['summaryNativeHeap'] = summaryNativeHeap;
+    data['summaryCode'] = summaryCode;
+    data['summaryStack'] = summaryStack;
+    data['summaryGraphics'] = summaryGraphics;
+    data['summaryPrivateOther'] = summaryPrivateOther;
+    data['summarySystem'] = summarySystem;
+    data['summaryTotalSwap'] = summaryTotalSwap;
     data['ramUseB'] = ramUseB;
     data['ramAllB'] = ramAllB;
+    data['ramThreshold'] = ramThreshold;
+    data['ramAvailableB'] = ramAvailableB;
+    data['lowMemory'] = lowMemory;
     data['romUseB'] = romUseB;
     data['romAllB'] = romAllB;
+    data['jvmUseB'] = jvmUseB;
+    data['jvmMaxB'] = jvmMaxB;
+    data['jvmTotalB'] = jvmTotalB;
+    data['jvmFreeB'] = jvmFreeB;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'AndroidStorage{单位(Byte) 进程占内存总大小: ${totalPssB!.sizeFormat()}, '
+        '其中:native内存:${summaryNativeHeap!.sizeFormat()},系统内存:${summarySystem!.sizeFormat()},总 swap 内存:${summaryTotalSwap!.sizeFormat()},显存:${summaryGraphics!.sizeFormat()},'
+        'java 内存:${summaryJavaHeap!.sizeFormat()},其他私有内存:${summaryPrivateOther!.sizeFormat()},静态代码、资源内存:${summaryCode!.sizeFormat()},栈内存:${summaryStack!.sizeFormat()}, '
+        '已使用的RAM: ${ramUseB!.sizeFormat()}, 全部的RAM容量: ${ramAllB!.sizeFormat()}, 可用RAM容量清理阈值: ${ramThreshold!.sizeFormat()}, 设备空闲RAM: ${ramAvailableB!.sizeFormat()}, lowMemory: $lowMemory, '
+        '已使用的ROM: ${romUseB!.sizeFormat()}, 全部的ROM容量: ${romAllB!.sizeFormat()}, '
+        '虚拟机已使用内存: ${jvmUseB!.sizeFormat()}, 当前虚拟机可用的最大内存: ${jvmMaxB!.sizeFormat()}, 当前虚拟机已分配的内存: ${jvmTotalB!.sizeFormat()}, 当前虚拟机已分配内存中未使用的部分: ${jvmFreeB!.sizeFormat()}}';
   }
 }

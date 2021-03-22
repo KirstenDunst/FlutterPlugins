@@ -1,6 +1,7 @@
 #import "DeviceInfoCsxPlugin.h"
 #import <sys/utsname.h>
 #import <mach/mach.h>
+#import <AvoidCrash/AvoidCrash.h>
 #import <sys/sysctl.h>
 
 #ifndef __OPTIMIZE__
@@ -11,6 +12,7 @@
 
 @implementation DeviceInfoCsxPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+  [AvoidCrash becomeEffective];
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"device_info_csx"
             binaryMessenger:[registrar messenger]];
@@ -107,7 +109,7 @@
   natural_t mem_free = vm_stat.free_count * pagesize;
   natural_t mem_total = mem_used + mem_free;
   NSLog(@"运行内存已用: %u 可用: %u 总共: %u", mem_used, mem_free, mem_total);
-  return @[@(mem_total), @(mem_used)];
+  return @[@(mem_total==nil?0:mem_total), @(mem_used==nil?0:mem_used)];
 }
 
 - (NSArray *)getROMDetail{
