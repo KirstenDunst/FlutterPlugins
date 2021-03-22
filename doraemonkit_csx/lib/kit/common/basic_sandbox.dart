@@ -2,13 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-07 11:37:24
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-08 16:59:27
+ * @LastEditTime: 2021-03-11 11:27:37
  * @Description: 沙盒浏览器
  */
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:doraemonkit_csx/resource/assets.dart';
 import 'package:doraemonkit_csx/model/sandbox_info.dart';
 import 'package:doraemonkit_csx/widget/sandbox_cell.dart';
@@ -66,8 +65,8 @@ class _SandBoxPageState extends State<SandBoxPage>
         return ListView.separated(
           itemCount: arr.length,
           itemBuilder: (BuildContext context, int index) {
-            return SandboxCell(arr[index],(){       
-                _getFileStream();
+            return SandboxCell(arr[index], () {
+              _getFileStream();
             });
           },
           separatorBuilder: (BuildContext context, int index) {
@@ -104,9 +103,14 @@ class _SandBoxPageState extends State<SandBoxPage>
     if (await baseDire.exists()) {
       baseDire.listSync().forEach((fileSys) async {
         var isDire = await Directory(fileSys.path).exists();
+        var byte = 0;
+        if (!isDire) {
+          byte = (await File(fileSys.path).length());
+        }
         tempArr.add(SandBoxModel(
           name: fileSys.path.replaceAll(fileSys.parent.path + '/', ''),
           path: fileSys.path,
+          byte: byte,
           fileType: isDire ? FileType.Directory : FileType.File,
         ));
       });

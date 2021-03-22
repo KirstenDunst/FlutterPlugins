@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: DoKitTestPage(),
+      routes: {TestPage2.routeName: (_) => TestPage2()},
     );
   }
 }
@@ -113,14 +114,15 @@ class _DoKitTestPageState extends State<DoKitTestPage> {
                       fontSize: 18,
                     )),
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: false).push(
-                      new MaterialPageRoute(
-                          builder: (context) {
-                            //指定跳转的页面
-                            return new TestPage2();
-                          },
-                          settings: new RouteSettings(
-                              name: 'page1', arguments: ['test', '111'])));
+                  Navigator.of(context).pushNamed(TestPage2.routeName,arguments: [123,123,]);
+                  // Navigator.of(context, rootNavigator: false).push(
+                  //     new MaterialPageRoute(
+                  //         builder: (context) {
+                  //           //指定跳转的页面
+                  //           return new TestPage2();
+                  //         },
+                  //         settings: new RouteSettings(
+                  //             name: 'page1', arguments: ['test', '111'])));
                 },
               ),
             ),
@@ -238,6 +240,7 @@ class TestPageState extends State<TestPage> {
 }
 
 class TestPage2 extends StatefulWidget {
+  static const String routeName = 'page1';
   @override
   State<StatefulWidget> createState() {
     return TestPageState2();

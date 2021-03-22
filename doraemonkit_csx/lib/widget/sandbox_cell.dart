@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-08 11:58:36
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-20 18:36:39
+ * @LastEditTime: 2021-03-10 19:14:17
  * @Description: 
  */
 import 'dart:convert';
@@ -54,17 +54,17 @@ class _SandboxCellState extends State<SandboxCell> {
             SizedBox(
               width: 5,
             ),
-            widget.model.fileType == FileType.File
-                ? Container()
-                : Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset(Images.dokit_expand_no,
-                            width: 10, height: 20, package: DoKit.PACKAGE_NAME)
-                      ],
-                    ),
-                  ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  widget.model.fileType == FileType.File
+                      ? Text(widget.model.byteStr)
+                      : Image.asset(Images.dokit_expand_no,
+                          width: 10, height: 20, package: DoKit.PACKAGE_NAME),
+                ],
+              ),
+            ),
           ],
         ),
       ),

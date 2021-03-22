@@ -1,6 +1,6 @@
 name: doraemonkit_csx
-description: A new flutter plugin project.
-version: 0.0.1
+description: An app development detection tool, based on the Didi Doraemonkit.
+version: 0.0.2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
 
 environment:
@@ -21,7 +21,7 @@ dependencies:
   qr_flutter: ^3.2.0 # 二维码生成器
   qr_code_scanner: ^0.3.2 # 二维码扫描
   permission_handler: ^5.0.1+1 # 权限管理
-  webview_flutter: ^1.0.7 
+  webview_flutter: ^2.0.2
   wakelock: ^0.2.1+1 # 屏幕常亮
 
 
