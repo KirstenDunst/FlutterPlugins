@@ -13,11 +13,6 @@
 
 @implementation MainViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    NSLog(@"走了");
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.supportedOrientations = UIInterfaceOrientationMaskAll;
