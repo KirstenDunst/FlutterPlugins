@@ -2,12 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-11 17:03:57
+ * @LastEditTime: 2021-03-25 15:55:24
  * @Description: 
 -->
 ## 0.0.4 20210111
 
 * 添加设备当前方位状态功能（安卓和iOS）
+* 修复跳转外部app返回app后导致的app全方位旋转问题
 
 
 ## 0.0.3 20210105
