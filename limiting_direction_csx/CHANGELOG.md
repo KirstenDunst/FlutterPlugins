@@ -2,9 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-25 15:55:24
+ * @LastEditTime: 2021-03-25 16:10:48
  * @Description: 
 -->
+## 0.0.4+1 20210325
+* 去除多余调试log
+
+
 ## 0.0.4 20210111
 
 * 添加设备当前方位状态功能（安卓和iOS）

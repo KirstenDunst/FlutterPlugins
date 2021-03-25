@@ -1,6 +1,6 @@
 name: limiting_direction_csx
 description: Limit the rotatable orientation of the screen, also known as the orientation Settings that the interface can support. It should be noted that the orientation set here needs to be included in the supported orientation of the project.
-version: 0.0.4
+version: 0.0.4+1
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/limiting_direction_csx
 
 environment:
