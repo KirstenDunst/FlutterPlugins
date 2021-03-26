@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - ios_specific_csx (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - ios_specific_csx (from `.symlinks/plugins/ios_specific_csx/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  ios_specific_csx:
+    :path: ".symlinks/plugins/ios_specific_csx/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  ios_specific_csx: a3a8d8a1c1b8a34ecd1073e007ab3c2125fc3676
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.9.3
