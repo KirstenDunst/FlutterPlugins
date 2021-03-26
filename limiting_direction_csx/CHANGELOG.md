@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-25 16:10:48
+ * @LastEditTime: 2021-03-26 09:53:39
  * @Description: 
 -->
+## 0.0.4+2 20210326
+* 暂时屏蔽安卓陀螺仪功能
+
 ## 0.0.4+1 20210325
 * 去除多余调试log
 

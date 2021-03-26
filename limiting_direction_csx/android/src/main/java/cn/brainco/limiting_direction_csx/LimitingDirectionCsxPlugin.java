@@ -28,7 +28,7 @@ public class LimitingDirectionCsxPlugin implements FlutterPlugin, MethodCallHand
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("getNowDeviceDirection")) {
-            result.success(orientationStr);
+            result.success("0");
         } else {
             result.notImplemented();
         }
