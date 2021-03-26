@@ -13,13 +13,9 @@
 
 @implementation MainViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.supportedOrientations = UIInterfaceOrientationMaskAll;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.supportedOrientations = UIInterfaceOrientationMaskAll;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(supportedOrientationsChanged:) name:@"LimitingDirectionCsxPlugin" object:nil];
 }
 

@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        Log.d("","触发了");
         float xValue = sensorEvent.values[0];// Acceleration minus Gx on the x-axis
         float yValue = sensorEvent.values[1];//Acceleration minus Gy on the y-axis
         float zValue = sensorEvent.values[2];
@@ -65,6 +64,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             //屏幕朝下
             orientationStr = "6";
         }
-        channel.invokeMethod("orientationCallback", orientationStr);
+        // channel.invokeMethod("orientationCallback", orientationStr);
     }
 }

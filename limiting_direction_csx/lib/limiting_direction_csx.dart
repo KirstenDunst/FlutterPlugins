@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-18 11:11:28
+ * @LastEditTime: 2021-03-25 15:52:20
  * @Description: 
  */
 import 'dart:async';
@@ -38,6 +38,11 @@ class LimitingDirectionCsx {
       _currentDeviceOrientation = event;
     });
     _dealCallHandler();
+  }
+
+  @Deprecated('after version 0.0.3 to Use `setScreenDirection` method instead')
+  static Future setUpScreenDirection(DeviceDirectionMask directionMask) async {
+    await _channel.invokeMethod('changeScreenDirection', [directionMask.index]);
   }
 
   /// 设置屏幕支持的方位
