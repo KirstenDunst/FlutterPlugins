@@ -14,7 +14,7 @@ public class SwiftIosSpecificCsxPlugin: NSObject, FlutterPlugin {
         case "addHealthMindfulness":
             let argument = call.arguments as! NSDictionary;
             HealthTool.sharedInstance.addHealthMindfulness(startDateInMill: argument["startDate"] as! Int, endDateInMill: argument["endDate"] as! Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr!])
+                result(["success":success,"errorDescri":errorStr as Any])
             }
             break;
         case "getHealthAuthorityStatus":
