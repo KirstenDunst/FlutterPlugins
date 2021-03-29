@@ -15,6 +15,5 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'coswift'
   s.platform = :ios, '8.0'
 end
