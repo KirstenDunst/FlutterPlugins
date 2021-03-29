@@ -11,6 +11,10 @@
 ![health capability](https://github.com/KirstenDunst/FlutterPlugins/tree/main/ios_specific_csx/config.png)
 
 ### 插件代码使用方法
+```flutter
+//引入头文件
+import 'package:ios_specific_csx/ios_specific_csx.dart';
+```
 
 1.加入到健康的正念训练
 ```flutter
