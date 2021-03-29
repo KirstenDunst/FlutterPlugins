@@ -1,11 +1,20 @@
 PODS:
+  - cocore (1.2.6)
+  - coswift (1.2.5):
+    - cocore (~> 1.2.5)
   - Flutter (1.0.0)
   - ios_specific_csx (0.0.1):
+    - coswift
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - ios_specific_csx (from `.symlinks/plugins/ios_specific_csx/ios`)
+
+SPEC REPOS:
+  trunk:
+    - cocore
+    - coswift
 
 EXTERNAL SOURCES:
   Flutter:
@@ -14,8 +23,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/ios_specific_csx/ios"
 
 SPEC CHECKSUMS:
+  cocore: d6abaa4dd8c15115290362b9accbb42cc2bce9a0
+  coswift: 1ab02b4ed647cce3e6315dc56ac9bbe9b0e634a2
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  ios_specific_csx: a3a8d8a1c1b8a34ecd1073e007ab3c2125fc3676
+  ios_specific_csx: 0c2dcd55bef707e9acb3cdf1bf3abc7a1f50ed14
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

@@ -2,12 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:21:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-26 10:23:08
+ * @LastEditTime: 2021-03-29 10:34:13
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
  */
 import 'package:flutter/material.dart';
+import 'package:ios_specific_csx/ios_specific_csx.dart';
+import 'package:ios_specific_csx/specific_enum.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,39 +40,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: ListView(
+          children: [
+            RaisedButton(
+              onPressed: () {
+                IosSpecificCsx.addHealthMindfulness(
+                        DateTime(2021, 3, 26, 14, 10),
+                        DateTime(2021, 3, 26, 14, 20))
+                    .then((result) {
+                  print('mindfulness加入结果：${result.toJson()}');
+                });
+              },
+              child: Text("加入mindfulnes数据"),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            RaisedButton(
+              onPressed: () {
+                IosSpecificCsx.getHealthAuthorityStatus(
+                        HealthAppSubclassification.Mindfulness)
+                    .then((result) {
+                  print('mindfulness权限：$result');
+                });
+              },
+              child: Text("获取mindfulness当前的权限信息"),
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
+        ));
   }
 }
