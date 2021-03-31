@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:10:47
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-31 10:31:37
+ * @LastEditTime: 2021-03-31 10:37:14
  * @Description: 
 -->
 # limiting_direction_csx
@@ -22,12 +22,12 @@ flutter强制某些界面横屏，特殊界面--特殊的可支持设备旋转�
 (即xcode打开iOS项目，勾选中Targets->General->Deployment Info->Requires full screen(前面选中打勾☑️))
 (这个配置主要针对pad的适配，需要添加，单纯的手机应用开发，这个配置可以不用勾选就可以实现其效果)
 
-## 二
+## 二 两种方式使用方式不一样，请对号入座！
 ### 1.纯flutter项目： 主项目的Main.storyboard的控制器类型class从FlutterViewController调整为MainViewController
 ![ios配置Main.storyboard，图片在根目录下的iosConfiguration.png](https://github.com/KirstenDunst/FlutterPlugins/blob/main/limiting_direction_csx/iosConfiguration.png)
 
-### 2.module形式接入主项目，原生在跳转flutter页面的地方将承载flutter的FlutterViewController替换成MainViewController,并注册当前flutter的桥接到原生项目中
-![module形式接入主项目，图片在根目录下的module_configuratioon.jpg](https://github.com/KirstenDunst/FlutterPlugins/blob/main/limiting_direction_csx/module_configuratioon.jpg)
+### 2.module形式接入主项目: 原生在跳转flutter页面的地方将承载flutter的FlutterViewController替换成MainViewController,并注册当前flutter的桥接到原生项目中
+![module形式接入主项目，图片在根目录下的module_configuration.jpg](https://github.com/KirstenDunst/FlutterPlugins/blob/main/limiting_direction_csx/module_configuration.jpg)
 
 详细介绍module的使用为什么这样，看一查看我的博客：[原生混合开发flutter Unhandled Exception...](https://blog.csdn.net/BUG_delete/article/details/115342517)
 
