@@ -1,8 +1,15 @@
+<!--
+ * @Author: Cao Shixin
+ * @Date: 2021-03-30 15:38:11
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2021-03-31 10:45:51
+ * @Description: 
+-->
 # ios_specific_csx
 
 旨在专注于iOS特有方面的插件开发
 
-## Getting Started
+## 1. Health App 更新和获取数据
 
 ### 项目配置
 主项目的info.plist引入权限配置描述信息
@@ -40,3 +47,7 @@ IosSpecificCsx.getHealthAuthorityStatus(
                   print('mindfulness权限：$result');
                 });
 ```
+
+
+
+## 2.

@@ -50,8 +50,6 @@
 		DB0A26C6260DB4A100BCFCCF /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		DB0A26C7260DB4A100BCFCCF /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		DB0A26D1260DDFB700BCFCCF /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
-		DB0A26D4260DDFB700BCFCCF /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
-		DB0A26D6260DDFB700BCFCCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E70351851E5EF2B138A2906C /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -94,7 +92,6 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				DB0A26D3260DDFB700BCFCCF /* watch */,
 				97C146EF1CF9000F007C117D /* Products */,
 				86979E0F365A809907494E81 /* Pods */,
 				C24F6C9784D54908BCD9E3B6 /* Frameworks */,
@@ -133,15 +130,6 @@
 				DB0A26D1260DDFB700BCFCCF /* Intents.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DB0A26D3260DDFB700BCFCCF /* watch */ = {
-			isa = PBXGroup;
-			children = (
-				DB0A26D4260DDFB700BCFCCF /* IntentHandler.swift */,
-				DB0A26D6260DDFB700BCFCCF /* Info.plist */,
-			);
-			path = watch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
