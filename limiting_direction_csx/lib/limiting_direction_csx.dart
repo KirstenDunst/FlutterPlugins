@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-25 15:52:20
+ * @LastEditTime: 2021-04-14 10:09:16
  * @Description: 
  */
 import 'dart:async';
@@ -15,8 +15,8 @@ class LimitingDirectionCsx {
   /// 或者使用[LimitingDirectionCsx().getDeviceDirection]以流的方式处理状态变化
   UIDeviceOrientation get currentDeviceOrientation => _currentDeviceOrientation;
 
-  var _deviceOrientationController;
-  UIDeviceOrientation _currentDeviceOrientation;
+  late var _deviceOrientationController;
+  late UIDeviceOrientation _currentDeviceOrientation;
 
   static const MethodChannel _channel =
       const MethodChannel('limiting_direction_csx');
@@ -51,12 +51,12 @@ class LimitingDirectionCsx {
   }
 
   /// 获取陀螺仪的陈列方位的变化流
-  Stream<UIDeviceOrientation> getDeviceDirectionStream() {
+  Stream<UIDeviceOrientation>? getDeviceDirectionStream() {
     return _deviceOrientationController.stream;
   }
 
   /// 实时获取当前陀螺仪的陈列方位
-  Future<UIDeviceOrientation> getNowDeviceDirection() async {
+  Future<UIDeviceOrientation?> getNowDeviceDirection() async {
     var tempStr = await _channel.invokeMethod('getNowDeviceDirection');
     var deviceOrientation = deviceOrientationMap[tempStr];
     _currentDeviceOrientation =

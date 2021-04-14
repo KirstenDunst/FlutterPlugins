@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-31 10:15:14
+ * @LastEditTime: 2021-04-14 09:45:29
  * @Description: 
 -->
+## 0.1.0 20210414
+* nullsafety兼容flutter2.0
+
 ## 0.0.4+3 20210331
 * 添加module形式引入项目使用示例
 
