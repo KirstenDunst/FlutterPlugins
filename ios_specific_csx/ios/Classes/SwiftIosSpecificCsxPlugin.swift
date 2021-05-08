@@ -17,6 +17,11 @@ public class SwiftIosSpecificCsxPlugin: NSObject, FlutterPlugin {
                 result(["success":success,"errorDescri":errorStr as Any])
             }
             break;
+        case "requestHealthAuthority":
+            HealthTool.sharedInstance.requestHealthAuthority { (success, errorStr) in
+                result(["success":success,"errorDescri":errorStr as Any])
+            }
+            break;
         case "getHealthAuthorityStatus":
             let answer = HealthTool.sharedInstance.getHealthAuthorityStatus(subclassificationIndex: call.arguments as! Int).rawValue
             result(answer)
@@ -73,6 +78,18 @@ public class SwiftIosSpecificCsxPlugin: NSObject, FlutterPlugin {
             let argument = call.arguments as! NSDictionary;
             HealthTool.sharedInstance.addHealthHeartRate(heartRate: argument["heartRate"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
                 result(["success":success,"errorDescri":errorStr as Any])
+            break;
+        case "isHealthDataAvailable":
+            let answer = HealthTool.sharedInstance.isHealthDataAvailable()
+            result(answer)
+            break;
+        case "gotoHealthApp":
+            guard let url = URL.init(string: "x-apple-health://app/") else {
+                result(false)
+                fatalError("生成跳转链接失败")
+            }
+            UIApplication.shared.open(url){(success) in
+                result(success)
             }
             break;
         default:

@@ -83,6 +83,31 @@ class HealthTool: NSObject {
         }
         return self.healthStore.authorizationStatus(for: categoryType);
     }
+
+    //健康APP是否可用
+    func isHealthDataAvailable() -> Bool {
+        return HKHealthStore.isHealthDataAvailable()
+    }
+
+    func requestHealthAuthority(completion: @escaping (Bool, String?) -> Void) {
+        if #available(iOS 10.0, *) {
+            guard let categoryType =
+                    HKCategoryType.categoryType(forIdentifier: HKCategoryTypeIdentifier.mindfulSession) else {
+                let errorStr = "mindfulSession创建HKCategoryType失败"
+                completion(false,errorStr)
+                fatalError(errorStr)
+            }
+            getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
+                if(success){
+                    completion(success, (error != nil) ? error: nil)
+                } else {
+                    completion(false,error)
+                }
+            }
+        } else {
+            completion(false,"iOS系统版本不能低于iOS10")
+        }
+    }
     
     /*
      * 写入健康正念

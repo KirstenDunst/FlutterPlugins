@@ -7,6 +7,13 @@
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
 -->
+## 0.0.1+3 [20210430]
+
+* 添加方法：
+    - requestHealthAuthority 请求权限
+    - isHealthDataAvailable 健康App是否可用
+    - gotoHealthApp 跳转健康App
+    
 ## 0.0.1+2 [20210329]
 
 * 去除暂时不使用的依赖库

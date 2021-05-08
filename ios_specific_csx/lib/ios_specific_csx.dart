@@ -11,8 +11,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/services.dart';
+
 import 'result_base.dart';
 import 'specific_enum.dart';
+
+export 'result_base.dart';
+export 'specific_enum.dart';
 
 class IosSpecificCsx {
   static const MethodChannel _channel = const MethodChannel('ios_specific_csx');
@@ -43,6 +47,19 @@ class IosSpecificCsx {
       });
       return ResultBase.fromJson(result);
     }
+  }
+
+  static Future<bool> gotoHealthApp() async {
+    return _channel.invokeMethod('gotoHealthApp');
+  }
+
+  static Future<bool> isHealthDataAvailable() async {
+    return _channel.invokeMethod('isHealthDataAvailable');
+  }
+
+  static Future<ResultBase> requestHealthAuthority() async {
+    var result = await _channel.invokeMethod('requestHealthAuthority');
+    return ResultBase.fromJson(result);
   }
 
   /*
