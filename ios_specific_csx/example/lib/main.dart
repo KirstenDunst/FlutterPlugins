@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:21:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-04-01 15:26:44
+ * @LastEditTime: 2021-05-08 17:50:20
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -50,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthMindfulness(
-                        DateTime(2021, 3, 26, 14, 10),
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthMindfulness(DateTime(2021, 3, 26, 14, 10),
                         DateTime(2021, 3, 26, 14, 20))
                     .then((result) {
                   print('mindfulness加入结果：${result.toJson()}');
@@ -61,7 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.getHealthAuthorityStatus(
+                IosSpecificCsx.instance.healthHandle
+                    .requestHealthAuthority(
+                        HealthAppSubclassification.Mindfulness)
+                    .then((result) {
+                  print('mindfulnes权限：${result.toJson()}');
+                });
+              },
+              child: Text("mindfulnes权限"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx()
+                    .healthHandle
+                    .getHealthAuthorityStatus(
                         HealthAppSubclassification.Mindfulness)
                     .then((result) {
                   print('mindfulness权限：$result');
@@ -71,79 +84,103 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx()
+                    .healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
-                    .then((value) => print(value.errorDescri));
-              },
-              child: Text("写入身高"),
-            ),ElevatedButton(
-              onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx()
+                    .healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx()
+                    .healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx()
+                    .healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
             ),
             ElevatedButton(
               onPressed: () {
-                IosSpecificCsx.addHealthStature(170)
+                IosSpecificCsx()
+                    .healthHandle
+                    .addHealthStature(170)
                     .then((value) => print(value.errorDescri));
               },
               child: Text("写入身高"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx.instance.healthHandle
+                    .addHealthStature(170)
+                    .then((value) => print(value.errorDescri));
+              },
+              child: Text("写入身高"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx.instance.commonHandle.platformVersion
+                    .then((value) => print('$value'));
+              },
+              child: Text("通用处理"),
             ),
           ],
         ));

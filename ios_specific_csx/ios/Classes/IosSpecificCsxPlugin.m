@@ -10,6 +10,7 @@
 
 @implementation IosSpecificCsxPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftIosSpecificCsxPlugin registerWithRegistrar:registrar];
+  [IosSpecificCsxHealthPlugin registerWithRegistrar:registrar];
+  [IosSpecificCsxCommonPlugin registerWithRegistrar:registrar];
 }
 @end

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:32:28
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-29 09:15:30
+ * @LastEditTime: 2021-05-08 10:20:28
  * @Description: 返回的模型接收
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -10,14 +10,14 @@
 
 class ResultBase {
   //是否操作成功，
-  bool success;
+  late bool success;
   //如果失败，失败的具体信息
-  String errorDescri;
-  ResultBase({this.success, this.errorDescri});
+  late String errorDescri;
+  ResultBase({this.success = false, this.errorDescri = ''});
 
   ResultBase.fromJson(Map json) {
     success = json['success'] ?? false;
-    errorDescri = json['errorDescri'];
+    errorDescri = json['errorDescri'] ?? '';
   }
 
   Map toJson() {

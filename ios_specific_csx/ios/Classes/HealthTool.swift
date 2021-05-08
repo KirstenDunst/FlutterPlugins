@@ -36,10 +36,11 @@ class HealthTool: NSObject {
             completion(false,"健康APP不可用，请安装并打开健康查看")
         }
     }
+
     /*
-     * 获取类型的授权状态
+     *通用根据类型获取categoryType对象
      */
-    func getHealthAuthorityStatus(subclassificationIndex: Int) -> HKAuthorizationStatus {
+    private func getCategoryType(subclassificationIndex: Int) -> HKSampleType {
         var categoryType:HKSampleType;
         let subclassification:HealthAppSubclassification = HealthAppSubclassification.fromRow(index: subclassificationIndex)
         switch subclassification {
@@ -81,31 +82,57 @@ class HealthTool: NSObject {
                 fatalError("类型传入错误:\(subclassificationIndex)")
                 break
         }
-        return self.healthStore.authorizationStatus(for: categoryType);
+        return categoryType
     }
 
-    //健康APP是否可用
+    /*
+     * 获取类型的授权状态
+     */
+    func getHealthAuthorityStatus(subclassificationIndex: Int) -> HKAuthorizationStatus {
+        let categoryType:HKSampleType = getCategoryType(subclassificationIndex:subclassificationIndex)
+        return self.healthStore.authorizationStatus(for: categoryType)
+    }
+    
+    /*
+     * 健康APP是否可用
+     */
     func isHealthDataAvailable() -> Bool {
         return HKHealthStore.isHealthDataAvailable()
     }
-
-    func requestHealthAuthority(completion: @escaping (Bool, String?) -> Void) {
-        if #available(iOS 10.0, *) {
-            guard let categoryType =
-                    HKCategoryType.categoryType(forIdentifier: HKCategoryTypeIdentifier.mindfulSession) else {
-                let errorStr = "mindfulSession创建HKCategoryType失败"
-                completion(false,errorStr)
-                fatalError(errorStr)
-            }
-            getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
-                if(success){
-                    completion(success, (error != nil) ? error: nil)
-                } else {
-                    completion(false,error)
+    
+    /*
+     * 跳转进入健康app
+     */
+    func gotoHealthApp(completion: @escaping (Bool, String?) -> Void) {
+        guard let url = URL.init(string: "x-apple-health://app/") else {
+            let errorStr = "生成跳转链接失败"
+            completion(false,errorStr)
+            fatalError(errorStr)
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:]) { (result) in
+                    completion(result,"")
                 }
+            } else {
+                UIApplication.shared.open(url)
             }
         } else {
-            completion(false,"iOS系统版本不能低于iOS10")
+            completion(false,"未安装健康App，请先前往App Store安装健康App！")
+        }
+    }
+
+    /*
+     * 对不同类型进行系统的授权
+     */
+    func requestHealthAuthority(subclassificationIndex: Int, completion: @escaping (Bool, String?) -> Void) {
+        let categoryType:HKSampleType = getCategoryType(subclassificationIndex:subclassificationIndex)
+        getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
+            if(success){
+                completion(success, (error != nil) ? error: nil)
+            } else {
+                completion(false,error)
+            }
         }
     }
     
@@ -119,7 +146,9 @@ class HealthTool: NSObject {
             completion(false,"iOS系统版本不能低于iOS10")
         }
     }
-    //通用CategoryType写入
+    /*
+     * 通用CategoryType写入
+     */
     private func commonAddHKCategoryType(type:HealthAppSubclassification,typeIdentifier: HKCategoryTypeIdentifier, startDateInMill: Int?, endDateInMill: Int?, completion: @escaping (Bool, String?) -> Void) {
         guard let categoryType =
                 HealthKit.HKCategoryType.categoryType(forIdentifier: typeIdentifier) else {
@@ -165,54 +194,62 @@ class HealthTool: NSObject {
     }
 
     /*
-    * 写入身高到健康
-    * 时间不设置的话，默认读取设备当前的时间
-    */
+     * 写入身高到健康
+     * 时间不设置的话，默认读取设备当前的时间
+     */
     func addHealthStature(height: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num:height,type: .height, typeIdentifier: .height,unit: .init(from: "cm"), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入身高体重指数
      */
     func addHealthBodyMassIndex(bodyMassIndex: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: bodyMassIndex, type: .bodyMassIndex, typeIdentifier: .bodyMassIndex,unit: .init(from: "BMI"), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入体脂率
      */
     func addHealthBodyFatPercentage(bodyFatPercentage: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: bodyFatPercentage, type: .bodyFatPercentage, typeIdentifier: .bodyFatPercentage,unit:.init(from: "%"), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入体重
      */
     func addHealthBodyMass(bodyMass: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: bodyMass, type: .bodyMass, typeIdentifier: .bodyMass,unit: .gramUnit(with: .kilo), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入去脂体重
      */
     func addHealthLeanBodyMass(leanBodyMass: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: leanBodyMass, type: .leanBodyMass, typeIdentifier: .leanBodyMass,unit: .gramUnit(with: .kilo), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入步数
      */
     func addHealthStepCount(stepCount: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: stepCount, type: .stepCount, typeIdentifier: .stepCount,unit: .count(), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入步行+跑步
      */
     func addHealthWalkingRunning(walkingRunning: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: walkingRunning, type: .walkingRunning, typeIdentifier: .distanceWalkingRunning,unit: .gramUnit(with: .kilo), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+
     /*
      * 写入骑行
      */
     func addHealthCycling(cycling: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num: cycling, type: .cycling, typeIdentifier: .distanceCycling,unit: .gramUnit(with: .kilo), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+    
     /*
      * 写入心率
      */
