@@ -84,6 +84,18 @@ class HealthHandle {
   }
 
   /*
+   * 获取健康的身高，单位cm
+   */
+  Future<GetHealthData> getHealthStature(
+      {DateTime? startDate, DateTime? endDate}) async {
+    var result = await _channel.invokeMethod('getHealthStature', {
+      'startDate': (startDate ?? DateTime.now()).millisecondsSinceEpoch,
+      'endDate': (endDate ?? DateTime.now()).millisecondsSinceEpoch
+    });
+    return GetHealthData.fromJson(result);
+  }
+
+  /*
    * 将身高体重指数写入健康 单位BMI，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
