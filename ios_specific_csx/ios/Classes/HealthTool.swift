@@ -17,7 +17,7 @@ class HealthTool: NSObject {
      * 统一授权
      */
     private func getPermissions(writeDataType:HKSampleType?, readDataType: HKSampleType?, completion: @escaping (Bool, String?) -> Void) {
-        if HKHealthStore.isHealthDataAvailable() {
+        if isHealthDataAvailable() {
             var writeType: NSSet?
             if writeDataType != nil {
                 writeType =  NSSet.init(object: writeDataType!)
@@ -127,7 +127,7 @@ class HealthTool: NSObject {
      */
     func requestHealthAuthority(subclassificationIndex: Int, completion: @escaping (Bool, String?) -> Void) {
         let categoryType:HKSampleType = getCategoryType(subclassificationIndex:subclassificationIndex)
-        getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
+        getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
             if(success){
                 completion(success, (error != nil) ? error: nil)
             } else {
@@ -169,7 +169,7 @@ class HealthTool: NSObject {
         let state = getHealthAuthorityStatus(subclassificationIndex: type.rawValue)
         switch state {
             case HKAuthorizationStatus.notDetermined:
-                getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
+                getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
                     if(success){
                         self.healthStore.save([categorySample]) { (success, error) in
                             completion(success, (error != nil) ? error!.localizedDescription: nil)
@@ -200,6 +200,28 @@ class HealthTool: NSObject {
     func addHealthStature(height: Double,startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?) -> Void) {
         commonAddHKQuantityType(num:height,type: .height, typeIdentifier: .height,unit: .init(from: "cm"), startDateInMill: startDateInMill, endDateInMill: endDateInMill, completion: completion)
     }
+    
+    /*
+     * 获取健康中的身高
+     */
+    func getHealthStature(startDateInMill: Int?, endDateInMill: Int?,completion: @escaping (Bool, String?,Double) -> Void) {
+        completion(true,"",175)
+    }
+    
+//    private func commonGetHKQuantityType() {
+//        let predicate =  HKQuery.predicateForWorkouts(with: HKWorkoutActivityType.running)
+//        let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
+//        let sampleQuery = HKSampleQuery(sampleType: HKWorkoutType.workoutType(), predicate: predicate, limit: 0, sortDescriptors: [sortDescriptor])
+//            { (sampleQuery, results, error ) -> Void in
+//              if let queryError = error {
+////                ("There was an error while reading the samples: \(queryError.localizedDescription)")
+//              }
+//              completion(results,error)
+//            }
+//          // 4. Execute the query
+//        self.healthStore.execute(sampleQuery)
+//    }
+    
 
     /*
      * 写入身高体重指数
@@ -276,7 +298,7 @@ class HealthTool: NSObject {
         let state = getHealthAuthorityStatus(subclassificationIndex: type.rawValue)
         switch state {
             case HKAuthorizationStatus.notDetermined:
-                getPermissions(writeDataType: categoryType, readDataType: nil) { (success, error) in
+                getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
                     if(success){
                         self.healthStore.save([quantitySample]) { (success, error) in
                             completion(success, (error != nil) ? error!.localizedDescription: nil)

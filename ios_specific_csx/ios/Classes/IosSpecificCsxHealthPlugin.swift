@@ -29,6 +29,12 @@ public class IosSpecificCsxHealthPlugin: NSObject, FlutterPlugin {
                 result(["success":success,"errorDescri":errorStr as Any])
             }
             break;
+        case "getHealthStature":
+            let argument = call.arguments as! NSDictionary;
+            HealthTool.sharedInstance.getHealthStature(startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr, arg)  in
+                result(["resultBase":["success":success,"errorDescri":errorStr as Any],"result":arg])
+            }
+            break;
         case "addHealthBodyMassIndex":
             let argument = call.arguments as! NSDictionary;
             HealthTool.sharedInstance.addHealthBodyMassIndex(bodyMassIndex: argument["bodyMassIndex"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:21:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-05-08 17:50:20
+ * @LastEditTime: 2021-05-15 08:46:15
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -51,6 +51,39 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 IosSpecificCsx.instance.healthHandle
+                    .isHealthDataAvailable()
+                    .then((value) {
+                  print('健康是否可用: $value');
+                });
+              },
+              child: Text('健康是否可用'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx()
+                    .healthHandle
+                    .getHealthAuthorityStatus(
+                        HealthAppSubclassification.Mindfulness)
+                    .then((result) {
+                  print('获取mindfulness当前的权限状态：$result');
+                });
+              },
+              child: Text('获取mindfulness当前的权限状态'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx.instance.healthHandle
+                    .requestHealthAuthority(
+                        HealthAppSubclassification.Mindfulness)
+                    .then((result) {
+                  print('请求mindfulnes权限：${result.toJson()}');
+                });
+              },
+              child: Text('请求mindfulnes权限'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                IosSpecificCsx.instance.healthHandle
                     .addHealthMindfulness(DateTime(2021, 3, 26, 14, 10),
                         DateTime(2021, 3, 26, 14, 20))
                     .then((result) {
@@ -60,44 +93,26 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("加入mindfulnes数据"),
             ),
             ElevatedButton(
-              onPressed: () {
-                IosSpecificCsx.instance.healthHandle
-                    .requestHealthAuthority(
-                        HealthAppSubclassification.Mindfulness)
-                    .then((result) {
-                  print('mindfulnes权限：${result.toJson()}');
-                });
-              },
-              child: Text("mindfulnes权限"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                IosSpecificCsx()
-                    .healthHandle
-                    .getHealthAuthorityStatus(
-                        HealthAppSubclassification.Mindfulness)
-                    .then((result) {
-                  print('mindfulness权限：$result');
-                });
-              },
-              child: Text("获取mindfulness当前的权限信息"),
+              onPressed: () =>
+                  IosSpecificCsx.instance.healthHandle.gotoHealthApp(),
+              child: Text('打开健康app'),
             ),
             ElevatedButton(
               onPressed: () {
                 IosSpecificCsx.instance.healthHandle
                     .addHealthStature(170)
-                    .then((value) => print(value.errorDescri));
+                    .then((value) => print('写入身高结果${value.toJson()}'));
               },
-              child: Text("写入身高"),
+              child: Text('写入身高'),
             ),
             ElevatedButton(
               onPressed: () {
                 IosSpecificCsx()
                     .healthHandle
                     .addHealthStature(170)
-                    .then((value) => print(value.errorDescri));
+                    .then((value) => print('获取身高:${value.toJson()}'));
               },
-              child: Text("写入身高"),
+              child: Text('获取身高'),
             ),
             ElevatedButton(
               onPressed: () {
