@@ -1,32 +1,34 @@
+import 'num_util.dart';
+
 /// Information derived from `android.os.Build`.
 ///
 /// See: https://developer.android.com/reference/android/os/Build.html
 class AndroidDeviceInfo {
   /// Android device Info class.
   AndroidDeviceInfo({
-    this.version,
-    this.board,
-    this.bootloader,
-    this.brand,
-    this.device,
-    this.display,
-    this.fingerprint,
-    this.hardware,
-    this.host,
-    this.id,
-    this.manufacturer,
-    this.model,
-    this.product,
-    List<String> supported32BitAbis,
-    List<String> supported64BitAbis,
-    List<String> supportedAbis,
-    this.tags,
-    this.type,
-    this.isPhysicalDevice,
-    this.androidId,
-    List<String> systemFeatures,
-    this.storage,
-  })  : supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
+    required this.version,
+    required this.board,
+    required this.bootloader,
+    required this.brand,
+    required this.device,
+    required this.display,
+    required this.fingerprint,
+    required this.hardware,
+    required this.host,
+    required this.id,
+    required this.manufacturer,
+    required this.model,
+    required this.product,
+    required List<String> supported32BitAbis,
+    required List<String> supported64BitAbis,
+    required List<String> supportedAbis,
+    required this.tags,
+    required this.type,
+    required this.isPhysicalDevice,
+    required this.androidId,
+    required List<String> systemFeatures,
+    required this.storage,
+  })   : supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
         supported64BitAbis = List<String>.unmodifiable(supported64BitAbis),
         supportedAbis = List<String>.unmodifiable(supportedAbis),
         systemFeatures = List<String>.unmodifiable(systemFeatures);
@@ -108,34 +110,37 @@ class AndroidDeviceInfo {
   final List<String> systemFeatures;
 
   /// device storage detail.
-  final Storage storage;
+  final AndroidStorage storage;
 
   /// Deserializes from the message received from [_kChannel].
   static AndroidDeviceInfo fromMap(Map<String, dynamic> map) {
     return AndroidDeviceInfo(
-      version:
-          AndroidBuildVersion._fromMap(map['version'].cast<String, dynamic>()),
-      board: map['board'],
-      bootloader: map['bootloader'],
-      brand: map['brand'],
-      device: map['device'],
-      display: map['display'],
-      fingerprint: map['fingerprint'],
-      hardware: map['hardware'],
-      host: map['host'],
-      id: map['id'],
-      manufacturer: map['manufacturer'],
-      model: map['model'],
-      product: map['product'],
+      version: AndroidBuildVersion._fromMap(map['version'] != null
+          ? map['version'].cast<String, dynamic>()
+          : <String, dynamic>{}),
+      board: map['board'] ?? '',
+      bootloader: map['bootloader'] ?? '',
+      brand: map['brand'] ?? '',
+      device: map['device'] ?? '',
+      display: map['display'] ?? '',
+      fingerprint: map['fingerprint'] ?? '',
+      hardware: map['hardware'] ?? '',
+      host: map['host'] ?? '',
+      id: map['id'] ?? '',
+      manufacturer: map['manufacturer'] ?? '',
+      model: map['model'] ?? '',
+      product: map['product'] ?? '',
       supported32BitAbis: _fromList(map['supported32BitAbis']),
       supported64BitAbis: _fromList(map['supported64BitAbis']),
       supportedAbis: _fromList(map['supportedAbis']),
-      tags: map['tags'],
-      type: map['type'],
-      isPhysicalDevice: map['isPhysicalDevice'],
-      androidId: map['androidId'],
+      tags: map['tags'] ?? '',
+      type: map['type'] ?? '',
+      isPhysicalDevice: map['isPhysicalDevice'] ?? false,
+      androidId: map['androidId'] ?? '',
       systemFeatures: _fromList(map['systemFeatures']),
-      storage: Storage._fromMap(map['storage'].cast<String, dynamic>()),
+      storage: AndroidStorage._fromMap(map['storage'] != null
+          ? map['storage'].cast<String, dynamic>()
+          : <String, dynamic>{}),
     );
   }
 
@@ -168,8 +173,13 @@ class AndroidDeviceInfo {
 
   /// Deserializes message as List<String>
   static List<String> _fromList(dynamic message) {
-    final List<dynamic> list = message;
-    return List<String>.from(list);
+    if (message == null) {
+      return <String>[];
+    }
+    assert(message is List<dynamic>);
+    final List<dynamic> list = List<dynamic>.from(message)
+      ..removeWhere((value) => value == null);
+    return list.cast<String>();
   }
 }
 
@@ -182,23 +192,23 @@ class AndroidBuildVersion {
     this.baseOS,
     this.previewSdkInt,
     this.securityPatch,
-    this.codename,
-    this.incremental,
-    this.release,
-    this.sdkInt,
+    required this.codename,
+    required this.incremental,
+    required this.release,
+    required this.sdkInt,
   });
 
   /// The base OS build the product is based on.
   /// This is only available on Android 6.0 or above.
-  String baseOS;
+  String? baseOS;
 
   /// The developer preview revision of a prerelease SDK.
   /// This is only available on Android 6.0 or above.
-  int previewSdkInt;
+  int? previewSdkInt;
 
   /// The user-visible security patch level.
   /// This is only available on Android 6.0 or above.
-  final String securityPatch;
+  final String? securityPatch;
 
   /// The current development codename, or the string "REL" if this is a release build.
   final String codename;
@@ -220,10 +230,10 @@ class AndroidBuildVersion {
       baseOS: map['baseOS'],
       previewSdkInt: map['previewSdkInt'],
       securityPatch: map['securityPatch'],
-      codename: map['codename'],
-      incremental: map['incremental'],
-      release: map['release'],
-      sdkInt: map['sdkInt'],
+      codename: map['codename'] ?? '',
+      incremental: map['incremental'] ?? '',
+      release: map['release'] ?? '',
+      sdkInt: map['sdkInt'] ?? -1,
     );
   }
 
@@ -240,38 +250,148 @@ class AndroidBuildVersion {
   }
 }
 
-class Storage {
-  // 已使用的ram，单位byte
-  num ramUseB;
-  // 全部的ram容量，单位byte
-  num ramAllB;
-  // 已使用的rom，单位byte
-  num romUseB;
-  // 全部的rom容量，单位byte
-  num romAllB;
+class AndroidStorage {
+  /// 应用进程占内存总大小
+  final num totalPssB;
 
-  Storage({
-    this.ramUseB,
-    this.ramAllB,
-    this.romUseB,
-    this.romAllB,
+  /// summary开头字段都是Android 23 及以后能获取
+  ///java 内存
+  final num summaryJavaHeap;
+
+  ///native 内存
+  final num summaryNativeHeap;
+
+  ///静态代码，资源内存
+  final num summaryCode;
+
+  ///栈内存
+  final num summaryStack;
+
+  ///显存
+  final num summaryGraphics;
+
+  ///其他私有内存
+  final num summaryPrivateOther;
+
+  ///系统内存
+  final num summarySystem;
+
+  ///总 swap 内存
+  final num summaryTotalSwap;
+
+  /// 已使用的ram，单位byte
+  final num ramUseB;
+
+  /// 全部的ram容量，单位byte
+  final num ramAllB;
+
+  /// 可用ram容量小于此值时，系统开始清理进程
+  final num ramThreshold;
+
+  /// 设备空闲内存,ramAvailableB = ramAllB - ramUseB
+  final num ramAvailableB;
+
+  /// 是否低内存
+  final bool lowMemory;
+
+  /// 已使用的rom，单位byte
+  final num romUseB;
+
+  /// 全部的rom容量，单位byte
+  final num romAllB;
+
+  /// 虚拟机已使用内存
+  final num jvmUseB;
+
+  /// 当前虚拟机可用的最大内存
+  final num jvmMaxB;
+
+  /// 当前虚拟机已分配的内存
+  final num jvmTotalB;
+
+  /// 当前虚拟机已分配内存中未使用的部分
+  final num jvmFreeB;
+
+  AndroidStorage({
+    required this.totalPssB,
+    required this.summaryJavaHeap,
+    required this.summaryNativeHeap,
+    required this.summaryCode,
+    required this.summaryStack,
+    required this.summaryGraphics,
+    required this.summaryPrivateOther,
+    required this.summarySystem,
+    required this.summaryTotalSwap,
+    required this.ramUseB,
+    required this.ramAllB,
+    required this.ramThreshold,
+    required this.ramAvailableB,
+    required this.lowMemory,
+    required this.romUseB,
+    required this.romAllB,
+    required this.jvmUseB,
+    required this.jvmMaxB,
+    required this.jvmTotalB,
+    required this.jvmFreeB,
   });
 
-  static Storage _fromMap(Map<String, dynamic> map) {
-    return Storage(
-      ramUseB: map['ramUseB'],
-      ramAllB: map['ramAllB'],
-      romUseB: map['romUseB'],
-      romAllB: map['romAllB'],
+  static AndroidStorage _fromMap(Map<String, dynamic> map) {
+    return AndroidStorage(
+      totalPssB: map['totalPssB'] ?? 0,
+      summaryJavaHeap: map['summaryJavaHeap'] ?? 0,
+      summaryNativeHeap: map['summaryNativeHeap'] ?? 0,
+      summaryCode: map['summaryCode'] ?? 0,
+      summaryStack: map['summaryStack'] ?? 0,
+      summaryGraphics: map['summaryGraphics'] ?? 0,
+      summaryPrivateOther: map['summaryPrivateOther'] ?? 0,
+      summarySystem: map['summarySystem'] ?? 0,
+      summaryTotalSwap: map['summaryTotalSwap'] ?? 0,
+      ramUseB: map['ramUseB'] ?? 0,
+      ramAllB: map['ramAllB'] ?? 0,
+      ramThreshold: map['ramThreshold'] ?? 0,
+      ramAvailableB: map['ramAvailableB'] ?? 0,
+      lowMemory: map['lowMemory'] ?? false,
+      romUseB: map['romUseB'] ?? 0,
+      romAllB: map['romAllB'] ?? 0,
+      jvmUseB: map['jvmUseB'] ?? 0,
+      jvmMaxB: map['jvmMaxB'] ?? 0,
+      jvmTotalB: map['jvmTotalB'] ?? 0,
+      jvmFreeB: map['jvmFreeB'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     var data = <String, dynamic>{};
+    data['totalPssB'] = totalPssB;
+    data['summaryJavaHeap'] = summaryJavaHeap;
+    data['summaryNativeHeap'] = summaryNativeHeap;
+    data['summaryCode'] = summaryCode;
+    data['summaryStack'] = summaryStack;
+    data['summaryGraphics'] = summaryGraphics;
+    data['summaryPrivateOther'] = summaryPrivateOther;
+    data['summarySystem'] = summarySystem;
+    data['summaryTotalSwap'] = summaryTotalSwap;
     data['ramUseB'] = ramUseB;
     data['ramAllB'] = ramAllB;
+    data['ramThreshold'] = ramThreshold;
+    data['ramAvailableB'] = ramAvailableB;
+    data['lowMemory'] = lowMemory;
     data['romUseB'] = romUseB;
     data['romAllB'] = romAllB;
+    data['jvmUseB'] = jvmUseB;
+    data['jvmMaxB'] = jvmMaxB;
+    data['jvmTotalB'] = jvmTotalB;
+    data['jvmFreeB'] = jvmFreeB;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'AndroidStorage{单位(Byte) 进程占内存总大小: ${totalPssB.sizeFormat()}, '
+        '其中:native内存:${summaryNativeHeap.sizeFormat()},系统内存:${summarySystem.sizeFormat()},总 swap 内存:${summaryTotalSwap.sizeFormat()},显存:${summaryGraphics.sizeFormat()},'
+        'java 内存:${summaryJavaHeap.sizeFormat()},其他私有内存:${summaryPrivateOther.sizeFormat()},静态代码、资源内存:${summaryCode.sizeFormat()},栈内存:${summaryStack.sizeFormat()}, '
+        '已使用的RAM: ${ramUseB.sizeFormat()}, 全部的RAM容量: ${ramAllB.sizeFormat()}, 可用RAM容量清理阈值: ${ramThreshold.sizeFormat()}, 设备空闲RAM: ${ramAvailableB.sizeFormat()}, lowMemory: $lowMemory, '
+        '已使用的ROM: ${romUseB.sizeFormat()}, 全部的ROM容量: ${romAllB.sizeFormat()}, '
+        '虚拟机已使用内存: ${jvmUseB.sizeFormat()}, 当前虚拟机可用的最大内存: ${jvmMaxB.sizeFormat()}, 当前虚拟机已分配的内存: ${jvmTotalB.sizeFormat()}, 当前虚拟机已分配内存中未使用的部分: ${jvmFreeB.sizeFormat()}}';
   }
 }

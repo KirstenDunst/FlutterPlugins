@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-01-04 17:54:50
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-01-04 18:33:17
+ * @LastEditTime: 2021-03-25 18:54:31
  * @Description: 
  */
 import 'dart:async';
@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Text(
                     '${_deviceData[property]}',
-                    maxLines: 10,
+                    maxLines: 1000,
                     overflow: TextOverflow.ellipsis,
                   ),
                 )),
