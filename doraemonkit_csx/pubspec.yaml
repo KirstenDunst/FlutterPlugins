@@ -1,8 +1,7 @@
 name: doraemonkit_csx
-description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+description: An app development detection tool, based on the Didi Doraemonkit.
+version: 0.0.2
+homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -11,6 +10,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  date_format: ^1.0.8
+  vm_service: ^5.5.0
+  package_info: ^0.4.3+2
+  shared_preferences: ^0.5.12+4 #usedefaults
+  path_provider: ^1.6.11
+  share: ^0.6.5+4 # 系统分享
+  bot_toast: ^3.0.5 # toast
+  qr_flutter: ^3.2.0 # 二维码生成器
+  qr_code_scanner: ^0.3.2 # 二维码扫描
+  permission_handler: ^5.0.1+1 # 权限管理
+  webview_flutter: ^2.0.2
+  wakelock: ^0.2.1+1 # 屏幕常亮
+
 
 dev_dependencies:
   flutter_test:
@@ -34,16 +47,14 @@ flutter:
         pluginClass: DoraemonkitCsxPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

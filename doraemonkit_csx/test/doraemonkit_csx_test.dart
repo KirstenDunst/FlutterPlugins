@@ -1,6 +1,12 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2021-02-04 17:28:14
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2021-02-07 12:03:53
+ * @Description: 
+ */
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:doraemonkit_csx/doraemonkit_csx.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('doraemonkit_csx');
@@ -17,7 +23,4 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await DoraemonkitCsx.platformVersion, '42');
-  });
 }
