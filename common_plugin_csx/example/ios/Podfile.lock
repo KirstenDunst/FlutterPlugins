@@ -1,0 +1,28 @@
+PODS:
+  - common_plugin_csx (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - image_picker (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - common_plugin_csx (from `.symlinks/plugins/common_plugin_csx/ios`)
+  - Flutter (from `Flutter`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+
+EXTERNAL SOURCES:
+  common_plugin_csx:
+    :path: ".symlinks/plugins/common_plugin_csx/ios"
+  Flutter:
+    :path: Flutter
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
+
+SPEC CHECKSUMS:
+  common_plugin_csx: 736d862a94b11fef2540e7ae17dc28ca60e23dcb
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.11.2
