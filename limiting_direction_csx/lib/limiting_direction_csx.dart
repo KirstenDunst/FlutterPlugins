@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-04-14 10:09:16
+ * @LastEditTime: 2021-12-10 08:38:07
  * @Description: 
  */
 import 'dart:async';
@@ -51,7 +51,7 @@ class LimitingDirectionCsx {
   }
 
   /// 获取陀螺仪的陈列方位的变化流
-  Stream<UIDeviceOrientation>? getDeviceDirectionStream() {
+  Stream<UIDeviceOrientation> getDeviceDirectionStream() {
     return _deviceOrientationController.stream;
   }
 
