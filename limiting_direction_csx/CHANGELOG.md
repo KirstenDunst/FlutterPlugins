@@ -2,9 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-04-14 09:45:29
+ * @LastEditTime: 2021-12-10 08:41:35
  * @Description: 
 -->
+## 0.1.1 20211210
+* 支持安卓设备当前偏转状态的获取
 ## 0.1.0 20210414
 * nullsafety兼容flutter2.0
 
