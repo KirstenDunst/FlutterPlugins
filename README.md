@@ -27,4 +27,8 @@ iOS 独有的一些操作，比如iOS的健康管理
 
 
 ## doraemonkit_csx
- didi的doraemonkit转换flutter使用demo
+didi的doraemonkit转换flutter使用demo
+ 
+ 
+## hot_fix_csx
+app大资源包变更，不需要发版热修复工具
