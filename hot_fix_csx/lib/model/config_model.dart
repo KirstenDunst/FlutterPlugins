@@ -2,22 +2,22 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 13:32:47
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-30 10:20:25
+ * @LastEditTime: 2022-01-21 15:25:34
  * @Description: 本地存储校验的config.json内部key键使用
  */
-import 'package:hot_fix_csx/base/enum.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
 
 class ConfigModel {
   //当前可用资源的的类型
   late int currentValidResource;
   HotFixValidResource get currentValidResourceType =>
       {
-        0: HotFixValidResource.None,
-        1: HotFixValidResource.Base,
-        2: HotFixValidResource.Fix,
-        3: HotFixValidResource.FixTmp
+        0: HotFixValidResource.none,
+        1: HotFixValidResource.base,
+        2: HotFixValidResource.fix,
+        3: HotFixValidResource.fixTmp
       }[currentValidResource] ??
-      HotFixValidResource.None;
+      HotFixValidResource.none;
   //记录是否是第一次加载
   late bool isFirst;
   //记录上一次进行热更新的时间

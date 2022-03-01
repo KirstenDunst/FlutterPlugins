@@ -2,13 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 15:51:01
+ * @LastEditTime: 2022-01-21 15:25:37
  * @Description: 
  */
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hot_fix_csx/base/enum.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/model/config_model.dart';
 import 'package:hot_fix_csx/model/manifest_net_model.dart';
 import 'package:hot_fix_csx/model/resource_model.dart';

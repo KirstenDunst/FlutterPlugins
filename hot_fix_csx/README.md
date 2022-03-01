@@ -1,15 +1,15 @@
+<!--
+ * @Author: Cao Shixin
+ * @Date: 2022-01-19 14:57:55
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2022-01-21 15:20:06
+ * @Description: 
+-->
 # hot_fix_csx
 
-A new flutter plugin project.
+The update of the project's large resource pack does not require the repair tool of the app's re-release.
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 1.需要准备一个json文件用于文件的
 

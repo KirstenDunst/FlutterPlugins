@@ -2,38 +2,37 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:09:50
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-28 14:12:12
+ * @LastEditTime: 2022-01-21 15:25:46
  * @Description: 
  */
 
-import 'package:hot_fix_csx/base/enum.dart';
-
+import 'package:hot_fix_csx/constant/enum.dart';
 class ErrorHelper {
   static Error errorWithType(HotFixErrorType errorType) {
     Error error;
     switch (errorType) {
-      case HotFixErrorType.UnKnow:
+      case HotFixErrorType.unknow:
         error = ArgumentError.value(errorType, '未知错误');
         break;
-      case HotFixErrorType.PathInvalid:
+      case HotFixErrorType.pathInvalid:
         error = ArgumentError.value(errorType, '路径无效');
         break;
-      case HotFixErrorType.ResourceListInvalid:
+      case HotFixErrorType.resourceListInvalid:
         error = ArgumentError.value(errorType, '资源清单无效');
         break;
-      case HotFixErrorType.ResourceSumNotExists:
+      case HotFixErrorType.resourceSumNotExists:
         error = ArgumentError.value(errorType, '资源不完整');
         break;
-      case HotFixErrorType.ResourceSumMd5NotEqual:
+      case HotFixErrorType.resourceSumMd5NotEqual:
         error = ArgumentError.value(errorType, '有资源md5不一致');
         break;
-      case HotFixErrorType.NetResourceIsWrong:
+      case HotFixErrorType.netResourceIsWrong:
         error = ArgumentError.value(errorType, '网络全量资源不正确');
         break;
-      case HotFixErrorType.DiffResourceIsWrong:
+      case HotFixErrorType.diffResourceIsWrong:
         error = ArgumentError.value(errorType, '网络增量资源不正确（合并包错误）');
         break;
-      case HotFixErrorType.URLInvalid:
+      case HotFixErrorType.urlInvalid:
         error = ArgumentError.value(errorType, 'URL无效');
         break;
       default:

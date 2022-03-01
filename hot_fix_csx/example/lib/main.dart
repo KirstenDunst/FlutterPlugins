@@ -2,13 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-18 15:50:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 15:13:50
+ * @LastEditTime: 2022-01-21 15:09:36
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),

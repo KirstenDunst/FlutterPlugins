@@ -2,24 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:25:42
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-29 15:39:16
+ * @LastEditTime: 2022-01-21 15:43:10
  * @Description: 
  */
 
 class Constant {
-  //*********** 网络环境地址 **********
-  static const hotfixAskBaseUrlDevelop =
-      'https://fshows-app-dev.oss-cn-hangzhou.aliyuncs.com'; //测试基本路径
-  static const hotfixAskBaseUrlBeta =
-      'https://fshows-app-pre.oss-cn-hangzhou.aliyuncs.com'; //beta基本路径
-  static const hotfixAskBaseUrlDistribute =
-      'https://fshows-app-pro.oss-cn-hangzhou.aliyuncs.com'; //正式基本路径
-
-//pragma mark  *********** 独立队列名称 **********
-  static const hotfixDownloadQueueName = 'HotFixDownloadQueueName'; //下载队列
-  static const hotfixResourceQueueName = 'FixResourceQueueName';
-  static const hotfixQueueName = 'HotFixQueueName';
-
 //pragma mark  *********** 通用路径文件名称 **********
   static const hotfixBaseResourceDirName = 'base/www'; //基本解压w文件的跟路径
   static const hotfixFixResourceDirName = 'fix/www'; //合并一次热更新的跟路径

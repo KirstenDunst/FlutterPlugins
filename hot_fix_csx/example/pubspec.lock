@@ -50,6 +50,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.15.0"
+  common_plugin_csx:
+    dependency: transitive
+    description:
+      name: common_plugin_csx
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.1"
   convert:
     dependency: transitive
     description:
@@ -71,6 +78,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
+  device_info:
+    dependency: transitive
+    description:
+      name: device_info
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.3"
+  device_info_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   dio:
     dependency: transitive
     description:
@@ -104,6 +125,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_downloader:
+    dependency: transitive
+    description:
+      name: flutter_downloader
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -111,16 +139,37 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
+  flutter_network:
+    dependency: transitive
+    description:
+      name: flutter_network
+      url: "https://dart-pub.brainco.cn"
+    source: hosted
+    version: "1.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_utils:
+    dependency: transitive
+    description:
+      name: flutter_utils
+      url: "https://dart-pub.brainco.cn"
+    source: hosted
+    version: "1.1.2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+  get:
+    dependency: transitive
+    description:
+      name: get
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.6.1"
   hot_fix_csx:
     dependency: "direct main"
     description:
@@ -135,6 +184,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -149,6 +205,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
+  logger_csx:
+    dependency: transitive
+    description:
+      name: logger_csx
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
+  logger_util:
+    dependency: transitive
+    description:
+      name: logger_util
+      url: "https://dart-pub.brainco.cn"
+    source: hosted
+    version: "1.0.4"
   matcher:
     dependency: transitive
     description:
@@ -163,6 +233,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.7.0"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.2"
   path:
     dependency: transitive
     description:
@@ -219,6 +296,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.11.1"
   permission_handler:
     dependency: transitive
     description:

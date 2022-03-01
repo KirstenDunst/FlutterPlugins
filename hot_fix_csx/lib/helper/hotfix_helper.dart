@@ -2,11 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-30 15:15:56
+ * @LastEditTime: 2022-01-21 15:25:27
  * @Description: 
  */
-import 'package:hot_fix_csx/base/constant.dart';
-import 'package:hot_fix_csx/base/enum.dart';
+import 'package:hot_fix_csx/constant/constant.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
 
@@ -21,14 +21,14 @@ class HotFixHelper {
     var type = ConfigHelp.instance.configModel.currentValidResourceType;
     var footPath = Constant.hotfixBaseResourceDirName;
     switch (type) {
-      case HotFixValidResource.Fix:
+      case HotFixValidResource.fix:
         footPath = Constant.hotfixFixResourceDirName;
         break;
-      case HotFixValidResource.FixTmp:
+      case HotFixValidResource.fixTmp:
         footPath = Constant.hotfixFixTempResourceDirName;
         break;
-      case HotFixValidResource.Base:
-      case HotFixValidResource.None:
+      case HotFixValidResource.base:
+      case HotFixValidResource.none:
       default:
         footPath = Constant.hotfixBaseResourceDirName;
     }

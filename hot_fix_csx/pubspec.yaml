@@ -10,14 +10,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  crypto: ^3.0.1
   convert: ^3.0.1
   ffi: ^1.1.2
   path_provider: ^2.0.1
-  dio: ^4.0.4
   archive: ^3.1.8
+  common_plugin_csx: ^0.0.1
   shared_preferences: ^2.0.12
   permission_handler: ^8.3.0
+  get: ^4.6.1
+
+  logger_util:
+    hosted:
+      name: logger_util
+      url: https://dart-pub.brainco.cn/
+    version: ^1.0.4
+  flutter_network:
+    hosted:
+      name: flutter_network
+      url: https://dart-pub.brainco.cn/
+    version: ^1.1.2
+  
 
 dev_dependencies:
   flutter_test:

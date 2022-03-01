@@ -2,30 +2,34 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:29:57
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-29 09:40:05
+ * @LastEditTime: 2022-01-21 15:25:48
  * @Description: 
  */
 
-import 'package:hot_fix_csx/base/common.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
+import 'package:logger_util/logger_util.dart';
 
 class LogHelper {
   factory LogHelper() => _getInstance();
   static LogHelper get instance => _getInstance();
   static LogHelper? _instance;
   static LogHelper _getInstance() {
-    return _instance ??= new LogHelper._internal();
+    return _instance ??= LogHelper._internal();
   }
 
-  LogHelper._internal();
-  LogInfoCall? _call;
+  LogHelper._internal() {
+    _call = (str) {
+      LogUtil.logD(str, fileSubName: 'hotFixLog');
+    };
+  }
+
+  late LogInfoCall _call;
 
   set logCall(LogInfoCall? call) {
-    _call = call;
-  }
-
-  void logInfo(String info) {
-    if (_call != null) {
-      _call!(info);
+    if (call != null) {
+      _call = call;
     }
   }
+
+  void logInfo(String info) => _call(info);
 }

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:51:39
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-28 10:51:40
+ * @LastEditTime: 2022-01-21 15:38:32
  * @Description: 
  */
 import 'dart:async';
@@ -26,9 +26,9 @@ extension StreamRepeatLatestExtension<T> on Stream<T> {
       done = true;
       latest = null;
       final listens = List.from(currentListeners);
-      listens.forEach((element) {
+      for (var element in listens) {
         element.closeSync();
-      });
+      }
       currentListeners.clear();
     });
     return Stream.multi((controller) {

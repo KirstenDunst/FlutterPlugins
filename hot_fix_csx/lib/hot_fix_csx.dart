@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 16:01:46
+ * @LastEditTime: 2022-01-21 15:25:51
  * @Description: 
  */
 export 'base/hotfix_manager.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'dart:ffi'; // For FFI
 import 'package:ffi/ffi.dart';
 import 'dart:io';
-import 'channel/allocation.dart'; // For Platform.isX
+import 'base/allocation.dart'; // For Platform.isX
 
 final DynamicLibrary nativeAddLib = Platform.isAndroid
     ? DynamicLibrary.open("libhot_fix_csx.so")

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:49:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 15:53:16
+ * @LastEditTime: 2022-01-21 15:25:28
  * @Description: 路径操作
  * HotFix
  *       base
@@ -25,7 +25,7 @@
 
 import 'dart:io';
 
-import 'package:hot_fix_csx/base/constant.dart';
+import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PathOp {

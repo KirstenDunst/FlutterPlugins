@@ -2,12 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 11:55:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-30 13:52:34
+ * @LastEditTime: 2022-01-21 15:25:25
  * @Description: 
  */
 import 'dart:io';
 
-import 'package:hot_fix_csx/base/enum.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:hot_fix_csx/helper/md5_helper.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
@@ -21,7 +21,7 @@ class DownloadHelper {
     String filePath = ConfigHelp.instance.resourceModel.baseZipName;
     var currentResource =
         ConfigHelp.instance.configModel.currentValidResourceType;
-    if (currentResource != HotFixValidResource.Base) {
+    if (currentResource != HotFixValidResource.base) {
       if (await File(PathOp.instance.latestZipFilePath()).exists()) {
         filePath = PathOp.instance.latestZipFilePath();
       }

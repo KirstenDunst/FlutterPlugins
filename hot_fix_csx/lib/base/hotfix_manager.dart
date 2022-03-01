@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-30 14:00:09
+ * @LastEditTime: 2022-01-21 15:25:54
  * @Description: 热更新资源管理
  */
 
@@ -11,6 +11,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:hot_fix_csx/helper/download_helper.dart';
 import 'package:hot_fix_csx/helper/hotfix_helper.dart';
@@ -22,17 +23,14 @@ import 'package:hot_fix_csx/operation/check_resource_op.dart';
 import 'package:hot_fix_csx/operation/compare_md5_op.dart';
 import 'package:hot_fix_csx/operation/download_op.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
-
-import 'common.dart';
-import 'constant.dart';
-import 'enum.dart';
+import '../constant/enum.dart';
 
 class HotFixManager with WidgetsBindingObserver {
   factory HotFixManager() => _getInstance();
   static HotFixManager get instance => _getInstance();
   static HotFixManager? _instance;
   static HotFixManager _getInstance() {
-    return _instance ??= new HotFixManager._internal();
+    return _instance ??= HotFixManager._internal();
   }
 
   VoidCallback get needRefresh => _needRefresh;
@@ -43,6 +41,10 @@ class HotFixManager with WidgetsBindingObserver {
     _isResourceIntegrityCheck = false;
   }
 
+  /// 设置参数
+  /// manifestUrl
+  /// resourceModel
+  /// logInfo：可选参数，默认单独存在hotFixLog文件内，如果设置，则需要单独处理存储事宜
   @required
   Future setParam(
     String manifestUrl,
@@ -59,15 +61,13 @@ class HotFixManager with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    /*
-     * AppLifecycleState.paused:进入后台
-     * AppLifecycleState.resumed:进入前台
-     * AppLifecycleState.inactive:应用进入非活动状态 , 如来了个电话 , 电话应用进入前台
-     * AppLifecycleState.detached:应用程序仍然在 Flutter 引擎上运行 , 但是与宿主 View 组件分离
-     */
-    LogHelper.instance.logInfo('应用活跃状态：$state');
+    // AppLifecycleState.paused:进入后台
+    // AppLifecycleState.resumed:进入前台
+    // AppLifecycleState.inactive:应用进入非活动状态 , 如来了个电话 , 电话应用进入前台
+    // AppLifecycleState.detached:应用程序仍然在 Flutter 引擎上运行 , 但是与宿主 View 组件分离
+    LogHelper.instance.logInfo('应用活跃状态:$state');
+    //应用进入前台
     if (state == AppLifecycleState.resumed) {
-      //应用进入前台
       var timeSpe = Constant.hotfixSpeceTime * 60;
       if (!ConfigHelp.instance.configModel.isFirst &&
           DateTime.now().second -
@@ -78,9 +78,8 @@ class HotFixManager with WidgetsBindingObserver {
     }
   }
 
-  /* 开启资源监听，
-   * hasNewResource：有新资源的回调
-   */
+  /// 开启资源监听，
+  /// hasNewResource：有新资源的回调
   @required
   Future start() async {
     LogHelper.instance.logInfo('开启资源检测');
@@ -91,45 +90,38 @@ class HotFixManager with WidgetsBindingObserver {
     });
   }
 
-  /*
-   * 校验是否需要进行资源包更新
-   */
+  /// 校验是否需要进行资源包更新
   Future<bool> _readyResource() async {
     if (!ConfigHelp.instance.configModel.isFirst) {
       _needRefresh();
-      return _checkRecource(HotFixResourceIntegrityType.After);
+      return _checkRecource(HotFixResourceIntegrityType.after);
     } else if (await HotFixHelper.isCompletedUnarchiveBase()) {
       LogHelper.instance.logInfo('首次解压成功');
       await ConfigHelp.instance
-          .updateAvailableResourceType(HotFixValidResource.Base);
+          .updateAvailableResourceType(HotFixValidResource.base);
       _needRefresh();
-      return _checkRecource(HotFixResourceIntegrityType.First);
+      return _checkRecource(HotFixResourceIntegrityType.first);
     } else {
-      //走到这里，说明无可用资源，这是不合理的，安卓那边会做一下全量下载（可能仍然不行）最合理的是走单元测试，让代码永远不要进入这里。
-      //给自己留一后手，大招，保命用！
+      //走到这里，说明无可用资源，这是不合理的，做一下全量下载（可能仍然不行）最合理的是走单元测试，让代码永远不要进入这里。
       //全量下载
       readyTotalDownloadOperation(true);
       return false;
     }
   }
 
-  /*
-   * 进行资源包处理
-   */
+  /// 进行资源包处理
   Future startHotFix() async {
     ConfigHelp.instance.updateHotfixTime();
     await ConfigHelp.instance.refreshManifest();
     if (ConfigHelp.instance.manifestNetModel.bundleManifestChecksum !=
         (await Md5Helper.getFileMd5(PathOp.instance.localManifestJsonPath()) ??
             '')) {
-//增量下载
+      //增量下载
       _startDiffDownloadOperation();
     }
   }
 
-/*
- 开始增量下载
- */
+  /// 开始增量下载
   Future _startDiffDownloadOperation() async {
     //增量包下载失败的话，全量下载
     if (await DownloadOp.instance.downloadFile(
@@ -144,8 +136,8 @@ class HotFixManager with WidgetsBindingObserver {
           PathOp.instance.makeupZipFilePath(),
           ConfigHelp.instance.manifestNetModel.bundleArchiveChecksum);
       if (result) {
-//增量合并zip和配置文件md5一致
-//解压缩zip文件
+        //增量合并zip和配置文件md5一致
+        //解压缩zip文件
         var integrityType = await _unarchiveZip(false);
         //解压成功
         //同步校验完整性
@@ -171,10 +163,8 @@ class HotFixManager with WidgetsBindingObserver {
     }
   }
 
-  /*
-   * 校验资源完备
-   * integrityType 资源完备性校验的排次类型
-   */
+  /// 校验资源完备
+  /// integrityType 资源完备性校验的排次类型
   late bool _isResourceIntegrityCheck;
   Future<bool> _checkRecource(HotFixResourceIntegrityType integrityType) async {
     if (_isResourceIntegrityCheck) {
@@ -224,15 +214,13 @@ class HotFixManager with WidgetsBindingObserver {
     }
   }
 
-  /*
-   * 资源不完整的处理方案
-   * integrityType 资源完备性校验的排次类型
-   * block 资源是否可用
-   */
+  /// 资源不完整的处理方案
+  /// integrityType 资源完备性校验的排次类型
+  /// block 资源是否可用
   Future<bool> _dealCheckIntegrityResourceType(
       HotFixResourceIntegrityType integrityType) async {
     switch (integrityType) {
-      case HotFixResourceIntegrityType.After:
+      case HotFixResourceIntegrityType.after:
         {
           //重新解压一次上一次的结果，并刷新页面，然后进行再一次异步校验
           var preRecourceType = await _unarchiveZip(true);
@@ -243,11 +231,11 @@ class HotFixManager with WidgetsBindingObserver {
               .copy(PathOp.instance.latestZipFilePath());
           File(PathOp.instance.totalDownloadFilePath()).delete();
           var result =
-              await _checkRecource(HotFixResourceIntegrityType.AfterAgain);
+              await _checkRecource(HotFixResourceIntegrityType.afterAgain);
           return result;
         }
-      case HotFixResourceIntegrityType.AfterAgain:
-      case HotFixResourceIntegrityType.First:
+      case HotFixResourceIntegrityType.afterAgain:
+      case HotFixResourceIntegrityType.first:
         {
           readyTotalDownloadOperation(true);
           return false;
@@ -255,10 +243,8 @@ class HotFixManager with WidgetsBindingObserver {
     }
   }
 
-  /*
-   * 解压缩最新资源包资源
-   * isTotalZip 是否是全量zip，否则是增量的合成包
-   */
+  /// 解压缩最新资源包资源
+  /// isTotalZip 是否是全量zip，否则是增量的合成包
   Future<HotFixValidResource> _unarchiveZip(bool isTotalZip) async {
     var result = await _unarchiveZipPathAndType();
     var dirName = result['dirName'] as String;
@@ -286,12 +272,12 @@ class HotFixManager with WidgetsBindingObserver {
     HotFixValidResource preRecourceType;
     // fix和fixtmp文件相互替换，每次的热更新包都会交替循环的使用这两个文件夹
     if (ConfigHelp.instance.configModel.currentValidResourceType !=
-        HotFixValidResource.Fix) {
+        HotFixValidResource.fix) {
       dirName = Constant.hotfixFixResourceDirName;
-      preRecourceType = HotFixValidResource.Fix;
+      preRecourceType = HotFixValidResource.fix;
     } else {
       dirName = Constant.hotfixFixTmpResourceDirName;
-      preRecourceType = HotFixValidResource.FixTmp;
+      preRecourceType = HotFixValidResource.fixTmp;
     }
     if (await Directory(dirName).exists()) {
       await Directory(dirName).rename(Constant.hotfixFixTempResourceDirName);
@@ -299,9 +285,7 @@ class HotFixManager with WidgetsBindingObserver {
     return {'dirName': dirName, 'preRecourceType': preRecourceType};
   }
 
-  /*
-   * 全量下载
-   */
+  /// 全量下载
   Future readyTotalDownloadOperation(bool needlLatest) async {
     if (needlLatest) {
       var model = await DownloadOp.instance.getJsonUrlContent();
@@ -319,9 +303,7 @@ class HotFixManager with WidgetsBindingObserver {
     await startTotalDownloadOperation(fullResourceZipUrl);
   }
 
-  /*
-   * 开始全量下载操作，这是一个操作集合
-   */
+  /// 开始全量下载操作，这是一个操作集合
   Future startTotalDownloadOperation(String loadUrl) async {
     if (await DownloadOp.instance.downloadFile(
         ConfigHelp.instance.manifestNetModel.entireBundleUrl,

@@ -2,11 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-26 18:10:15
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 16:08:43
+ * @LastEditTime: 2022-01-20 17:32:12
  * @Description: 
  */
 import 'dart:convert';
 import 'dart:io';
+import 'package:common_plugin_csx/common_plugin_csx.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
@@ -16,8 +17,7 @@ class Md5Helper {
    */
   static Future<String?> getFileMd5(String path) async {
     if (path.isNotEmpty && await File(path).exists()) {
-      var fileStr = await File(path).readAsString();
-      var result = await getStringMd5(fileStr);
+      var result = await CommonPluginCsx.getFileMd5(path);
       return result;
     } else {
       return null;

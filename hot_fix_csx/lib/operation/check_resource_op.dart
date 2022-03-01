@@ -2,12 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:11:17
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-28 17:24:34
+ * @LastEditTime: 2022-01-21 15:25:41
  * @Description: 资源核对操作工具
  */
 import 'dart:io';
 
-import 'package:hot_fix_csx/base/enum.dart';
+import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/error_helper.dart';
 import 'package:hot_fix_csx/helper/md5_helper.dart';
 
@@ -22,7 +22,7 @@ class CheckResourceOp {
       Function(bool checkIsComplete, Error? checkError) result) async {
     if (manifestJson.isEmpty || !(await Directory(resourceDirect).exists())) {
       result(false,
-          ErrorHelper.errorWithType(HotFixErrorType.ResourceSumNotExists));
+          ErrorHelper.errorWithType(HotFixErrorType.resourceSumNotExists));
       return;
     } else {
       HotFixErrorType? errorType;
@@ -34,11 +34,11 @@ class CheckResourceOp {
         if (await File(filePath).exists()) {
           var fileMd5 = await Md5Helper.getFileMd5(filePath) ?? '';
           if (fileMd5.isEmpty || fileMd5 != value) {
-            errorType = HotFixErrorType.ResourceSumMd5NotEqual;
+            errorType = HotFixErrorType.resourceSumMd5NotEqual;
             break;
           }
         } else {
-          errorType = HotFixErrorType.ResourceSumNotExists;
+          errorType = HotFixErrorType.resourceSumNotExists;
           break;
         }
       }
