@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 11:17:09
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-06-29 11:25:48
+ * @LastEditTime: 2022-03-02 10:18:38
  * @Description: 
  */
 import 'package:hot_fix_csx/model/resource_model.dart';
@@ -24,6 +24,6 @@ class ResourceHelper {
    * 获取项目基准资源包名称
    */
   String getBaseZipName() {
-    return _model.baseZipName;
+    return _model.baseZipPath;
   }
 }

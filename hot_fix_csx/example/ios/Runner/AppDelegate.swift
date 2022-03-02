@@ -8,6 +8,7 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    NormalChannel.register(with: self.registrar(forPlugin: "NormalChannel")!)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

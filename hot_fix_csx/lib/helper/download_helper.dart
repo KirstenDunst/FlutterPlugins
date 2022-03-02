@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 11:55:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:25
+ * @LastEditTime: 2022-03-02 10:18:32
  * @Description: 
  */
 import 'dart:io';
@@ -18,7 +18,7 @@ class DownloadHelper {
   }
 
   static Future<String> getDiffUrl() async {
-    String filePath = ConfigHelp.instance.resourceModel.baseZipName;
+    String filePath = ConfigHelp.instance.resourceModel.baseZipPath;
     var currentResource =
         ConfigHelp.instance.configModel.currentValidResourceType;
     if (currentResource != HotFixValidResource.base) {

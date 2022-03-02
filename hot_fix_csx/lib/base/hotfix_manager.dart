@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-01 15:13:59
+ * @LastEditTime: 2022-03-02 10:29:28
  * @Description: 热更新资源管理
  */
 
@@ -43,6 +43,7 @@ class HotFixManager with WidgetsBindingObserver {
   HotFixManager._internal() {
     WidgetsBinding.instance?.addObserver(this);
     _isResourceIntegrityCheck = false;
+    _refreshStreamController = StreamController.broadcast();
   }
 
   /// 设置参数

@@ -2,10 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:51
+ * @LastEditTime: 2022-03-02 10:09:38
  * @Description: 
  */
 export 'base/hotfix_manager.dart';
+export 'model/resource_model.dart';
 
 import 'package:flutter/services.dart';
 import 'dart:ffi'; // For FFI
