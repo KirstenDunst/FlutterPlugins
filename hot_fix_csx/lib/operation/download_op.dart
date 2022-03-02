@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:10:12
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:35:59
+ * @LastEditTime: 2022-03-02 09:14:41
  * @Description: 
  */
 import 'dart:convert';
@@ -26,7 +26,7 @@ class DownloadOp {
   late String _manifestUrl;
 
   DownloadOp._internal() {
-    _dio = NetworkService.rest;
+    _dio = FocusHttpUtil().rest;
   }
 
   @required
@@ -34,10 +34,9 @@ class DownloadOp {
     _manifestUrl = url;
   }
 
-  /* 下载文件保存本地
-   * url：下载文件的远端地址
-   * savePath： 保存本地的路径
-   */
+  /// 下载文件保存本地
+  /// url：下载文件的远端地址
+  /// savePath： 保存本地的路径
   Future<bool> downloadFile(String url, String savePath) async {
     bool status = await Permission.storage.isGranted;
     //判断如果还没拥有读写权限就申请获取权限
@@ -46,7 +45,9 @@ class DownloadOp {
     }
     Response response;
     try {
-      response = await _dio.download(url, savePath);
+      response = await _dio.download(url, savePath,
+          onReceiveProgress: (count, total) => LogHelper.instance
+              .logInfo('$url下载进度:count:$count, total: $total'));
       if (response.statusCode == 200) {
         LogHelper.instance.logInfo('下载请求成功');
         return true;
@@ -60,9 +61,7 @@ class DownloadOp {
     }
   }
 
-  /*
-   * 请求远端json文件的内容获取
-   */
+  /// 请求远端json文件的内容获取
   Future<ManifestNetModel?> getJsonUrlContent() async {
     Response response;
     try {

@@ -10,14 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  convert: ^3.0.1
   ffi: ^1.1.2
   path_provider: ^2.0.1
-  archive: ^3.1.8
   common_plugin_csx: ^0.0.1
   shared_preferences: ^2.0.12
   permission_handler: ^8.3.0
-  get: ^4.6.1
 
   logger_util:
     hosted:
@@ -28,14 +25,12 @@ dependencies:
     hosted:
       name: flutter_network
       url: https://dart-pub.brainco.cn/
-    version: ^1.1.2
-  
+    version: ^2.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-
 
 # The following section is specific to Flutter.
 flutter:
@@ -46,4 +41,3 @@ flutter:
         pluginClass: HotFixCsxPlugin
       ios:
         pluginClass: HotFixCsxPlugin
-

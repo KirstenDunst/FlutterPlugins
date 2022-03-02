@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:47:21
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:22:47
+ * @LastEditTime: 2022-03-01 15:44:12
  * @Description: 
  */
 
@@ -19,10 +19,13 @@ enum HotFixErrorType {
   resourceListInvalid,
   //资源清单不存在
   resourceSumNotExists,
-  //资源清单
+  //资源清单不一致
   resourceSumMd5NotEqual,
+  //网络资源错误
   netResourceIsWrong,
+  //差量资源错误
   diffResourceIsWrong,
+  //url不可用
   urlInvalid
 }
 

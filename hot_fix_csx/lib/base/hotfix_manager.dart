@@ -2,10 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:54
+ * @LastEditTime: 2022-03-01 15:13:59
  * @Description: 热更新资源管理
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -18,6 +19,7 @@ import 'package:hot_fix_csx/helper/hotfix_helper.dart';
 import 'package:hot_fix_csx/helper/log_helper.dart';
 import 'package:hot_fix_csx/helper/md5_helper.dart';
 import 'package:hot_fix_csx/helper/zip_helper.dart';
+import 'package:hot_fix_csx/model/config_model.dart';
 import 'package:hot_fix_csx/model/resource_model.dart';
 import 'package:hot_fix_csx/operation/check_resource_op.dart';
 import 'package:hot_fix_csx/operation/compare_md5_op.dart';
@@ -33,8 +35,10 @@ class HotFixManager with WidgetsBindingObserver {
     return _instance ??= HotFixManager._internal();
   }
 
-  VoidCallback get needRefresh => _needRefresh;
-  late VoidCallback _needRefresh;
+  String get availablePath => HotFixHelper.currentValidResourceBasePath();
+  Stream get refreshStream => _refreshStreamController.stream;
+  late StreamController _refreshStreamController;
+  late bool _isResourceIntegrityCheck;
 
   HotFixManager._internal() {
     WidgetsBinding.instance?.addObserver(this);
@@ -45,7 +49,6 @@ class HotFixManager with WidgetsBindingObserver {
   /// manifestUrl
   /// resourceModel
   /// logInfo：可选参数，默认单独存在hotFixLog文件内，如果设置，则需要单独处理存储事宜
-  @required
   Future setParam(
     String manifestUrl,
     ResourceModel resourceModel, {
@@ -55,6 +58,16 @@ class HotFixManager with WidgetsBindingObserver {
     LogHelper.instance.logCall = logInfo;
     await PathOp.instance.initBase();
     await ConfigHelp.instance.initData(resourceModel);
+  }
+
+  /// 开启资源监听，
+  /// hasNewResource：有新资源的回调
+  Future start() async {
+    LogHelper.instance.logInfo('开启资源检测');
+    var readyResource = await _readyResource();
+    if (readyResource) {
+      await _startHotFix();
+    }
   }
 
   /// 当应用生命周期发生变化时 , 会回调该方法
@@ -73,44 +86,35 @@ class HotFixManager with WidgetsBindingObserver {
           DateTime.now().second -
                   int.parse(ConfigHelp.instance.configModel.lastHotfixTime) >
               timeSpe) {
-        startHotFix();
+        _startHotFix();
       }
     }
-  }
-
-  /// 开启资源监听，
-  /// hasNewResource：有新资源的回调
-  @required
-  Future start() async {
-    LogHelper.instance.logInfo('开启资源检测');
-    _readyResource().then((value) {
-      if (value) {
-        startHotFix();
-      }
-    });
   }
 
   /// 校验是否需要进行资源包更新
   Future<bool> _readyResource() async {
-    if (!ConfigHelp.instance.configModel.isFirst) {
-      _needRefresh();
-      return _checkRecource(HotFixResourceIntegrityType.after);
-    } else if (await HotFixHelper.isCompletedUnarchiveBase()) {
-      LogHelper.instance.logInfo('首次解压成功');
-      await ConfigHelp.instance
-          .updateAvailableResourceType(HotFixValidResource.base);
-      _needRefresh();
-      return _checkRecource(HotFixResourceIntegrityType.first);
+    if (ConfigHelp.instance.configModel.isFirst) {
+      var baseComplate = await HotFixHelper.isCompletedUnarchiveBase();
+      if (baseComplate) {
+        LogHelper.instance.logInfo('首次解压成功');
+        await ConfigHelp.instance
+            .updateAvailableResourceType(HotFixValidResource.base);
+        _refreshStreamController.sink.add(null);
+        return _checkRecource(HotFixResourceIntegrityType.first);
+      } else {
+        //走到这里，说明无可用资源，这是不合理的，做一下全量下载（可能仍然不行）最合理的是走单元测试，让代码永远不要进入这里。
+        //全量下载
+        await _readyTotalDownloadOperation(true);
+        return false;
+      }
     } else {
-      //走到这里，说明无可用资源，这是不合理的，做一下全量下载（可能仍然不行）最合理的是走单元测试，让代码永远不要进入这里。
-      //全量下载
-      readyTotalDownloadOperation(true);
-      return false;
+      _refreshStreamController.sink.add(null);
+      return _checkRecource(HotFixResourceIntegrityType.after);
     }
   }
 
   /// 进行资源包处理
-  Future startHotFix() async {
+  Future _startHotFix() async {
     ConfigHelp.instance.updateHotfixTime();
     await ConfigHelp.instance.refreshManifest();
     if (ConfigHelp.instance.manifestNetModel.bundleManifestChecksum !=
@@ -145,7 +149,7 @@ class HotFixManager with WidgetsBindingObserver {
         if (checkResult) {
           ConfigHelp.instance.configModel.currentValidResource =
               integrityType.index;
-          _needRefresh();
+          _refreshStreamController.sink.add(null);
           //清理将要不用的文件，防止影响新文件生成
           await HotFixHelper.clearLastZip();
           if (await HotFixHelper.mvMakeZipToLastZip()) {
@@ -153,19 +157,18 @@ class HotFixManager with WidgetsBindingObserver {
           }
           //增量更新完成
         } else {
-          readyTotalDownloadOperation(false);
+          _readyTotalDownloadOperation(false);
         }
       } else {
-        readyTotalDownloadOperation(false);
+        _readyTotalDownloadOperation(false);
       }
     } else {
-      readyTotalDownloadOperation(false);
+      _readyTotalDownloadOperation(false);
     }
   }
 
   /// 校验资源完备
   /// integrityType 资源完备性校验的排次类型
-  late bool _isResourceIntegrityCheck;
   Future<bool> _checkRecource(HotFixResourceIntegrityType integrityType) async {
     if (_isResourceIntegrityCheck) {
       return false;
@@ -182,6 +185,7 @@ class HotFixManager with WidgetsBindingObserver {
           if (checkIsComplete) {
             return true;
           } else {
+            LogHelper.instance.logInfo('资源完备性校验失败:$checkError');
             return _dealCheckIntegrityResourceType(integrityType);
           }
         });
@@ -225,7 +229,7 @@ class HotFixManager with WidgetsBindingObserver {
           //重新解压一次上一次的结果，并刷新页面，然后进行再一次异步校验
           var preRecourceType = await _unarchiveZip(true);
           ConfigHelp.instance.updateAvailableResourceType(preRecourceType);
-          _needRefresh();
+          _refreshStreamController.sink.add(null);
           File(PathOp.instance.latestZipFilePath()).delete();
           File(PathOp.instance.totalDownloadFilePath())
               .copy(PathOp.instance.latestZipFilePath());
@@ -237,7 +241,7 @@ class HotFixManager with WidgetsBindingObserver {
       case HotFixResourceIntegrityType.afterAgain:
       case HotFixResourceIntegrityType.first:
         {
-          readyTotalDownloadOperation(true);
+          _readyTotalDownloadOperation(true);
           return false;
         }
     }
@@ -247,27 +251,23 @@ class HotFixManager with WidgetsBindingObserver {
   /// isTotalZip 是否是全量zip，否则是增量的合成包
   Future<HotFixValidResource> _unarchiveZip(bool isTotalZip) async {
     var result = await _unarchiveZipPathAndType();
-    var dirName = result['dirName'] as String;
-    var preRecourceType = result['preRecourceType'] as HotFixValidResource;
-
     var isSuccess = false;
     if (isTotalZip) {
       isSuccess = await ZipHelper.unZipFile(
-          PathOp.instance.totalDownloadFilePath(), dirName);
+          PathOp.instance.totalDownloadFilePath(), result.dirName);
     } else {
       isSuccess = await ZipHelper.unZipFile(
-          PathOp.instance.makeupZipFilePath(), dirName);
+          PathOp.instance.makeupZipFilePath(), result.dirName);
     }
     if (!isSuccess) {
       //异常处理，解压失败
-      Directory(PathOp.instance.fixtempDirectoryPath()).rename(dirName);
+      Directory(PathOp.instance.fixtempDirectoryPath()).rename(result.dirName);
     }
     Directory(PathOp.instance.fixtempDirectoryPath()).delete(recursive: true);
-
-    return preRecourceType;
+    return result.preRecourceType;
   }
 
-  Future<Map> _unarchiveZipPathAndType() async {
+  Future<UnArchiveModel> _unarchiveZipPathAndType() async {
     String dirName;
     HotFixValidResource preRecourceType;
     // fix和fixtmp文件相互替换，每次的热更新包都会交替循环的使用这两个文件夹
@@ -282,11 +282,11 @@ class HotFixManager with WidgetsBindingObserver {
     if (await Directory(dirName).exists()) {
       await Directory(dirName).rename(Constant.hotfixFixTempResourceDirName);
     }
-    return {'dirName': dirName, 'preRecourceType': preRecourceType};
+    return UnArchiveModel(dirName: dirName, preRecourceType: preRecourceType);
   }
 
   /// 全量下载
-  Future readyTotalDownloadOperation(bool needlLatest) async {
+  Future _readyTotalDownloadOperation(bool needlLatest) async {
     if (needlLatest) {
       var model = await DownloadOp.instance.getJsonUrlContent();
       if (model == null) {
@@ -298,13 +298,15 @@ class HotFixManager with WidgetsBindingObserver {
     var fullResourceZipUrl =
         ConfigHelp.instance.manifestNetModel.entireBundleUrl;
     if (fullResourceZipUrl.isEmpty) {
-      //无下载地址，异常结束 TODO:异常结束-无全量下载地址
+      //无下载地址，异常结束
+      LogHelper.instance.logInfo('云端json配置无全量包下载地址');
+    } else {
+      await _startTotalDownloadOperation(fullResourceZipUrl);
     }
-    await startTotalDownloadOperation(fullResourceZipUrl);
   }
 
   /// 开始全量下载操作，这是一个操作集合
-  Future startTotalDownloadOperation(String loadUrl) async {
+  Future _startTotalDownloadOperation(String loadUrl) async {
     if (await DownloadOp.instance.downloadFile(
         ConfigHelp.instance.manifestNetModel.entireBundleUrl,
         DownloadHelper.getTotalUrl())) {
@@ -314,15 +316,16 @@ class HotFixManager with WidgetsBindingObserver {
         var type = await _unarchiveZip(true);
         //全量zip解压完成--
         ConfigHelp.instance.updateAvailableResourceType(type);
-        _needRefresh();
+        _refreshStreamController.sink.add(null);
         File(PathOp.instance.totalDownloadFilePath())
             .rename(PathOp.instance.latestZipFilePath());
-//全量更新完成---
+        //全量更新完成---
       }
     }
   }
 
   void dispose() {
     WidgetsBinding.instance?.removeObserver(this);
+    _refreshStreamController.close();
   }
 }

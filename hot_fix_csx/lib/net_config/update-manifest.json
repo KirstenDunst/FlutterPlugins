@@ -1,0 +1,11 @@
+{
+    "bundleArchiveChecksum": "426994eaddd9048a0d3368c00eb00217",
+    "bundleManifestChecksum": "4c808b1e67f5329c8c87cd21a669da3e",
+    "bundlePlatform": "flutter",
+    "bundleType": "H5",
+    "desc": "有升级！",
+    "entireBundleUrl": "http://fshows-app-dev.oss-cn-hangzhou.aliyuncs.com/fubei-ios/3.4.6/bundle/ios-www.zip",
+    "forceUpdate": true,
+    "patchRootUrl": "http://fshows-app-dev.oss-cn-hangzhou.aliyuncs.com/fubei-ios/3.4.6/bundle/patch/",
+    "version": "1.0.0"
+}

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:37
+ * @LastEditTime: 2022-03-02 09:28:16
  * @Description: 
  */
 import 'dart:convert';
@@ -44,33 +44,25 @@ class ConfigHelp {
     _manifestNetModel = model;
   }
 
-  /*
-   * 修改不是第一次加载的记录
-   */
+  /// 修改不是第一次加载的记录
   Future theVersionHasLoad() async {
     _configModel.isFirst = false;
     await _saveChange();
   }
 
-  /*
-   * 更新热更新资源下载的时间
-   */
+  /// 更新热更新资源下载的时间
   Future updateHotfixTime() async {
     _configModel.lastHotfixTime = '${DateTime.now().second}';
     await _saveChange();
   }
 
-  /*
-   * 更新资源可用的类型
-   */
+  /// 更新资源可用的类型
   Future updateAvailableResourceType(HotFixValidResource type) async {
     _configModel.currentValidResource = type.index;
     await _saveChange();
   }
 
-  /*
-   * 更新本地记录资源
-   */
+  /// 更新本地记录资源
   Future _saveChange() async {
     var value = PathOp.instance.localRecodJsonPath();
     var _buffer = StringBuffer();

@@ -1,6 +1,14 @@
 PODS:
+  - common_plugin_csx (0.0.1):
+    - Flutter
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - flutter_downloader (0.0.1):
+    - Flutter
   - hot_fix_csx (0.0.1):
+    - Flutter
+  - package_info (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
@@ -10,17 +18,29 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - common_plugin_csx (from `.symlinks/plugins/common_plugin_csx/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
+  - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - hot_fix_csx (from `.symlinks/plugins/hot_fix_csx/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 EXTERNAL SOURCES:
+  common_plugin_csx:
+    :path: ".symlinks/plugins/common_plugin_csx/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
+  flutter_downloader:
+    :path: ".symlinks/plugins/flutter_downloader/ios"
   hot_fix_csx:
     :path: ".symlinks/plugins/hot_fix_csx/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
@@ -29,8 +49,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
+  common_plugin_csx: 736d862a94b11fef2540e7ae17dc28ca60e23dcb
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   hot_fix_csx: 97139438d9485cd25633d8d9a356186e5c4bf7fd
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32

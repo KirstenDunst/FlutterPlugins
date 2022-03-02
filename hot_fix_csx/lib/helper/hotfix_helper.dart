@@ -2,12 +2,15 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:27
+ * @LastEditTime: 2022-03-01 18:19:10
  * @Description: 
  */
+import 'dart:io';
+
 import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
+import 'package:hot_fix_csx/helper/log_helper.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
 
 import 'resource_helper.dart';
@@ -50,23 +53,45 @@ class HotFixHelper {
             '/${Constant.hotfixBaseResourceDirName}');
   }
 
+  /// 增量合并
   static Future<bool> makeupZip() async {
+    var isBbase = true;
+    var currentResource =
+        ConfigHelp.instance.configModel.currentValidResourceType;
+    if (currentResource == HotFixValidResource.fix ||
+        currentResource == HotFixValidResource.fixTmp) {
+      isBbase = false;
+    }
+    var result = await ZipHelper.patchResource(isBbase);
+    LogHelper.instance.logInfo('增量合并完成---result:$result');
     return true;
   }
 
   static Future<bool> clearLastDiff() async {
+    await File(
+            '${PathOp.instance.baseDirectory}/${Constant.hotfixDownloadDirName}/${Constant.hotfixDiffDirName}')
+        .delete(recursive: true);
     return true;
   }
 
   static Future<bool> clearLastZip() async {
+    await File(
+            '${PathOp.instance.baseDirectory}/${Constant.hotfixDownloadDirName}/${Constant.hotfixLatestResourceFile}')
+        .delete(recursive: true);
     return true;
   }
 
   static Future<bool> clearMakeupZip() async {
+    await File(
+            '${PathOp.instance.baseDirectory}/${Constant.hotfixDownloadDirName}/${Constant.hotfixMakeupResourceFile}')
+        .delete(recursive: true);
     return true;
   }
 
   static Future<bool> mvMakeZipToLastZip() async {
+    File('${PathOp.instance.baseDirectory}/${Constant.hotfixDownloadDirName}/${Constant.hotfixMakeupResourceFile}')
+        .copy(
+            '${PathOp.instance.baseDirectory}/${Constant.hotfixDownloadDirName}/${Constant.hotfixLatestResourceFile}');
     return true;
   }
 }

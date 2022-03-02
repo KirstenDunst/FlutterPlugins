@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 13:32:47
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:34
+ * @LastEditTime: 2022-03-01 15:07:21
  * @Description: 本地存储校验的config.json内部key键使用
  */
 import 'package:hot_fix_csx/constant/enum.dart';
@@ -41,4 +41,10 @@ class ConfigModel {
     data['lastHotfixTime'] = lastHotfixTime;
     return data;
   }
+}
+
+class UnArchiveModel {
+  String dirName;
+  HotFixValidResource preRecourceType;
+  UnArchiveModel({required this.dirName, required this.preRecourceType});
 }

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:29:57
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-21 15:25:48
+ * @LastEditTime: 2022-03-01 14:39:53
  * @Description: 
  */
 
@@ -19,7 +19,7 @@ class LogHelper {
 
   LogHelper._internal() {
     _call = (str) {
-      LogUtil.logD(str, fileSubName: 'hotFixLog');
+      LogUtil.logD(str, fileSubName: 'hotfixLog');
     };
   }
 

@@ -2,20 +2,20 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 09:00:11
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-01-19 16:17:36
+ * @LastEditTime: 2022-03-01 15:58:33
  * @Description: 
  */
 
 class ManifestNetModel {
-  late String bundleArchiveChecksum;
-  late String bundleManifestChecksum;
-  late String bundlePlatform;
-  late String bundleType;
-  late String desc;
-  late String entireBundleUrl;
-  late bool forceUpdate;
-  late String patchRootUrl;
-  late String version;
+  String bundleArchiveChecksum;
+  String bundleManifestChecksum;
+  String? bundlePlatform;
+  String? bundleType;
+  String? desc;
+  String entireBundleUrl;
+  bool? forceUpdate;
+  String patchRootUrl;
+  String? version;
   ManifestNetModel(
       this.bundleArchiveChecksum,
       this.bundleManifestChecksum,
@@ -31,13 +31,13 @@ class ManifestNetModel {
       ManifestNetModel(
         json['bundleArchiveChecksum'] as String,
         json['bundleManifestChecksum'] as String,
-        json['bundlePlatform'] as String,
-        json['bundleType'] as String,
-        json['desc'] as String,
+        json['bundlePlatform'] as String?,
+        json['bundleType'] as String?,
+        json['desc'] as String?,
         json['entireBundleUrl'] as String,
-        json['forceUpdate'] as bool,
+        json['forceUpdate'] as bool?,
         json['patchRootUrl'] as String,
-        json['version'] as String,
+        json['version'] as String?,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
