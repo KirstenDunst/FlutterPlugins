@@ -2,9 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2022-03-02 09:40:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-02 15:19:28
+ * @LastEditTime: 2022-04-11 10:24:44
  * @Description: 
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hot_fix_csx_example/channel_util.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,14 +26,19 @@ class _HotFixScreenState extends State<HotFixScreen> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       var basePath = await getApplicationDocumentsDirectory();
-      var baseZipPath = basePath.path + '/HotFix/web.zip';
+      var baseDirectory = basePath.path + '/HotFix';
+      if (!await Directory(baseDirectory).exists()) {
+        await Directory(baseDirectory).create(recursive: true);
+      }
+      var baseZipPath = baseDirectory + '/web.zip';
       await ChannelUtil.copyBaseResource(baseZipPath);
-      HotFixManager.instance.setParam(
-          'https://app.brainco.cn/focus-autism/mobile/hotfix/debug/',
+      await HotFixManager.instance.setParam(
+          'https://app.brainco.cn/focus-autism/mobile/hotfix/debug/2.9.0/update-manifest.json?time=${DateTime.now().millisecondsSinceEpoch}',
           ResourceModel(baseZipPath: baseZipPath));
       HotFixManager.instance.start();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +47,23 @@ class _HotFixScreenState extends State<HotFixScreen> {
       ),
       body: StreamBuilder(
         stream: HotFixManager.instance.refreshStream,
-        builder: (context, snapData) => WebView(
-          initialUrl: HotFixManager.instance.availablePath + '/index.html',
-        ),
+        builder: (context, snapData) {
+          var localPath = HotFixManager.instance.availablePath + '/index.html';
+          print('刷新路径:>>>>>>>>>>>$localPath');
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                child: WebView(
+                  initialUrl: localPath,
+                ),
+              ),
+              Text(localPath),
+            ],
+          );
+        },
       ),
     );
   }

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:47:21
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-01 15:44:12
+ * @LastEditTime: 2022-04-15 16:36:41
  * @Description: 
  */
 
@@ -31,7 +31,6 @@ enum HotFixErrorType {
 
 /// 当前可用资源
 enum HotFixValidResource {
-  none,
   //基准包资源
   base,
   //更新包(交替使用)

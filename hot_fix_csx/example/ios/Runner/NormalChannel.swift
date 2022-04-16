@@ -33,7 +33,7 @@ class NormalChannel: NSObject,FlutterPlugin,FlutterStreamHandler {
             // let documentPath = documentPaths.first ?? ""
             // let targetPath = documentPath + "/www.zip"
             let targetPath = call.arguments as! String
-            let back = Tool.copyFile(from: Bundle.main.path(forResource: "www", ofType: "zip")!, to: targetPath)
+            let back = Tool.copyFile(from: Bundle.main.path(forResource: "dist", ofType: "zip")!, to: targetPath)
             result(back)
         default:
             result("iOS " + UIDevice.current.systemVersion)

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-18 15:50:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-02 10:04:22
+ * @LastEditTime: 2022-04-12 10:16:07
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -62,13 +62,13 @@ class HomePage extends StatelessWidget {
                 // print('>>>>>>>>>$result');
 
                 //合并包
-                var result1 = HotFixCsx.bsPatchWithC([
+                var result = HotFixCsx.bsPatchWithC([
                   'bspatch',
-                  '${value.path}/ios-www1.zip',
-                  '${value.path}/ios-wwwnew.zip',
-                  filePath
+                  '/Users/caoshixin/Library/Developer/CoreSimulator/Devices/B3792338-36F8-480C-BA8A-CC64D9E82FB3/data/Containers/Data/Application/3E611D6E-27A7-4FE9-B680-1FECA8740981/Documents/HotFix/web.zip',
+                  '/Users/caoshixin/Library/Developer/CoreSimulator/Devices/B3792338-36F8-480C-BA8A-CC64D9E82FB3/data/Containers/Data/Application/3E611D6E-27A7-4FE9-B680-1FECA8740981/Documents/HotFix/download/makeup123.zip',
+                  '/Users/caoshixin/Library/Developer/CoreSimulator/Devices/B3792338-36F8-480C-BA8A-CC64D9E82FB3/data/Containers/Data/Application/3E611D6E-27A7-4FE9-B680-1FECA8740981/Documents/HotFix/download/diff'
                 ]);
-                print('>>>>>>>>>$result1');
+                print('>>>>>>>>>>>>$result');
               } catch (e) {
                 print('error: $e');
               }

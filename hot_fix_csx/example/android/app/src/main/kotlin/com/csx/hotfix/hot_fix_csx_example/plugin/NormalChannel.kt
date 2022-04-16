@@ -14,8 +14,8 @@ class NormalChannel(val activity: Activity) : MethodChannel.MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "move_base_zip" -> {
-                var inputStream = assets.open("landing.mp4")
-                var outputStream = FileOutputStream(CacheUtils.getFileDir() + "landing.mp4")
+                var inputStream = assets.open("www.zip")
+                var outputStream = FileOutputStream(CacheUtils.getExternalStorageDirectory() + "www.zip")
                 var byteArray = ByteArray(512)
                 while (inputStream.read(byteArray) != -1) {
                     outputStream.write(byteArray)
@@ -34,9 +34,4 @@ class NormalChannel(val activity: Activity) : MethodChannel.MethodCallHandler {
             }
         }
     }
-}
-
-// 工具类
-class ZipUtils {
-    
 }

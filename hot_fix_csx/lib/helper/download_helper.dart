@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 11:55:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-02 10:18:32
+ * @LastEditTime: 2022-04-15 17:52:19
  * @Description: 
  */
 import 'dart:io';
@@ -13,10 +13,6 @@ import 'package:hot_fix_csx/helper/md5_helper.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
 
 class DownloadHelper {
-  static String getTotalUrl() {
-    return PathOp.instance.totalDownloadFilePath();
-  }
-
   static Future<String> getDiffUrl() async {
     String filePath = ConfigHelp.instance.resourceModel.baseZipPath;
     var currentResource =
