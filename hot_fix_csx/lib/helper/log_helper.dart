@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:29:57
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-01 14:39:53
+ * @LastEditTime: 2022-04-18 10:26:10
  * @Description: 
  */
 
@@ -32,4 +32,8 @@ class LogHelper {
   }
 
   void logInfo(String info) => _call(info);
+
+  void dispose() {
+    _instance = null;
+  }
 }

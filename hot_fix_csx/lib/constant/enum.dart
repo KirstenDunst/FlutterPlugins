@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:47:21
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 16:36:41
+ * @LastEditTime: 2022-04-18 14:46:29
  * @Description: 
  */
 
@@ -37,14 +37,4 @@ enum HotFixValidResource {
   fix,
   //更新包（交替使用） 考虑到更新包也会被更新，所以这里建立一个临时情况
   fixTmp,
-}
-
-/// 进行异步检测资源完备性的结果机制
-enum HotFixResourceIntegrityType {
-  //第一次异步校验
-  first,
-  //已有资源，加载的时候异步校验
-  after,
-  //已有资源完备性检测失败，重新解压检测
-  afterAgain
 }

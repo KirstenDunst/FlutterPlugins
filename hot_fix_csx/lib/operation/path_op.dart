@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:49:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 18:27:00
+ * @LastEditTime: 2022-04-18 14:48:06
  * @Description: 路径操作
  * HotFix
  *       base
@@ -77,9 +77,7 @@ class PathOp {
         footPath = Constant.hotfixBaseResourceDirName;
         break;
     }
-    var temp = ConfigHelp.instance.resourceModel.zipFileName;
-    return _baseDirectory +
-        ((temp != null && temp.isNotEmpty) ? '/$footPath/$temp' : '/$footPath');
+    return _baseDirectory.isEmpty ? '' : (_baseDirectory + '/$footPath');
   }
 
   /// 当前资源文件的清单文件路径
@@ -87,17 +85,11 @@ class PathOp {
     var parentPath = currentValidResourceBasePath();
     return '$parentPath/${Constant.hotfixResourceListFile}';
   }
-  
+
   /// 本地热更新记录json
   String localRecodJsonPath() {
     return _baseDirectory +
         '/${Constant.hotfixConfigDirName}/${Constant.hotfixConfigJsonFile}';
-  }
-
-  /// 本地保存上次的manifest的json数据
-  String localManifestJsonPath() {
-    return _baseDirectory +
-        '/${Constant.hotfixConfigDirName}/${Constant.hotfixNetWorkJsonFile}';
   }
 
   /// 文件存储文件夹
@@ -115,7 +107,7 @@ class PathOp {
     return _baseDirectory + '/${Constant.hotfixFixTmpResourceDirName}';
   }
 
-  /// 热更新中转操作文件夹
+  /// 热更新中转操作的临时文件夹
   String fixtempDirectoryPath() {
     return _baseDirectory + '/${Constant.hotfixFixTempResourceDirName}';
   }
@@ -142,5 +134,9 @@ class PathOp {
   String latestZipFilePath() {
     return _baseDirectory +
         '/${Constant.hotfixDownloadDirName}/${Constant.hotfixLatestResourceFile}';
+  }
+
+  void dispose() {
+    _instance = null;
   }
 }

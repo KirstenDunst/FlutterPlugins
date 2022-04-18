@@ -2,27 +2,25 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 18:27:49
+ * @LastEditTime: 2022-04-18 14:32:44
  * @Description: 
  */
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
+import 'package:hot_fix_csx/helper/error_helper.dart';
 import 'package:hot_fix_csx/model/config_model.dart';
 import 'package:hot_fix_csx/operation/check_resource_op.dart';
 import 'package:hot_fix_csx/operation/compare_md5_op.dart';
 import 'package:hot_fix_csx/operation/download_op.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
-
 import 'download_helper.dart';
 import 'file_system_helper.dart';
 import 'log_helper.dart';
-import 'md5_helper.dart';
 import 'zip_helper.dart';
 
 class HotFixHelper {
@@ -30,12 +28,10 @@ class HotFixHelper {
   static Future startHotFix() async {
     await DownloadOp.instance.getJsonUrlContent();
     unawaited(ConfigHelp.instance.updateHotfixTime());
-    var lastManifestPath = PathOp.instance.currentManifestPath();
-    var lastManifestMd5 = await Md5Helper.getFileMd5(lastManifestPath) ?? '';
-    LogHelper.instance.logInfo(
-        'HotFix compare MainfestMd5 net: ${ConfigHelp.instance.manifestNetModel.bundleManifestChecksum}, local:$lastManifestMd5');
-    if (ConfigHelp.instance.manifestNetModel.bundleManifestChecksum !=
-        lastManifestMd5) {
+    var result = await CompareMd5Op.compareMd5(
+        ConfigHelp.instance.manifestNetModel.bundleManifestChecksum,
+        PathOp.instance.currentManifestPath());
+    if (!result) {
       //增量下载
       await _startDiffDownloadOperation();
     }
@@ -53,9 +49,8 @@ class HotFixHelper {
       FileSystemHelper.clearLastDiff();
       //对比操作zip文件的md5
       var result = await CompareMd5Op.compareMd5(
-        ConfigHelp.instance.manifestNetModel.bundleArchiveChecksum,
-        PathOp.instance.makeupZipFilePath(),
-      );
+          ConfigHelp.instance.manifestNetModel.bundleArchiveChecksum,
+          PathOp.instance.makeupZipFilePath());
       if (result) {
         //增量合并zip和配置文件md5一致
         //解压缩zip文件
@@ -81,59 +76,54 @@ class HotFixHelper {
   /// 校验资源完备
   /// integrityType 资源完备性校验的排次类型
   static Future<bool> checkRecource(
-      HotFixResourceIntegrityType integrityType) async {
+      {bool onlyCheck = false, bool isAgain = false}) async {
     var resourceDirect = PathOp.instance.currentValidResourceBasePath();
-    var value = await rootBundle
-        .loadString(resourceDirect + '/' + Constant.hotfixResourceListFile);
-    if (value.isNotEmpty) {
-      var manifestJson = json.decode(value);
-      var result =
-          await CheckResourceOp.checkResourceFull(manifestJson, resourceDirect);
-      if (result.checkIsComplete) {
-        return true;
-      } else {
-        LogHelper.instance.logInfo('资源完备性校验失败:${result.checkError}');
-        return _dealCheckIntegrityResourceType(integrityType);
-      }
+    var result = await _onlyCheckRecource(resourceDirect);
+    if (result.checkIsComplete) {
+      return true;
+    } else {
+      LogHelper.instance.logInfo('资源完备性校验失败:${result.checkError}');
+      return onlyCheck
+          ? false
+          : await _dealCheckIntegrityResourceType(isAgain: isAgain);
     }
-    return _dealCheckIntegrityResourceType(integrityType);
   }
 
-  static Future<bool> _onlyCheckRecource({String? resDirect}) async {
-    var resourceDirect =
-        resDirect ?? PathOp.instance.currentValidResourceBasePath();
+  static Future<CheckResultModel> _onlyCheckRecource(String resDirect) async {
     var value = await rootBundle
-        .loadString(resourceDirect + '/' + Constant.hotfixResourceListFile);
+        .loadString(resDirect + '/' + Constant.hotfixResourceListFile);
     if (value.isNotEmpty) {
-      var manifestJson = json.decode(value);
-      var result =
-          await CheckResourceOp.checkResourceFull(manifestJson, resourceDirect);
-      return result.checkIsComplete;
+      try {
+        var manifestJson = json.decode(value);
+        var result =
+            await CheckResourceOp.checkResourceFull(manifestJson, resDirect);
+        return result;
+      } catch (e) {
+        return CheckResultModel(
+            checkIsComplete: false, checkError: ArgumentError.value(e));
+      }
     }
-    return false;
+    return CheckResultModel(
+        checkIsComplete: false,
+        checkError:
+            ErrorHelper.errorWithType(HotFixErrorType.resourceListInvalid));
   }
 
   /// 资源不完整的处理方案
-  /// integrityType 资源完备性校验的排次类型
   /// return 资源是否可用
   static Future<bool> _dealCheckIntegrityResourceType(
-      HotFixResourceIntegrityType integrityType) async {
-    switch (integrityType) {
-      case HotFixResourceIntegrityType.after:
-        {
-          //重新解压一次上一次的结果，并刷新页面，然后进行再一次异步校验
-          await _unarchiveZip(true);
-          ConfigHelp.instance.refreshStreamController.sink.add(null);
-          var result =
-              await checkRecource(HotFixResourceIntegrityType.afterAgain);
-          return result;
-        }
-      case HotFixResourceIntegrityType.afterAgain:
-      case HotFixResourceIntegrityType.first:
-        {
-          readyTotalDownloadOperation(true);
-          return false;
-        }
+      {bool isAgain = false}) async {
+    var latestFileExist = await FileSystemHelper.isExistsFile(
+        PathOp.instance.latestZipFilePath());
+    if (latestFileExist && !isAgain) {
+      //重新解压一次上一次的结果，并刷新页面，然后进行再一次异步校验
+      await _unarchiveZip(true);
+      ConfigHelp.instance.refreshStreamController.sink.add(null);
+      var result = await checkRecource(isAgain: true);
+      return result;
+    } else {
+      readyTotalDownloadOperation(true);
+      return false;
     }
   }
 
@@ -152,11 +142,12 @@ class HotFixHelper {
     if (isSuccess) {
       //解压成功
       //同步校验完整性
-      var answer = await _onlyCheckRecource(
-          resDirect: PathOp.instance.baseDirectory + '/' + result.dirName);
-      if (answer) {
+      var answer = await _onlyCheckRecource(result.dirName);
+      if (answer.checkIsComplete) {
         ConfigHelp.instance.updateAvailableResourceType(result.preRecourceType);
       } else {
+        //校验完整性失败，清除无效解压文件
+        await Directory(result.dirName).delete(recursive: true);
         isSuccess = false;
       }
     } else {
@@ -175,18 +166,20 @@ class HotFixHelper {
     String dirName;
     HotFixValidResource preRecourceType;
     // fix和fixtmp文件相互替换，每次的热更新合成包或者全量包都会交替循环的使用这两个文件夹
-    if (ConfigHelp.instance.configModel.currentValidResourceType !=
+    if (ConfigHelp.instance.configModel.currentValidResourceType ==
         HotFixValidResource.fix) {
-      dirName = Constant.hotfixFixResourceDirName;
-      preRecourceType = HotFixValidResource.fix;
-    } else {
       dirName = Constant.hotfixFixTmpResourceDirName;
       preRecourceType = HotFixValidResource.fixTmp;
+    } else {
+      dirName = Constant.hotfixFixResourceDirName;
+      preRecourceType = HotFixValidResource.fix;
     }
     if (await Directory(dirName).exists()) {
       await Directory(dirName).rename(Constant.hotfixFixTempResourceDirName);
     }
-    return UnArchiveModel(dirName: dirName, preRecourceType: preRecourceType);
+    return UnArchiveModel(
+        dirName: PathOp.instance.baseDirectory + '/' + dirName,
+        preRecourceType: preRecourceType);
   }
 
   /// 全量下载
@@ -194,6 +187,7 @@ class HotFixHelper {
     if (needlLatest) {
       var result = await DownloadOp.instance.getJsonUrlContent();
       if (!result) {
+        LogHelper.instance.logInfo('全量下载更新云端配置文件失败');
         return;
       }
     }
@@ -215,14 +209,14 @@ class HotFixHelper {
       if (await CompareMd5Op.compareMd5(
           ConfigHelp.instance.manifestNetModel.bundleArchiveChecksum,
           PathOp.instance.totalDownloadFilePath())) {
-        await File(PathOp.instance.totalDownloadFilePath())
-            .rename(PathOp.instance.latestZipFilePath());
+        await FileSystemHelper.mvTotalZipToLastZip();
         await _unarchiveZip(true);
         //全量zip解压完成--
         ConfigHelp.instance.refreshStreamController.sink.add(null);
         LogHelper.instance.logInfo('全量更新完成');
       } else {
-        LogHelper.instance.logInfo('code error,全量md5文件云端配置不一致');
+        LogHelper.instance
+            .logInfo('code error please check and reUpload,全量包md5文件云端配置不一致');
       }
     }
   }

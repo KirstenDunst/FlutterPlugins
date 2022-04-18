@@ -2,13 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 18:22:54
+ * @LastEditTime: 2022-04-18 14:31:22
  * @Description: 
  */
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/log_helper.dart';
 import 'package:hot_fix_csx/model/config_model.dart';
@@ -35,8 +34,8 @@ class ConfigHelp {
   late StreamController _refreshStreamController;
 
   ConfigHelp._internal() {
-    _configModel = ConfigModel();
-    _resourceModel = ResourceModel(baseZipPath: '', zipFileName: '');
+    _configModel = ConfigModel(0, true, '');
+    _resourceModel = ResourceModel(baseZipPath: '');
   }
 
   Future initData(
@@ -90,5 +89,9 @@ class ConfigHelp {
     var saveJsonStr = jsonEncode(_configModel.toJson());
     LogHelper.instance.logInfo('更新本地记录:$saveJsonStr');
     await File(value).writeAsString(saveJsonStr);
+  }
+
+  void dispose() {
+    _instance = null;
   }
 }

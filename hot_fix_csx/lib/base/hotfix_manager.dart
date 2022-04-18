@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 18:26:46
+ * @LastEditTime: 2022-04-18 14:50:26
  * @Description: 热更新资源管理
  */
 
@@ -26,8 +26,13 @@ class HotFixManager with WidgetsBindingObserver {
     return _instance ??= HotFixManager._internal();
   }
 
+  /// 可用资源路径（压缩包解压的文件夹路径）
+  /// 使用判断是否为空，不为空的时候才为有效路径
   String get availablePath => PathOp.instance.currentValidResourceBasePath();
+
+  /// 配合上面路径获取使用，进行流事件监听，有更新会通过刷新流通知外部
   Stream get refreshStream => _refreshStreamController.stream;
+  
   late StreamController _refreshStreamController;
 
   HotFixManager._internal() {
@@ -51,12 +56,13 @@ class HotFixManager with WidgetsBindingObserver {
   }
 
   /// 开启资源监听
-  Future start() async {
+  void start() {
     LogHelper.instance.logInfo('开启资源检测');
-    var readyResource = await _readyResource();
-    if (readyResource) {
-      await HotFixHelper.startHotFix();
-    }
+    unawaited(_readyResource().then((readyResource) {
+      if (readyResource) {
+        HotFixHelper.startHotFix();
+      }
+    }));
   }
 
   /// 当应用生命周期发生变化时 , 会回调该方法
@@ -85,8 +91,7 @@ class HotFixManager with WidgetsBindingObserver {
             .updateAvailableResourceType(HotFixValidResource.base);
         await ConfigHelp.instance.theVersionHasLoad();
         _refreshStreamController.sink.add(null);
-        unawaited(
-            HotFixHelper.checkRecource(HotFixResourceIntegrityType.first));
+        unawaited(HotFixHelper.checkRecource());
         return true;
       } else {
         LogHelper.instance.logInfo('项目基准资源不完整，可以调用单元测试查看基准包不完备的具体原因');
@@ -97,18 +102,22 @@ class HotFixManager with WidgetsBindingObserver {
       }
     } else {
       _refreshStreamController.sink.add(null);
-      return HotFixHelper.checkRecource(HotFixResourceIntegrityType.after);
+      return HotFixHelper.checkRecource(isAgain: true);
     }
   }
 
   Future<bool> isCompletedUnarchiveBase() async {
     return ZipHelper.unZipFile(ConfigHelp.instance.getBaseZipPath(),
-        Constant.hotfixBaseResourceDirName);
+        PathOp.instance.baseDirectoryPath());
   }
 
   void dispose() {
     WidgetsBinding.instance?.removeObserver(this);
+    DownloadOp.instance.dispose();
+    PathOp.instance.dispose();
+    ConfigHelp.instance.dispose();
     _refreshStreamController.close();
+    LogHelper.instance.dispose();
     _instance = null;
   }
 }

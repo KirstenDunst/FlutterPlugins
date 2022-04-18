@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:10:12
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-12 10:41:45
+ * @LastEditTime: 2022-04-18 10:27:38
  * @Description: 
  */
 import 'package:dio/dio.dart';
@@ -81,5 +81,10 @@ class DownloadOp {
       LogHelper.instance.logInfo('json服务器出错或网络连接失败:$e');
       return false;
     }
+  }
+
+  void dispose() {
+    _dio.close(force: true);
+    _instance = null;
   }
 }

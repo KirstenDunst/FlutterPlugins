@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:25:42
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-02 15:14:35
+ * @LastEditTime: 2022-04-18 14:23:24
  * @Description: 
  */
 
@@ -23,8 +23,6 @@ class Constant {
   static const hotfixDiffDirName = 'diff'; //下载资源临时目录名
   static const hotfixResourceListFile = 'resource-bundle.manifest'; //清单文件名
   static const hotfixConfigJsonFile = 'config.json'; //本地热更新的资源文件
-  static const hotfixNetWorkJsonFile =
-      'manifest.json'; //远端热更新的ios-update-manifest文件本地存储名称
   static const hotfixTotalResourceFile = 'total.zip'; //全量包
   static const hotfixMakeupResourceFile = 'makeup.zip'; //合并增量包生成的压缩包
   static const hotfixLatestResourceFile =
