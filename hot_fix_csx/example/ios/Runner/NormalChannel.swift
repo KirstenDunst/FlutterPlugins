@@ -22,7 +22,7 @@ class NormalChannel: NSObject,FlutterPlugin,FlutterStreamHandler {
         return nil
     }
     
-    static var CHANNEL_NAME = "hot_fix_csx_example";
+    static var CHANNEL_NAME = "hot_fix_csx_example123";
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let method = call.method

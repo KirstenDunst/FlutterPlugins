@@ -2,13 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2022-03-02 09:40:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-11 10:24:44
+ * @LastEditTime: 2022-04-18 17:29:55
  * @Description: 
  */
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hot_fix_csx_example/channel_util.dart';
+import 'package:example/channel_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -24,6 +24,9 @@ class _HotFixScreenState extends State<HotFixScreen> {
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       var basePath = await getApplicationDocumentsDirectory();
       var baseDirectory = basePath.path + '/HotFix';
@@ -33,7 +36,7 @@ class _HotFixScreenState extends State<HotFixScreen> {
       var baseZipPath = baseDirectory + '/web.zip';
       await ChannelUtil.copyBaseResource(baseZipPath);
       await HotFixManager.instance.setParam(
-          'https://app.brainco.cn/focus-autism/mobile/hotfix/debug/2.9.0/update-manifest.json?time=${DateTime.now().millisecondsSinceEpoch}',
+          'https://app.brainco.cn/focus-autism/mobile/hotfix/debug/2.9.0/update-manifest.json',
           ResourceModel(baseZipPath: baseZipPath));
       HotFixManager.instance.start();
     });

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:10:12
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 10:27:38
+ * @LastEditTime: 2022-04-18 16:56:33
  * @Description: 
  */
 import 'package:dio/dio.dart';
@@ -46,7 +46,7 @@ class DownloadOp {
     Response response;
     try {
       response = await _dio.download(
-        url, savePath,
+        url + '?time=${DateTime.now().millisecondsSinceEpoch}', savePath,
         // onReceiveProgress: (count, total) => LogHelper.instance
         //     .logInfo('$url下载进度:count:$count, total: $total')
       );
@@ -67,7 +67,8 @@ class DownloadOp {
   Future<bool> getJsonUrlContent() async {
     Response response;
     try {
-      response = await _dio.get(_manifestUrl);
+      response = await _dio
+          .get(_manifestUrl + '?time=${DateTime.now().millisecondsSinceEpoch}');
       if (response.statusCode == 200) {
         LogHelper.instance.logInfo('jsonUrl请求成功:${response.data}');
         var model = ManifestNetModel.fromJson(response.data);

@@ -1,6 +1,6 @@
-# hot_fix_csx_example
+# example
 
-Demonstrates how to use the hot_fix_csx plugin.
+A new Flutter project.
 
 ## Getting Started
 

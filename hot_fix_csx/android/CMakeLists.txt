@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.4.1)  # for example
 
-add_library( native_add
+add_library( hot_fix_csx
 
     # Sets the library as a shared library.
     SHARED
 
     # Provides a relative path to your source file(s).
-    ../ios/Classes/native_add.cpp
+    ../ios/Classes/hot_fix.cpp
     ../ios/Classes/bsdiff/bsdiff.c
     ../ios/Classes/bsdiff/bspatch.c
     ../ios/Classes/bsdiff/bsdiff.h
