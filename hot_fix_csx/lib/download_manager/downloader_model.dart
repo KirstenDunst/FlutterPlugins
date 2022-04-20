@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 20:08:28
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 14:56:23
+ * @LastEditTime: 2022-04-20 09:05:59
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -12,7 +12,6 @@
 import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:hot_fix_csx/ext/num_ext.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 class ResourceModel {
@@ -182,79 +181,6 @@ class HeadVerifyModel {
   }
 }
 
-//下载成功界面展示的模型
-class DownLoadShowModel {
-  //名称
-  String title;
-
-  //下载地址
-  String url;
-
-  //下面的时间或者共有几项文字
-  String timeOrCount;
-
-  //存储占有b、kb、m、g、t
-  int memoryByte;
-
-  String get memoryStr => (memoryByte).byteFormat();
-
-  DownLoadShowModel(
-      {this.title = '',
-      this.url = '',
-      this.timeOrCount = '',
-      this.memoryByte = 0});
-}
-
-class DownLoadedModel {
-  //总 内存占有
-  int memoryByte;
-
-  String get memoryStr => (memoryByte).byteFormat();
-
-  //列表
-  List<DownLoadShowModel> showModels;
-
-  DownLoadedModel({this.memoryByte = 0, required this.showModels});
-}
-
-class DownloaddingModel {
-  // 下载中的数量
-  int loaddingNum;
-
-  //所有加入可显示下载队列的数量
-  int allLoadddingNum;
-
-  // 合计内存数量
-  int memoryByte;
-
-  String get memoryByteStr => (memoryByte).byteFormat();
-
-  DownloaddingModel(
-      {required this.loaddingNum,
-      required this.allLoadddingNum,
-      required this.memoryByte});
-}
-
-//下载中的每个cell处理模型
-class DownloaddingCellModel {
-  //状态字符串
-  String stateStr;
-  String memoryProgressStr;
-  String statePicStr;
-  TextStyle stateStrStyle;
-  int progress;
-  DownloadTaskStatus state;
-
-  DownloaddingCellModel({
-    required this.stateStr,
-    required this.memoryProgressStr,
-    required this.statePicStr,
-    required this.stateStrStyle,
-    required this.progress,
-    required this.state,
-  });
-}
-
 //批量下载整合进度模型
 class DownloadStateModel {
   //当批量中任意一个下载失败就会触发这个状态为true，但是不影响其他的任务继续下载
@@ -314,30 +240,4 @@ class DownloadStateModel {
   void addByte({num increment = 0}) {
     _allByte += increment;
   }
-}
-
-enum DownloadModelType {
-  //无特殊状态
-  UnSelect,
-  //选中
-  Select,
-  //下载完成
-  Download,
-}
-
-//下载弹窗dialog模型
-class DownloadDialogModel {
-  //图片地址
-  String picUrl;
-
-  //下载资源地址
-  ResourceModel resourceModel;
-
-  //下载的类型，调用showdialog的时候传入的参数可以不设置，内部会统一判定并修改
-  DownloadModelType modelType;
-
-  DownloadDialogModel(
-      {required this.resourceModel,
-      this.picUrl = '',
-      this.modelType = DownloadModelType.UnSelect});
 }
