@@ -34,71 +34,15 @@ public class CommonPluginCsxPlugin implements FlutterPlugin, MethodCallHandler {
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("getFileMd5")) {
-      String md5Str = getFileMD5( new File(call.arguments.toString()),16);
+      // error:
+      // BigInteger bigInt = new BigInteger(1, digest.digest());
+      // bigInt.toString(16);
+      // 当遇到第一位数字是0时，就会发现得到的MD5把首位的0丢掉啦(很隐蔽的一个坑呀)
+      String md5Str = MD5Util.getAgentMD5(call.arguments.toString());
       result.success(md5Str);
     } else {
       result.notImplemented();
     }
-  }
-
-  /**
-   * 获取单个文件的MD5值
-   * 
-   * @param file  文件
-   * @param radix 位 16 32 64
-   *
-   * @return
-   */
-  private String getFileMD5(File file, int radix) {
-    if (!file.isFile()) {
-      return null;
-    }
-    MessageDigest digest = null;
-    FileInputStream in = null;
-    byte buffer[] = new byte[1024];
-    int len;
-    try {
-      digest = MessageDigest.getInstance("MD5");
-      in = new FileInputStream(file);
-      while ((len = in.read(buffer, 0, 1024)) != -1) {
-        digest.update(buffer, 0, len);
-      }
-      in.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-    BigInteger bigInt = new BigInteger(1, digest.digest());
-    return bigInt.toString(radix);
-  }
-
-  /**
-   * 获取文件夹中文件的MD5值
-   * 
-   * @param file
-   * @param listChild
-   *                  ;true递归子目录中的文件
-   * @return
-   */
-  private Map<String, String> getDirMD5(File file, boolean listChild) {
-    if (!file.isDirectory()) {
-      return null;
-    }
-    Map<String, String> map = new HashMap<String, String>();
-    String md5;
-    File files[] = file.listFiles();
-    for (int i = 0; i < files.length; i++) {
-      File f = files[i];
-      if (f.isDirectory() && listChild) {
-        map.putAll(getDirMD5(f, listChild));
-      } else {
-        md5 = getFileMD5(f,16);
-        if (md5 != null) {
-          map.put(f.getPath(), md5);
-        }
-      }
-    }
-    return map;
   }
 
   @Override

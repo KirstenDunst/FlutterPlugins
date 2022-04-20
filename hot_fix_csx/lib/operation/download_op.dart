@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:10:12
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 16:56:33
+ * @LastEditTime: 2022-04-19 11:10:51
  * @Description: 
  */
 import 'package:dio/dio.dart';
@@ -41,7 +41,11 @@ class DownloadOp {
     bool status = await Permission.storage.isGranted;
     //判断如果还没拥有读写权限就申请获取权限
     if (!status) {
-      await Permission.storage.request().isGranted;
+      var permissionState = await Permission.storage.request();
+      if (!permissionState.isGranted) {
+        LogHelper.instance.logInfo('本地存储权限拒绝');
+        return false;
+      }
     }
     Response response;
     try {

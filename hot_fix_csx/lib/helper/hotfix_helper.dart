@@ -2,13 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:32:44
+ * @LastEditTime: 2022-04-19 09:26:54
  * @Description: 
  */
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
@@ -90,8 +89,8 @@ class HotFixHelper {
   }
 
   static Future<CheckResultModel> _onlyCheckRecource(String resDirect) async {
-    var value = await rootBundle
-        .loadString(resDirect + '/' + Constant.hotfixResourceListFile);
+    var value = await File(resDirect + '/' + Constant.hotfixResourceListFile)
+        .readAsString();
     if (value.isNotEmpty) {
       try {
         var manifestJson = json.decode(value);

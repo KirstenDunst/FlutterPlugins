@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:50:26
+ * @LastEditTime: 2022-04-19 16:11:16
  * @Description: 热更新资源管理
  */
 
@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hot_fix_csx/constant/constant.dart';
 import 'package:hot_fix_csx/constant/enum.dart';
+import 'package:hot_fix_csx/helper/clear_helper.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:hot_fix_csx/helper/hotfix_helper.dart';
 import 'package:hot_fix_csx/helper/log_helper.dart';
@@ -32,7 +33,7 @@ class HotFixManager with WidgetsBindingObserver {
 
   /// 配合上面路径获取使用，进行流事件监听，有更新会通过刷新流通知外部
   Stream get refreshStream => _refreshStreamController.stream;
-  
+
   late StreamController _refreshStreamController;
 
   HotFixManager._internal() {
@@ -55,14 +56,17 @@ class HotFixManager with WidgetsBindingObserver {
     await ConfigHelp.instance.initData(resourceModel, _refreshStreamController);
   }
 
-  /// 开启资源监听
+  /// 开启资源监听，需要在[setParam]方法执行完成之后调用
   void start() {
-    LogHelper.instance.logInfo('开启资源检测');
-    unawaited(_readyResource().then((readyResource) {
-      if (readyResource) {
-        HotFixHelper.startHotFix();
-      }
-    }));
+    // 检测旧文件清理
+    ClearHelp.clearOldData().then((value) {
+      LogHelper.instance.logInfo('开启资源检测:$value');
+      unawaited(_readyResource().then((readyResource) {
+        if (readyResource) {
+          HotFixHelper.startHotFix();
+        }
+      }));
+    });
   }
 
   /// 当应用生命周期发生变化时 , 会回调该方法
@@ -87,9 +91,9 @@ class HotFixManager with WidgetsBindingObserver {
       var baseComplate = await isCompletedUnarchiveBase();
       if (baseComplate) {
         LogHelper.instance.logInfo('首次解压成功');
+        await ConfigHelp.instance.theVersionHasLoad();
         await ConfigHelp.instance
             .updateAvailableResourceType(HotFixValidResource.base);
-        await ConfigHelp.instance.theVersionHasLoad();
         _refreshStreamController.sink.add(null);
         unawaited(HotFixHelper.checkRecource());
         return true;

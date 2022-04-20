@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-18 15:50:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-12 10:16:07
+ * @LastEditTime: 2022-04-19 10:18:38
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'hotfix_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

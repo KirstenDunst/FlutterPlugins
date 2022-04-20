@@ -1,6 +1,6 @@
 name: common_plugin_csx
 description: A small collection of generic plug-ins.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/common_plugin_csx
 
 environment:

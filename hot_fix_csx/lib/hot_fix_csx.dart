@@ -2,11 +2,21 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-03-02 10:09:38
+ * @LastEditTime: 2022-04-19 17:28:50
  * @Description: 
  */
 export 'base/hotfix_manager.dart';
 export 'model/resource_model.dart';
+export 'helper/md5_helper.dart';
+export 'helper/zip_helper.dart';
+export 'util/url_encode_util.dart';
+export 'download_manager/resource_provider.dart';
+export 'base/safe_notifier.dart';
+export 'ext/num_ext.dart';
+export 'util/trace_util.dart';
+
+// 扩展，暂未用到，对外开放
+export 'util/stream_util.dart';
 
 import 'package:flutter/services.dart';
 import 'dart:ffi'; // For FFI
@@ -14,20 +24,20 @@ import 'package:ffi/ffi.dart';
 import 'dart:io';
 import 'base/allocation.dart'; // For Platform.isX
 
-final DynamicLibrary nativeAddLib = Platform.isAndroid
+final DynamicLibrary hotFixCsx = Platform.isAndroid
     ? DynamicLibrary.open("libhot_fix_csx.so")
     : DynamicLibrary.process();
 
-final int Function(int x, int y) nativeAdd = nativeAddLib
+final int Function(int x, int y) nativeAdd = hotFixCsx
     .lookup<NativeFunction<Int32 Function(Int32, Int32)>>("native_add")
     .asFunction();
 
-final int Function(int x, Pointer<Pointer<Utf8>> y) bsdiff = nativeAddLib
+final int Function(int x, Pointer<Pointer<Utf8>> y) bsdiff = hotFixCsx
     .lookup<NativeFunction<Int32 Function(Int32, Pointer<Pointer<Utf8>>)>>(
         "bsdiff")
     .asFunction();
 
-final int Function(int x, Pointer<Pointer<Utf8>> y) bspatch = nativeAddLib
+final int Function(int x, Pointer<Pointer<Utf8>> y) bspatch = hotFixCsx
     .lookup<NativeFunction<Int32 Function(Int32, Pointer<Pointer<Utf8>>)>>(
         "bspatch")
     .asFunction();
@@ -35,13 +45,26 @@ final int Function(int x, Pointer<Pointer<Utf8>> y) bspatch = nativeAddLib
 class HotFixCsx {
   static const MethodChannel _channel = MethodChannel('hot_fix_csx');
 
-  ///解压本地资源，返回是否解压成功
-  ///zipPath:解压文件的路径
-  ///targetPath:需要解压到的文件路径
-  static Future<bool> unzipResource(String zipPath, String targetPath) async {
-    return (await _channel.invokeMethod(
-            'unzip_resource', {'zipPath': zipPath, 'targetPath': targetPath}) ??
+  /// 解压项目资源，返回是否解压成功
+  /// resourseName:待解压的项目资源文件（iOS项目直接拖入项目主目录的资源，Android:主项目下面assets文件夹中存放的资源）名称
+  /// targetDirectPath:需要解压到的手机本地路径
+  static Future<bool> unzipResource(
+      String resourseName, String targetDirectPath) async {
+    return (await _channel.invokeMethod('unzip_resource', {
+          'resourseName': resourseName,
+          'targetDirectPath': targetDirectPath
+        }) ??
         false);
+  }
+
+  /// 拷贝项目资源到手机本地
+  /// resourseName 待拷贝的项目资源文件（iOS项目直接拖入项目主目录的资源，Android:主项目下面assets文件夹中存放的资源）名称
+  /// targetPath: 本机目标路径
+  static Future<bool> copyResourceToDevice(
+      String resourseName, String targetPath) async {
+    var result = await _channel.invokeMethod('move_resource',
+        {'resourseName': resourseName, 'targetPath': targetPath});
+    return result ?? false;
   }
 
   /// 拆分包

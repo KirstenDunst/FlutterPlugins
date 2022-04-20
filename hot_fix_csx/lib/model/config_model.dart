@@ -2,12 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 13:32:47
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 11:14:55
+ * @LastEditTime: 2022-04-19 10:06:53
  * @Description: 本地存储校验的config.json内部key键使用
  */
 import 'package:hot_fix_csx/constant/enum.dart';
 
 class ConfigModel {
+  //当前版本号，留作版本升级的时候清理使用
+  String appVersion;
   //当前可用资源的的类型
   int currentValidResource;
   HotFixValidResource get currentValidResourceType =>
@@ -22,9 +24,11 @@ class ConfigModel {
   //记录上一次进行热更新的时间
   String lastHotfixTime;
 
-  ConfigModel(this.currentValidResource, this.isFirst, this.lastHotfixTime);
+  ConfigModel(this.appVersion, this.currentValidResource, this.isFirst,
+      this.lastHotfixTime);
 
   factory ConfigModel.fromJson(Map<String, dynamic> json) => ConfigModel(
+        json['appVersion'] ?? '',
         json['currentValidResource'] ?? 0,
         json['isFirst'] ?? true,
         json['lastHotfixTime'] ?? '',
@@ -32,6 +36,7 @@ class ConfigModel {
 
   Map toJson() {
     var data = <String, dynamic>{};
+    data['appVersion'] = appVersion;
     data['currentValidResource'] = currentValidResource;
     data['isFirst'] = isFirst;
     data['lastHotfixTime'] = lastHotfixTime;

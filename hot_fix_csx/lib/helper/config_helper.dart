@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:31:22
+ * @LastEditTime: 2022-04-19 10:21:19
  * @Description: 
  */
 import 'dart:async';
@@ -14,6 +14,7 @@ import 'package:hot_fix_csx/model/config_model.dart';
 import 'package:hot_fix_csx/model/manifest_net_model.dart';
 import 'package:hot_fix_csx/model/resource_model.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ConfigHelp {
   factory ConfigHelp() => _getInstance();
@@ -32,9 +33,10 @@ class ConfigHelp {
   late ManifestNetModel _manifestNetModel;
   late ResourceModel _resourceModel;
   late StreamController _refreshStreamController;
+  late PackageInfo _packageInfo;
 
   ConfigHelp._internal() {
-    _configModel = ConfigModel(0, true, '');
+    _configModel = ConfigModel('', 0, true, '');
     _resourceModel = ResourceModel(baseZipPath: '');
   }
 
@@ -51,6 +53,7 @@ class ConfigHelp {
       }
     }
     LogHelper.instance.logInfo('本地模型配置结果:${_configModel.toJson()}');
+    _packageInfo = await PackageInfo.fromPlatform();
   }
 
   set changeManifestModel(ManifestNetModel model) {
@@ -62,9 +65,12 @@ class ConfigHelp {
     return _resourceModel.baseZipPath;
   }
 
+  String get nowAppVersion => _packageInfo.version;
+
   /// 修改不是第一次加载的记录
   Future theVersionHasLoad() async {
     _configModel.isFirst = false;
+    _configModel.appVersion = nowAppVersion;
     await _saveChange();
   }
 
