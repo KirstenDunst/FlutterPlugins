@@ -1,0 +1,4 @@
+
+*.zip
+hot_fix_csx/example/ios/Runner/dist.zip
+hot_fix_csx/example/android/app/src/main/assets/dist.zip

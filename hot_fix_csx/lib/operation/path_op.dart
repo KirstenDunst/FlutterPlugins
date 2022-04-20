@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:49:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:48:06
+ * @LastEditTime: 2022-04-20 14:52:29
  * @Description: 路径操作
  * HotFix
  *       base
@@ -71,7 +71,7 @@ class PathOp {
         footPath = Constant.hotfixFixResourceDirName;
         break;
       case HotFixValidResource.fixTmp:
-        footPath = Constant.hotfixFixTempResourceDirName;
+        footPath = Constant.hotfixFixTmpResourceDirName;
         break;
       case HotFixValidResource.base:
         footPath = Constant.hotfixBaseResourceDirName;
@@ -83,7 +83,7 @@ class PathOp {
   /// 当前资源文件的清单文件路径
   String currentManifestPath() {
     var parentPath = currentValidResourceBasePath();
-    return '$parentPath/${Constant.hotfixResourceListFile}';
+    return '$parentPath/${Constant.hotfixResourceListFile}/${ConfigHelp.instance.resourceModel.unzipDirName}';
   }
 
   /// 本地热更新记录json

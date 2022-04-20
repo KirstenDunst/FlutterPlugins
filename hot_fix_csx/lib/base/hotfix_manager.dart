@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 16:11:16
+ * @LastEditTime: 2022-04-20 14:03:13
  * @Description: 热更新资源管理
  */
 
@@ -29,7 +29,13 @@ class HotFixManager with WidgetsBindingObserver {
 
   /// 可用资源路径（压缩包解压的文件夹路径）
   /// 使用判断是否为空，不为空的时候才为有效路径
-  String get availablePath => PathOp.instance.currentValidResourceBasePath();
+  String get availablePath {
+    var tempResult = PathOp.instance.currentValidResourceBasePath();
+    if (tempResult.isNotEmpty) {
+      tempResult += '/${ConfigHelp.instance.resourceModel.unzipDirName}';
+    }
+    return tempResult;
+  }
 
   /// 配合上面路径获取使用，进行流事件监听，有更新会通过刷新流通知外部
   Stream get refreshStream => _refreshStreamController.stream;

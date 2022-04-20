@@ -17,6 +17,11 @@ dependencies:
     path: ../
   get: ^4.6.1
   webview_flutter: ^3.0.2
+  jaguar:
+    version: ^3.0.12
+    hosted:
+      name: jaguar
+      url: https://dart-pub.brainco.cn/
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 10:21:19
+ * @LastEditTime: 2022-04-20 13:53:33
  * @Description: 
  */
 import 'dart:async';
@@ -37,7 +37,7 @@ class ConfigHelp {
 
   ConfigHelp._internal() {
     _configModel = ConfigModel('', 0, true, '');
-    _resourceModel = ResourceModel(baseZipPath: '');
+    _resourceModel = ResourceModel(baseZipPath: '', unzipDirName: '');
   }
 
   Future initData(

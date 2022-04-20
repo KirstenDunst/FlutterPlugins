@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 09:26:54
+ * @LastEditTime: 2022-04-20 14:21:14
  * @Description: 
  */
 import 'dart:async';
@@ -89,13 +89,14 @@ class HotFixHelper {
   }
 
   static Future<CheckResultModel> _onlyCheckRecource(String resDirect) async {
-    var value = await File(resDirect + '/' + Constant.hotfixResourceListFile)
-        .readAsString();
+    var path = resDirect + '/${ConfigHelp.instance.resourceModel.unzipDirName}';
+    var value =
+        await File('$path/${Constant.hotfixResourceListFile}').readAsString();
     if (value.isNotEmpty) {
       try {
         var manifestJson = json.decode(value);
         var result =
-            await CheckResourceOp.checkResourceFull(manifestJson, resDirect);
+            await CheckResourceOp.checkResourceFull(manifestJson, path);
         return result;
       } catch (e) {
         return CheckResultModel(
@@ -176,9 +177,8 @@ class HotFixHelper {
     if (await Directory(dirName).exists()) {
       await Directory(dirName).rename(Constant.hotfixFixTempResourceDirName);
     }
-    return UnArchiveModel(
-        dirName: PathOp.instance.baseDirectory + '/' + dirName,
-        preRecourceType: preRecourceType);
+    var path = PathOp.instance.baseDirectory + '/$dirName';
+    return UnArchiveModel(dirName: path, preRecourceType: preRecourceType);
   }
 
   /// 全量下载
