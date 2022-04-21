@@ -2,12 +2,11 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:13:32
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 13:50:53
+ * @LastEditTime: 2022-04-20 17:15:12
  * @Description: 
  */
 import 'dart:io';
 import 'package:archive/archive.dart';
-import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/file_system_helper.dart';
 import 'package:hot_fix_csx/helper/log_helper.dart';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
@@ -47,8 +46,7 @@ class ZipHelper {
   /// patch resource
   static Future<bool> patchResource() async {
     var filePath = '';
-    if (ConfigHelp.instance.configModel.currentValidResourceType ==
-        HotFixValidResource.base) {
+    if (ConfigHelp.instance.configModel.isFirst) {
       filePath = ConfigHelp.instance.getBaseZipPath();
     } else {
       var isExists = await FileSystemHelper.isExistsFile(

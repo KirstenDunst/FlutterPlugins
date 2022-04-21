@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:25:42
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:23:24
+ * @LastEditTime: 2022-04-20 15:42:36
  * @Description: 
  */
 
@@ -12,11 +12,9 @@ class Constant {
   static const hotfixBaseResourceDirName =
       '${_hotfixPrefix}base/resource'; //基本解压w文件的跟路径
   static const hotfixFixResourceDirName =
-      '${_hotfixPrefix}fix/resource'; //合并一次热更新的跟路径
-  static const hotfixFixTmpResourceDirName =
-      '${_hotfixPrefix}fixtmp/resource'; //再次热更新合并的跟路径
+      '${_hotfixPrefix}fix/resource'; //热更新解压临时路径
   static const hotfixFixTempResourceDirName =
-      '${_hotfixPrefix}fixtemp/resource'; //做内容解压的时候临时存储旧的文件，防止清除之后没解压成功导致下次加载问题。
+      '${_hotfixPrefix}fixtemp/resource'; //做内容替换的时候之前的文件备份，防止清除之后没解压成功导致下次加载问题。
   static const hotfixConfigDirName = '${_hotfixPrefix}config'; //配置资源的路径
   static const hotfixDownloadDirName = '${_hotfixPrefix}download'; //下载资源目录名
 

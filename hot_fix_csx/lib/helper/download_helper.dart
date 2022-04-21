@@ -6,8 +6,6 @@
  * @Description: 
  */
 import 'dart:io';
-
-import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:hot_fix_csx/helper/md5_helper.dart';
 import 'package:hot_fix_csx/operation/path_op.dart';
@@ -15,9 +13,7 @@ import 'package:hot_fix_csx/operation/path_op.dart';
 class DownloadHelper {
   static Future<String> getDiffUrl() async {
     String filePath = ConfigHelp.instance.resourceModel.baseZipPath;
-    var currentResource =
-        ConfigHelp.instance.configModel.currentValidResourceType;
-    if (currentResource != HotFixValidResource.base) {
+    if (!ConfigHelp.instance.configModel.isFirst) {
       if (await File(PathOp.instance.latestZipFilePath()).exists()) {
         filePath = PathOp.instance.latestZipFilePath();
       }

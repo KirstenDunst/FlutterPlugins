@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:47:21
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-18 14:46:29
+ * @LastEditTime: 2022-04-20 16:18:22
  * @Description: 
  */
 
@@ -27,14 +27,4 @@ enum HotFixErrorType {
   diffResourceIsWrong,
   //url不可用
   urlInvalid
-}
-
-/// 当前可用资源
-enum HotFixValidResource {
-  //基准包资源
-  base,
-  //更新包(交替使用)
-  fix,
-  //更新包（交替使用） 考虑到更新包也会被更新，所以这里建立一个临时情况
-  fixTmp,
 }

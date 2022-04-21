@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		DBA8D0FD280D685C00066A33 /* dist.zip in Resources */ = {isa = PBXBuildFile; fileRef = DBA8D0FC280D685C00066A33 /* dist.zip */; };
 		DBA8D0FF280D686C00066A33 /* NormalChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA8D0FE280D686B00066A33 /* NormalChannel.swift */; };
+		DBA8D1032810E51000066A33 /* www.zip in Resources */ = {isa = PBXBuildFile; fileRef = DBA8D1022810E51000066A33 /* www.zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		9E30CB6D28C6ED009BA21B29 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBA8D0FC280D685C00066A33 /* dist.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = dist.zip; sourceTree = "<group>"; };
 		DBA8D0FE280D686B00066A33 /* NormalChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NormalChannel.swift; sourceTree = "<group>"; };
+		DBA8D1022810E51000066A33 /* www.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = www.zip; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +82,6 @@
 				2C3960523558362B9DCD0A00 /* Pods-Runner.release.xcconfig */,
 				7265B293F738AEB5D20A13FC /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -119,6 +120,7 @@
 			children = (
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
+				DBA8D1022810E51000066A33 /* www.zip */,
 				DBA8D0FC280D685C00066A33 /* dist.zip */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
 				97C147021CF9000F007C117D /* Info.plist */,
@@ -197,6 +199,7 @@
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				DBA8D1032810E51000066A33 /* www.zip in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				DBA8D0FD280D685C00066A33 /* dist.zip in Resources */,
 			);

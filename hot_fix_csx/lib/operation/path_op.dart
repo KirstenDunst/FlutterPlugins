@@ -2,14 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:49:29
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 15:10:30
+ * @LastEditTime: 2022-04-20 16:33:28
  * @Description: 路径操作
  * HotFix
  *       base
  *              基准包解压缩之后的文件资源（文件夹）
  *       fix
- *              解压缩之后的文件资源（文件夹）
- *       fixtmp
  *              解压缩之后的文件资源（文件夹）
  *       fixtemp
  *              解压缩之后的文件资源（文件夹）
@@ -24,9 +22,7 @@
  */
 
 import 'dart:io';
-
 import 'package:hot_fix_csx/constant/constant.dart';
-import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/config_helper.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -58,31 +54,12 @@ class PathOp {
   }
 
   Future initBase() async {
-    var basePath = await _getBasePath();
-    _baseDirectory = basePath;
-  }
-
-  /// 当前可用资源的父级目录
-  String currentValidResourceBasePath() {
-    var type = ConfigHelp.instance.configModel.currentValidResourceType;
-    var footPath = Constant.hotfixBaseResourceDirName;
-    switch (type) {
-      case HotFixValidResource.fix:
-        footPath = Constant.hotfixFixResourceDirName;
-        break;
-      case HotFixValidResource.fixTmp:
-        footPath = Constant.hotfixFixTmpResourceDirName;
-        break;
-      case HotFixValidResource.base:
-        footPath = Constant.hotfixBaseResourceDirName;
-        break;
-    }
-    return _baseDirectory.isEmpty ? '' : (_baseDirectory + '/$footPath');
+    _baseDirectory = await _getBasePath();
   }
 
   /// 当前资源文件的清单文件路径
   String currentManifestPath() {
-    var parentPath = currentValidResourceBasePath();
+    var parentPath = baseDirectoryPath();
     return '$parentPath/${ConfigHelp.instance.resourceModel.unzipDirName}/${Constant.hotfixResourceListFile}';
   }
 
@@ -100,11 +77,6 @@ class PathOp {
   /// 热更新文件夹1
   String fixDirectoryPath() {
     return _baseDirectory + '/${Constant.hotfixFixResourceDirName}';
-  }
-
-  /// 热更新文件夹2
-  String fixtmpDirectoryPath() {
-    return _baseDirectory + '/${Constant.hotfixFixTmpResourceDirName}';
   }
 
   /// 热更新中转操作的临时文件夹

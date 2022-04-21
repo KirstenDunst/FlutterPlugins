@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 10:37:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 14:21:14
+ * @LastEditTime: 2022-04-20 18:05:49
  * @Description: 
  */
 import 'dart:async';
@@ -55,9 +55,6 @@ class HotFixHelper {
         //解压缩zip文件
         var success = await _unarchiveZip(false);
         if (success) {
-          ConfigHelp.instance.refreshStreamController.sink.add(null);
-          //清理将要不用的文件，防止影响新文件生成
-          await FileSystemHelper.clearLastZip();
           await FileSystemHelper.mvMakeZipToLastZip();
           LogHelper.instance.logInfo('增量更新完成');
         } else {
@@ -76,7 +73,7 @@ class HotFixHelper {
   /// integrityType 资源完备性校验的排次类型
   static Future<bool> checkRecource(
       {bool onlyCheck = false, bool isAgain = false}) async {
-    var resourceDirect = PathOp.instance.currentValidResourceBasePath();
+    var resourceDirect = PathOp.instance.baseDirectoryPath();
     var result = await _onlyCheckRecource(resourceDirect);
     if (result.checkIsComplete) {
       return true;
@@ -118,7 +115,6 @@ class HotFixHelper {
     if (latestFileExist && !isAgain) {
       //重新解压一次上一次的结果，并刷新页面，然后进行再一次异步校验
       await _unarchiveZip(true);
-      ConfigHelp.instance.refreshStreamController.sink.add(null);
       var result = await checkRecource(isAgain: true);
       return result;
     } else {
@@ -130,55 +126,40 @@ class HotFixHelper {
   /// 解压缩最新资源包资源
   /// isTotalZip 是否是全量zip，否则是增量的合成包
   static Future<bool> _unarchiveZip(bool isTotalZip) async {
-    var result = await _unarchiveZipPathAndType();
+    await FileSystemHelper.clearFixDir();
+    var unzipDir = PathOp.instance.fixDirectoryPath();
     var isSuccess = false;
     if (isTotalZip) {
       isSuccess = await ZipHelper.unZipFile(
-          PathOp.instance.latestZipFilePath(), result.dirName);
+          PathOp.instance.latestZipFilePath(), unzipDir);
     } else {
       isSuccess = await ZipHelper.unZipFile(
-          PathOp.instance.makeupZipFilePath(), result.dirName);
+          PathOp.instance.makeupZipFilePath(), unzipDir);
     }
     if (isSuccess) {
       //解压成功
       //同步校验完整性
-      var answer = await _onlyCheckRecource(result.dirName);
+      var answer = await _onlyCheckRecource(unzipDir);
       if (answer.checkIsComplete) {
-        ConfigHelp.instance.updateAvailableResourceType(result.preRecourceType);
+        //文件转换
+        try {
+          await FileSystemHelper.mvBaseDirToFixTempDir();
+          await FileSystemHelper.mvFixDirToBaseDir();
+        } catch (e) {
+          await FileSystemHelper.mvFixTempDirToBaseDir();
+        }
+        ConfigHelp.instance.updateResourcePath();
       } else {
         //校验完整性失败，清除无效解压文件
-        await Directory(result.dirName).delete(recursive: true);
+        await FileSystemHelper.clearFixDir();
         isSuccess = false;
       }
     } else {
       //异常处理，解压失败
-      await Directory(PathOp.instance.fixtempDirectoryPath())
-          .rename(result.dirName);
+      await FileSystemHelper.clearFixDir();
     }
-    if (await Directory(PathOp.instance.fixtempDirectoryPath()).exists()) {
-      await Directory(PathOp.instance.fixtempDirectoryPath())
-          .delete(recursive: true);
-    }
+    await FileSystemHelper.clearFixTempDir();
     return isSuccess;
-  }
-
-  static Future<UnArchiveModel> _unarchiveZipPathAndType() async {
-    String dirName;
-    HotFixValidResource preRecourceType;
-    // fix和fixtmp文件相互替换，每次的热更新合成包或者全量包都会交替循环的使用这两个文件夹
-    if (ConfigHelp.instance.configModel.currentValidResourceType ==
-        HotFixValidResource.fix) {
-      dirName = Constant.hotfixFixTmpResourceDirName;
-      preRecourceType = HotFixValidResource.fixTmp;
-    } else {
-      dirName = Constant.hotfixFixResourceDirName;
-      preRecourceType = HotFixValidResource.fix;
-    }
-    if (await Directory(dirName).exists()) {
-      await Directory(dirName).rename(Constant.hotfixFixTempResourceDirName);
-    }
-    var path = PathOp.instance.baseDirectory + '/$dirName';
-    return UnArchiveModel(dirName: path, preRecourceType: preRecourceType);
   }
 
   /// 全量下载
@@ -211,7 +192,6 @@ class HotFixHelper {
         await FileSystemHelper.mvTotalZipToLastZip();
         await _unarchiveZip(true);
         //全量zip解压完成--
-        ConfigHelp.instance.refreshStreamController.sink.add(null);
         LogHelper.instance.logInfo('全量更新完成');
       } else {
         LogHelper.instance

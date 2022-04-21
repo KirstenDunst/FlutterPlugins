@@ -2,13 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 13:53:33
+ * @LastEditTime: 2022-04-20 17:14:35
  * @Description: 
  */
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:hot_fix_csx/constant/enum.dart';
 import 'package:hot_fix_csx/helper/log_helper.dart';
 import 'package:hot_fix_csx/model/config_model.dart';
 import 'package:hot_fix_csx/model/manifest_net_model.dart';
@@ -27,7 +26,7 @@ class ConfigHelp {
   ConfigModel get configModel => _configModel;
   ManifestNetModel get manifestNetModel => _manifestNetModel;
   ResourceModel get resourceModel => _resourceModel;
-  StreamController get refreshStreamController => _refreshStreamController;
+  // StreamController get refreshStreamController => _refreshStreamController;
 
   late ConfigModel _configModel;
   late ManifestNetModel _manifestNetModel;
@@ -36,7 +35,7 @@ class ConfigHelp {
   late PackageInfo _packageInfo;
 
   ConfigHelp._internal() {
-    _configModel = ConfigModel('', 0, true, '');
+    _configModel = ConfigModel('', true, '');
     _resourceModel = ResourceModel(baseZipPath: '', unzipDirName: '');
   }
 
@@ -60,6 +59,11 @@ class ConfigHelp {
     _manifestNetModel = model;
   }
 
+  void updateResourcePath() {
+    _refreshStreamController.sink.add(
+        '${PathOp.instance.baseDirectoryPath()}/${_resourceModel.unzipDirName}');
+  }
+
   /// 获取项目基准资源包文件地址
   String getBaseZipPath() {
     return _resourceModel.baseZipPath;
@@ -77,12 +81,6 @@ class ConfigHelp {
   /// 更新热更新资源下载的时间
   Future updateHotfixTime() async {
     _configModel.lastHotfixTime = '${DateTime.now().millisecondsSinceEpoch}';
-    await _saveChange();
-  }
-
-  /// 更新资源可用的类型
-  Future updateAvailableResourceType(HotFixValidResource type) async {
-    _configModel.currentValidResource = type.index;
     await _saveChange();
   }
 
