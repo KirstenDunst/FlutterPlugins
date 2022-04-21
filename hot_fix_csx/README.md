@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 16:13:08
+ * @LastEditTime: 2022-04-21 15:16:56
  * @Description: 
 -->
 # hot_fix_csx
@@ -29,12 +29,12 @@ StreamBuilder(
 ```
 
 
-### 其他
+### 其他权限问题
 1. For Android 需要支持本地文件的读写权限
 
 
 ## Alert
-1.不要将重要的文件存储在：Android({{getExternalStorageDirectory}}/HotFix/),iOS({{getApplicationDocumentsDirectory}}/HotFix/)下面，避免版本升级的时候被此插件清理
+1.不要将重要的文件存储在：Android:({{getExternalStorageDirectory}}/HotFix/),iOS:({{getApplicationDocumentsDirectory}}/HotFix/)下面，避免版本升级的时候被此插件清理
 
 ## 其他关于项目可使用的工具类以及功能
 ```
@@ -89,7 +89,7 @@ ZipHelper.unZipFile(ConfigHelp.instance.getBaseZipPath(),
         PathOp.instance.baseDirectoryPath());
 ```
 
-6. url中文字符转码形成一个新的url,针对iOS的plugin加载需要
+6. url中文字符转码形成一个新的url,针对iOS的相关路径加载问题需要
 ```
 var newUri = UrlEncodeUtil.urlEncode('http:www.baidu.com/你猜猜.png');
 ```
