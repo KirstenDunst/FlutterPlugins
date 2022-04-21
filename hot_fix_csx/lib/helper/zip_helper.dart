@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-28 11:13:32
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 17:15:12
+ * @LastEditTime: 2022-04-21 14:11:17
  * @Description: 
  */
 import 'dart:io';
@@ -49,9 +49,10 @@ class ZipHelper {
     if (ConfigHelp.instance.configModel.isFirst) {
       filePath = ConfigHelp.instance.getBaseZipPath();
     } else {
-      var isExists = await FileSystemHelper.isExistsFile(
-          PathOp.instance.latestZipFilePath());
-      if (!isExists) {
+      if (await FileSystemHelper.isExistsFile(
+          PathOp.instance.latestZipFilePath())) {
+        filePath = PathOp.instance.latestZipFilePath();
+      } else {
         //不存在资源包，就用本地资源包
         LogHelper.instance.logInfo('热更新--合并增量--老热更新资源包路径获取失败,将用基准包合并');
         filePath = ConfigHelp.instance.getBaseZipPath();
