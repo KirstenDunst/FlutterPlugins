@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 15:08:15
+ * @LastEditTime: 2022-04-22 14:56:46
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -14,9 +14,9 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:hot_fix_csx/base/safe_notifier.dart';
 import 'package:hot_fix_csx/util/url_encode_util.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_utils/flutter_utils.dart';
