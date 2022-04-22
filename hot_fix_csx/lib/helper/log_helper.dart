@@ -7,7 +7,7 @@
  */
 
 import 'package:hot_fix_csx/constant/enum.dart';
-import 'package:logger_util/logger_util.dart';
+import 'package:flutter_utils/flutter_utils.dart';
 
 class LogHelper {
   factory LogHelper() => _getInstance();

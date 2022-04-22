@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-21 15:16:56
+ * @LastEditTime: 2022-04-22 10:56:26
  * @Description: 
 -->
 # hot_fix_csx
@@ -55,6 +55,7 @@ var downloadModel = await ResourceProvider.instance.batchDownResource([resourceM
 // alert to user
 1. 项目依赖flutter_downloader,所以需要其相关配置
 2. 项目依赖bot_toast（主要在downloade_manager里面），所以需要相关配置
+3. dependency_overrides一下私有的flutter_downloader，fix安卓的某些机型由于下载视频完成之后通知相册的事件异常问题
 // 使用资源下载管理工具，记得在app启动的那些初始化的地方调用这两个方法初始化工具:
 ResourceProvider.instance.initData();
 await ResourceProvider.instance.loadBaseData();
