@@ -1,9 +1,9 @@
 PODS:
   - common_plugin_csx (0.0.1):
     - Flutter
-  - connectivity_plus (0.0.1):
+  - connectivity (0.0.1):
     - Flutter
-    - ReachabilitySwift
+    - Reachability
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -23,7 +23,7 @@ PODS:
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - ReachabilitySwift (5.0.0)
+  - Reachability (3.2)
   - shared_preferences_ios (0.0.1):
     - Flutter
   - sqflite (0.0.2):
@@ -35,7 +35,7 @@ PODS:
 
 DEPENDENCIES:
   - common_plugin_csx (from `.symlinks/plugins/common_plugin_csx/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
@@ -51,14 +51,14 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
-    - ReachabilitySwift
+    - Reachability
     - SSZipArchive
 
 EXTERNAL SOURCES:
   common_plugin_csx:
     :path: ".symlinks/plugins/common_plugin_csx/ios"
-  connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   Flutter:
@@ -84,7 +84,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   common_plugin_csx: 736d862a94b11fef2540e7ae17dc28ca60e23dcb
-  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
@@ -94,7 +94,7 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef

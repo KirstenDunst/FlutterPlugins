@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-29 10:24:54
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 17:14:35
+ * @LastEditTime: 2022-04-22 18:16:14
  * @Description: 
  */
 import 'dart:async';
@@ -25,22 +25,22 @@ class ConfigHelp {
 
   ConfigModel get configModel => _configModel;
   ManifestNetModel get manifestNetModel => _manifestNetModel;
-  ResourceModel get resourceModel => _resourceModel;
+  HotFixModel get resourceModel => _resourceModel;
   // StreamController get refreshStreamController => _refreshStreamController;
 
   late ConfigModel _configModel;
   late ManifestNetModel _manifestNetModel;
-  late ResourceModel _resourceModel;
+  late HotFixModel _resourceModel;
   late StreamController _refreshStreamController;
   late PackageInfo _packageInfo;
 
   ConfigHelp._internal() {
     _configModel = ConfigModel('', true, '');
-    _resourceModel = ResourceModel(baseZipPath: '', unzipDirName: '');
+    _resourceModel = HotFixModel(baseZipPath: '', unzipDirName: '');
   }
 
   Future initData(
-      ResourceModel model, StreamController refreshStreamController) async {
+      HotFixModel model, StreamController refreshStreamController) async {
     _resourceModel = model;
     _refreshStreamController = refreshStreamController;
     var localRecordFile = File(PathOp.instance.localRecodJsonPath());

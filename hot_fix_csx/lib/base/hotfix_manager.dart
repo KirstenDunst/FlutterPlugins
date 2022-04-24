@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 18:15:48
+ * @LastEditTime: 2022-04-22 18:16:19
  * @Description: 热更新资源管理
  */
 
@@ -55,7 +55,7 @@ class HotFixManager with WidgetsBindingObserver {
   /// logInfo：可选参数，默认单独存在hotFixLog文件内，如果设置，则需要单独处理存储事宜
   Future setParam(
     String manifestUrl,
-    ResourceModel resourceModel, {
+    HotFixModel resourceModel, {
     LogInfoCall? logInfo,
   }) async {
     DownloadOp.instance.manifestUrl = manifestUrl;

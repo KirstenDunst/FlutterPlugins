@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 17:28:50
+ * @LastEditTime: 2022-04-22 18:04:59
  * @Description: 
  */
 export 'base/hotfix_manager.dart';
@@ -17,6 +17,11 @@ export 'util/trace_util.dart';
 
 // 扩展，暂未用到，对外开放
 export 'util/stream_util.dart';
+
+//DownloadManagerScreen查看你的下载内容及状态
+export 'download_manager/download_manager.dart';
+//hotfix最近70条记录显示器
+export 'base/log_widget.dart';
 
 import 'package:flutter/services.dart';
 import 'dart:ffi'; // For FFI

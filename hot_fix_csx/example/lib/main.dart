@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-18 15:50:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 09:35:06
+ * @LastEditTime: 2022-04-24 09:07:14
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -10,10 +10,15 @@ import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
 
+import 'download_screen.dart';
 import 'hotfix_screen.dart';
 
-void main() {
+void main() => appRunner();
+
+Future<void> appRunner() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ResourceProvider.instance.initData();
+  await ResourceProvider.instance.loadBaseData();
   runApp(const MyApp());
 }
 
@@ -88,6 +93,21 @@ class HomePage extends StatelessWidget {
           ),
           icon: const Icon(Icons.skip_next),
           label: const Text('热更新跳转检测'),
+        ),
+        ElevatedButton.icon(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const DownloadScreen(),
+            ),
+          ),
+          icon: const Icon(Icons.skip_next),
+          label: const Text('下载管理'),
+        ),
+        const SizedBox(
+          width: 800,
+          height: 180,
+          child: HotFixLogWidget(),
         )
       ],
     );
