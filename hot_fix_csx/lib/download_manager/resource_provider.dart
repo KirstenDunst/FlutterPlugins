@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 15:08:15
+ * @LastEditTime: 2022-04-24 10:51:04
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -14,9 +14,8 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:hot_fix_csx/base/safe_notifier.dart';
-import 'package:hot_fix_csx/util/url_encode_util.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_utils/flutter_utils.dart';
@@ -289,7 +288,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
           //下载到本地，并记录到数据库
           var parentDir =
               model.showDownloadList ? _saveListParentPath : _saveTmpParentPath;
-          var fileName = UrlEncodeUtil.urlEncode(model.url);
+          var fileName = Md5Helper.getStringMd5(model.url);
           headerModel ??= await ResourceProviderTool.getUrlHeadVerify(model.url,
               resourceSize: model.resourceSize,
               verificationNumberStr: model.verificationNumberStr);
@@ -309,7 +308,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
               isShowList: model.showDownloadList ? 1 : 0,
               taskId: loaddingTaskId,
               isLoadSuccess: 0,
-              fileName: fileName,
+              fileName: fileName!,
               resourceByte: headerModel.byteNum,
               verifyStr: headerModel.verifyStr,
               resourceModel: model,

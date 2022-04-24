@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-03-02 09:40:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-21 14:55:51
+ * @LastEditTime: 2022-04-22 18:16:28
  * @Description: 
  */
 import 'dart:async';
@@ -46,7 +46,7 @@ class _HotFixScreenState extends State<HotFixScreen> {
       await HotFixCsx.copyResourceToDevice('dist.zip', baseZipPath);
       await HotFixManager.instance.setParam(
           'https://app.brainco.cn/focus-autism/mobile/hotfix/develop/3.1.1/update-manifest.json',
-          ResourceModel(baseZipPath: baseZipPath, unzipDirName: 'dist'));
+          HotFixModel(baseZipPath: baseZipPath, unzipDirName: 'dist'));
       _streamSubscription =
           HotFixManager.instance.refreshStream.listen((event) {
         var localPath = HotFixManager.instance.availablePath;

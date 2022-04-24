@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-26 18:10:15
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-15 17:58:08
+ * @LastEditTime: 2022-04-24 10:50:39
  * @Description: 
  */
 import 'dart:convert';
@@ -23,7 +23,7 @@ class Md5Helper {
   }
 
   /// 处理字符串的md5值
-  static Future<String?> getStringMd5(String string) async {
+  static String? getStringMd5(String string) {
     if (string.isNotEmpty) {
       var content = const Utf8Encoder().convert(string);
       var digest = md5.convert(content);

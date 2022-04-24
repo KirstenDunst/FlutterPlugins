@@ -11,33 +11,34 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   ffi: ^1.1.2
   path_provider: ^2.0.1
   common_plugin_csx: ^0.0.2
   package_info_plus: ^1.4.2
   permission_handler: ^9.2.0
-  connectivity_plus: ^2.3.0
+  connectivity: ^3.0.6
   sqflite: ^2.0.2+1
   bot_toast: ^4.0.1
   stack_trace: ^1.10.0
+  dio: ^4.0.6
+  async: ^2.8.2
+  flutter_downloader: ^1.7.3
+  path: ^1.8.0
+  archive: ^3.3.0
+  convert: ^3.0.1
+  crypto: ^3.0.1
 
-  logger_util:
+  flutter_utils:
     hosted:
-      name: logger_util
+      name: flutter_utils
       url: https://dart-pub.brainco.cn/
-    version: ^1.0.4
+    version: ^1.1.2
   flutter_network:
     hosted:
       name: flutter_network
       url: https://dart-pub.brainco.cn/
     version: ^2.0.4
-
-dependency_overrides:
-  flutter_downloader:
-    hosted:
-      name: flutter_downloader
-      url: https://dart-pub.brainco.cn/
-    version: ^1.7.3+1
 
 dev_dependencies:
   flutter_test:

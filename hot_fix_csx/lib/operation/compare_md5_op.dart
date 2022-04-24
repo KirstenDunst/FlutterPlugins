@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:10:36
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-16 16:09:29
+ * @LastEditTime: 2022-04-22 15:40:16
  * @Description: 
  */
 import 'dart:io';
@@ -16,6 +16,7 @@ class CompareMd5Op {
         .logInfo('md5 compare: md5Str:$md5Str, filePath:$filePath');
     if (await File(filePath).exists()) {
       var fileMd5 = await Md5Helper.getFileMd5(filePath);
+      LogHelper.instance.logInfo('filePath md5: $fileMd5');
       if (fileMd5 == null) {
         return false;
       } else {
