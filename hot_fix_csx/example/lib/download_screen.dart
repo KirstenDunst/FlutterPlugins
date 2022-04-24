@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-22 18:10:43
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-24 11:07:57
+ * @LastEditTime: 2022-04-24 11:13:23
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -43,7 +43,11 @@ class DownloadScreen extends StatelessWidget {
                     url:
                         'https://focus-resource.oss-cn-beijing.aliyuncs.com/focus-autism/assets/videos/evaluation_video_3.mp4',
                     name: '测评视频3'),
-              ]);
+              ]).then((result) {
+                if (result.isProgressArchive) {
+                  print('所有资源已经全部下载完成');
+                }
+              });
             },
             icon: const Icon(Icons.skip_next),
             label: const Text('点击下载试试看'),
