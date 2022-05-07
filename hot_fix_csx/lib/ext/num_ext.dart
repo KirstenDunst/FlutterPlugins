@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-25 15:29:26
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-19 14:56:05
+ * @LastEditTime: 2022-05-07 14:58:55
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -52,23 +52,29 @@ extension NumExtension on num {
    * 时间转化，将秒为单位的数字转化为多少分多少秒，
    */
   String timeFormat({TimeFormatType type = TimeFormatType.onlyMSChinese}) {
+    var time = round();
     switch (type) {
       case TimeFormatType.onlyMSChinese:
         {
-          var timeInMinutes = this ~/ 60;
-          var lasSeconds = this % 60;
+          var timeInMinutes = time ~/ 60;
+          var lasSeconds = time % 60;
           return '$timeInMinutes分$lasSeconds秒';
         }
       case TimeFormatType.simHMSChinese:
         {
           var tempStr = '';
-          var timeInMinutes = this ~/ 60;
-          var lasSeconds = this % 60;
-          if (timeInMinutes > 59) {
-            var hours = timeInMinutes ~/ 60;
-            tempStr = '$hours时$timeInMinutes分$lasSeconds秒';
-          } else {
+          if (time < 60) {
+            tempStr = '$time秒';
+          } else if (time < 3600) {
+            var timeInMinutes = time ~/ 60;
+            var lasSeconds = time % 60;
             tempStr = '$timeInMinutes分$lasSeconds秒';
+          } else {
+            var hours = time ~/ 3600;
+            var last = (time - hours * 3600);
+            var minutes = last ~/ 60;
+            var second = last % 60;
+            tempStr = '$hours时$minutes分$second秒';
           }
           return tempStr;
         }
