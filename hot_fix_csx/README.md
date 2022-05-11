@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-19 14:57:55
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-24 09:11:46
+ * @LastEditTime: 2022-05-11 09:18:30
  * @Description: 
 -->
 # hot_fix_csx
@@ -96,14 +96,16 @@ ZipHelper.unZipFile(ConfigHelp.instance.getBaseZipPath(),
         PathOp.instance.baseDirectoryPath());
 ```
 
-6. url中文字符转码形成一个新的url,针对iOS的相关路径加载问题需要
+6. url中文字符转码形成一个新的url,url转码，对于iOS对中文路径加载异常问题处理
 ```
 var newUri = UrlEncodeUtil.urlEncode('http:www.baidu.com/你猜猜.png');
 ```
 
 7. 计算内存的显示，字节自动转换成对应的kb、m、g、t单位显示
 ```
-var result = 1234567.byteFormat();
+var result = 1234567.byteFormat();//转换成对应可承受最大的字符串eg：“12KB”
+
+var result = 1234234.timeFormat();//转化成对应时长的字符串eg：“65分钟3秒，1小时15分16秒”
 ```
 
 8. 获取当前代码的堆栈信息(工具)

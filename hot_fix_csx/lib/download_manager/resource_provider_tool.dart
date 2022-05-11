@@ -2,14 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-18 15:03:02
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-22 14:56:52
+ * @LastEditTime: 2022-05-11 09:15:38
  * @Description: 
  */
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
