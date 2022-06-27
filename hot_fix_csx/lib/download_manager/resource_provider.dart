@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-05-11 09:15:35
+ * @LastEditTime: 2022-06-27 10:25:50
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -363,8 +363,8 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       var headerModel = await ResourceProviderTool.getUrlHeadVerify(model.url,
           resourceSize: model.resourceSize,
           verificationNumberStr: model.verificationNumberStr);
-      _downloadStateModel.taskProgressMap[model.url] = 0;
-      _downloadStateModel.addByte(increment: headerModel.byteNum);
+      _downloadStateModel.changeProgressMap(model.url, 0);
+      _downloadStateModel.changeByteMap(model.url, headerModel.byteNum);
       downHeaderDic[model.url] = headerModel;
       if (_resourceMapLoaded.containsKey(model.url)) {
         var tempModel = _resourceMapLoaded[model.url]!;
@@ -373,7 +373,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
         var contentAndVerity = await ResourceProviderTool.contentAndVerityPass(
             tempModel, path, headerModel);
         if (contentAndVerity) {
-          _downloadStateModel.taskProgressMap[model.url] = 100;
+          _downloadStateModel.changeProgressMap(model.url, 100);
           continue;
         } else {
           //清除本地sql、loaded、资源指引
@@ -390,12 +390,13 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       var taskId = await downResource(model: model, headerModel: headerModel);
       if (taskId != null) {
         var tempModel = _resourceMapLoadding[taskId]!;
-        _downloadStateModel.taskProgressMap[tempModel.url] = tempModel.progress;
+        _downloadStateModel.changeProgressMap(
+            tempModel.url, tempModel.progress);
         //共享资源
         streamSubscribes
             .add(tempModel.refreshStreamControl.stream.listen((value) {
-          _downloadStateModel.taskProgressMap[tempModel.url] =
-              tempModel.progress;
+          _downloadStateModel.changeProgressMap(
+              tempModel.url, tempModel.progress);
           if (ResourceProviderTool.isErrorTaskState(tempModel.status)) {
             _downloadStateModel.changeErrorState(errorState: true);
           }

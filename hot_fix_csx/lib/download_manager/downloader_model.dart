@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 20:08:28
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-20 09:05:59
+ * @LastEditTime: 2022-06-27 10:50:11
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -189,9 +189,15 @@ class DownloadStateModel {
   bool get isError => _isError;
 
   //全部资源的总字节数，单位byte
-  num get allByte => _allByte;
+  num get allByte {
+    var temp = 0;
+    _taskByteMap.values.toList().forEach((element) {
+      temp += element;
+    });
+    return temp;
+  }
 
-  String get allByteStr => (_allByte).byteFormat();
+  String get allByteStr => allByte.byteFormat();
 
   //是否下载完成的判断
   bool get isProgressArchive {
@@ -214,20 +220,37 @@ class DownloadStateModel {
     return progress / (_taskProgressMap.length * 100);
   }
 
+  //字节进度(根据字节总大小计算出来的整体字节进度，单个下载同 [progress],)
+  //由于头部信息可能获取失败，导致下载项没有总字节，遇到这种情况使用 [progress]返回
+  double get byteProgress {
+    var isIntact = true;
+    var downloadByte = 0.0;
+    var tempKeys = _taskProgressMap.keys.toList();
+    for (var i = 0; i < tempKeys.length; i++) {
+      var url = tempKeys[i];
+      if (!_taskByteMap.containsKey(url)) {
+        isIntact = false;
+        break;
+      } else {
+        downloadByte += (_taskByteMap[url]! * (_taskProgressMap[url]! / 100));
+      }
+    }
+    return isIntact ? (downloadByte / allByte) : progress;
+  }
+
   //值有更新的流通知
   StreamController get valueChangeStreamControl => _valueChangeStreamControl;
 
-  //url和进度
-  Map<String, int> get taskProgressMap => _taskProgressMap;
-
   late bool _isError;
+  //url和进度
   late Map<String, int> _taskProgressMap;
   // ignore: close_sinks
   late StreamController _valueChangeStreamControl;
-  late num _allByte;
+  //url和总字节大小
+  late Map<String, int> _taskByteMap;
 
   DownloadStateModel() {
-    _allByte = 0;
+    _taskByteMap = <String, int>{};
     _taskProgressMap = <String, int>{};
     _isError = false;
     _valueChangeStreamControl = StreamController.broadcast();
@@ -237,7 +260,11 @@ class DownloadStateModel {
     _isError = errorState;
   }
 
-  void addByte({num increment = 0}) {
-    _allByte += increment;
+  void changeProgressMap(String key, int progress) {
+    _taskProgressMap[key] = progress;
+  }
+
+  void changeByteMap(String key, int byte) {
+    _taskByteMap[key] = byte;
   }
 }
