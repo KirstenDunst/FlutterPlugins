@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-06-27 10:53:43
+ * @LastEditTime: 2022-07-15 11:43:58
  * @Description: 
 -->
+## 0.0.5 20220715
+* 修复ResourceProvider下载本地文件命名后缀被覆盖问题
+
 ## 0.0.4 20220627
 * 扩展资源批量下载，总进度指使按照字节大小整体计算方法byteProgress
 

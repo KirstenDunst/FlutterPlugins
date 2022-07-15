@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-06-27 10:25:50
+ * @LastEditTime: 2022-07-05 20:20:48
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -288,7 +288,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
           //下载到本地，并记录到数据库
           var parentDir =
               model.showDownloadList ? _saveListParentPath : _saveTmpParentPath;
-          var fileName = Md5Helper.getStringMd5(model.url);
+          var fileName = Md5Helper.urlMd5ToName(model.url);
           headerModel ??= await ResourceProviderTool.getUrlHeadVerify(model.url,
               resourceSize: model.resourceSize,
               verificationNumberStr: model.verificationNumberStr);
@@ -308,7 +308,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
               isShowList: model.showDownloadList ? 1 : 0,
               taskId: loaddingTaskId,
               isLoadSuccess: 0,
-              fileName: fileName!,
+              fileName: fileName,
               resourceByte: headerModel.byteNum,
               verifyStr: headerModel.verifyStr,
               resourceModel: model,
