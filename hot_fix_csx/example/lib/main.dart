@@ -2,9 +2,10 @@
  * @Author: Cao Shixin
  * @Date: 2022-01-18 15:50:25
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-24 09:07:14
+ * @LastEditTime: 2022-07-15 15:34:23
  * @Description: 
  */
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,6 +39,7 @@ class _MyAppState extends State<MyApp> {
             title: const Text('Plugin example app'),
           ),
           body: const HomePage()),
+          builder: BotToastInit(), 
     );
   }
 }

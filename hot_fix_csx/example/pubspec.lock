@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "2.1.0"
   bot_toast:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bot_toast
       url: "https://pub.dartlang.org"
@@ -246,7 +246,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.5"
+    version: "0.0.5+1"
   http:
     dependency: transitive
     description:
