@@ -2,12 +2,13 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-15 15:36:30
+ * @LastEditTime: 2022-07-18 12:39:56
  * @Description: 
 -->
-## 0.0.5+1 20220715
+## 0.0.5+2 20220718
 * 修复ResourceProvider下载本地文件命名后缀被覆盖问题
 * 补充下载管理，已下载资源的删除功能
+* fix：本地资源不匹配，同步锁清理本地资源
 
 ## 0.0.4 20220627
 * 扩展资源批量下载，总进度指使按照字节大小整体计算方法byteProgress

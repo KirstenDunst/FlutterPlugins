@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-05 20:20:48
+ * @LastEditTime: 2022-07-18 11:11:54
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -19,6 +19,7 @@ import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_utils/flutter_utils.dart';
+import 'package:synchronized/extension.dart';
 import 'download_share_key.dart';
 import 'downloader_model.dart';
 import 'downloader_path.dart';
@@ -459,23 +460,25 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       BotToast.showText(text: '删除文件url不能为空');
       return false;
     }
-    await sqfliteUtil
-        .bcDeleteDataForTable({'url': urls}, tableName: _tableName);
+    await synchronized(() =>
+        sqfliteUtil.bcDeleteDataForTable({'url': urls}, tableName: _tableName));
     if (isComplete) {
       for (var url in urls) {
-        var tempModel = _resourceMapLoaded[url];
-        var path = tempModel == null
-            ? null
-            : _getFileAbsolutePath(tempModel.isShowList, tempModel.fileName);
-        if (path != null && await File(path).exists()) {
-          var result = await DownLoaderPath.deleteFile(path);
-          if (!result) {
-            _reloadArrStream();
-            BotToast.showText(text: '文件删除失败请重试!');
+        await synchronized(() async {
+          var tempModel = _resourceMapLoaded[url];
+          var path = tempModel == null
+              ? null
+              : _getFileAbsolutePath(tempModel.isShowList, tempModel.fileName);
+          if (path != null && await File(path).exists()) {
+            var result = await DownLoaderPath.deleteFile(path);
+            if (!result) {
+              _reloadArrStream();
+              BotToast.showText(text: '文件删除失败请重试!');
+            }
           }
-        }
-        _resourceMapLoaded.remove(url);
-        _reloadArrStream();
+          _resourceMapLoaded.remove(url);
+          _reloadArrStream();
+        });
       }
     } else {
       var urlTomodels = <LocalResourceModel>[];
