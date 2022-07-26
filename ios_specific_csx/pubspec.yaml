@@ -1,6 +1,6 @@
 name: ios_specific_csx
 description: A new flutter plugin project.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/ios_specific_csx
 
 environment:

@@ -2,29 +2,9 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'ios_specific_csx.dart';
-import 'result_base.dart';
-import 'specific_enum.dart';
 
 class HealthHandle {
   final MethodChannel _channel = const MethodChannel('ios_specific_csx_health');
-
-  /*添加正念,要求iOS系统版本在iOS10以及以上
-   * 返回是否添加成功
-   */
-  Future<ResultBase> addHealthMindfulness(
-      DateTime startDate, DateTime endDate) async {
-    var tempStartDate = startDate;
-    var tempEndDate = endDate;
-    if (endDate.isBefore(startDate)) {
-      tempStartDate = endDate;
-      tempEndDate = startDate;
-    }
-    var result = await _channel.invokeMethod('addHealthMindfulness', {
-      'startDate': tempStartDate.millisecondsSinceEpoch,
-      'endDate': tempEndDate.millisecondsSinceEpoch
-    });
-    return ResultBase.fromJson(result);
-  }
 
   /*
    * 前往健康app
@@ -68,6 +48,24 @@ class HealthHandle {
     }["$result"];
   }
 
+  /* 添加正念,要求iOS系统版本在iOS10以及以上
+   * 返回是否添加成功
+   */
+  Future<ResultBase> addHealthMindfulness(
+      DateTime startDate, DateTime endDate) async {
+    var tempStartDate = startDate;
+    var tempEndDate = endDate;
+    if (endDate.isBefore(startDate)) {
+      tempStartDate = endDate;
+      tempEndDate = startDate;
+    }
+    var result = await _channel.invokeMethod('addHealthMindfulness', {
+      'startDate': tempStartDate.millisecondsSinceEpoch,
+      'endDate': tempEndDate.millisecondsSinceEpoch
+    });
+    return ResultBase.fromJson(result);
+  }
+
   /*
    * 将身高写入健康，单位cm，内部会对权限的一系列处理，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
@@ -96,7 +94,7 @@ class HealthHandle {
   }
 
   /*
-   * 将身高体重指数写入健康 单位BMI，外部可以不用单独再请求和状态判断
+   * 将身高体重指数写入健康 单位count，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
   Future<ResultBase> addHealthBodyMassIndex(double bodyMassIndex,
@@ -124,7 +122,7 @@ class HealthHandle {
   }
 
   /*
-   * 将体重写入健康， 单位千克，外部可以不用单独再请求和状态判断
+   * 将体重写入健康， 单位kg，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
   Future<ResultBase> addHealthBodyMass(double bodyMass,
@@ -138,7 +136,7 @@ class HealthHandle {
   }
 
   /*
-   * 将去脂体重写入健康，单位千克，外部可以不用单独再请求和状态判断
+   * 将去脂体重写入健康，单位kg，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
   Future<ResultBase> addHealthLeanBodyMass(double leanBodyMass,
@@ -152,7 +150,7 @@ class HealthHandle {
   }
 
   /*
-   * 将步数写入健康，单位步，外部可以不用单独再请求和状态判断
+   * 将步数写入健康，单位count，外部可以不用单独再请求和状态判断
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
   Future<ResultBase> addHealthStepCount(double stepCount,
@@ -195,14 +193,27 @@ class HealthHandle {
 
   /*
    * 将心率写入健康，单位：次/分，外部可以不用单独再请求和状态判断˝
+   * heartRate, 最低30
    * 开始时间和结束时间不设置默认按照设备当前的时间
    */
-  Future<ResultBase> addHealthHeartRate(double heartRate,
-      {DateTime? startDate, DateTime? endDate}) async {
+  Future<ResultBase> addHealthHeartRate(int heartRate, {DateTime? time}) async {
     var result = await _channel.invokeMethod('addHealthHeartRate', {
       'heartRate': heartRate,
-      'startDate': (startDate ?? DateTime.now()).millisecondsSinceEpoch,
-      'endDate': (endDate ?? DateTime.now()).millisecondsSinceEpoch
+      'time': (time ?? DateTime.now()).millisecondsSinceEpoch,
+    });
+    return ResultBase.fromJson(result);
+  }
+
+  /*
+   * 将血氧写入健康，单位：%，外部可以不用单独再请求和状态判断˝
+   * bloodOxygen：为0～1之间的double数值，（iOS健康app有安全判断，低于0.7会写入失败，属于异常情况）
+   * 可自定义录入时间
+   */
+  Future<ResultBase> addHealthBloodOxygen(double bloodOxygen,
+      {DateTime? time}) async {
+    var result = await _channel.invokeMethod('addHealthBloodOxygen', {
+      'bloodOxygen': bloodOxygen,
+      'time': (time ?? DateTime.now()).millisecondsSinceEpoch,
     });
     return ResultBase.fromJson(result);
   }

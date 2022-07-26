@@ -2,11 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:17:59
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-05-08 17:39:50
+ * @LastEditTime: 2022-07-26 09:43:01
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
 -->
+## 0.1.1 [20220726]
+* 扩展健康写入类型：'正念','身高','身高体重指数','体脂率','体重','去脂体重','步数','步行+跑步','骑行','心率','血氧',
+
 ## 0.1.0 [20210508]
 * null safety 支持flutter2.0
 
