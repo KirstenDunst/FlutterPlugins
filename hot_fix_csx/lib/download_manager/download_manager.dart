@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-22 16:41:02
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-15 15:35:03
+ * @LastEditTime: 2022-07-27 14:40:04
  * @Description: 下载管理页面（用于开发检测查看使用）
  */
 import 'dart:math';
@@ -136,6 +136,7 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                   ),
                 ],
               ),
+              Text('original url:${model.url}'),
               Text('saveName:${model.fileName}')
             ],
           ),
@@ -193,6 +194,7 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green)),
                   ),
+                  Text('original url:${resourceModel.resourceModel.url}'),
                   Text(
                     model.stateStr +
                         '|' +
