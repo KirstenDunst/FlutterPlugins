@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-18 11:11:54
+ * @LastEditTime: 2022-08-11 11:02:17
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -102,7 +102,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
 
   //需要在启动的时候调用来预加载本地数据
   Future loadBaseData() async {
-    await FlutterDownloader.initialize(debug: true);
+    await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
     _connectResult = await (Connectivity().checkConnectivity());
     _saveListParentPath = await DownLoaderPath.getBasePath(true);
     _saveTmpParentPath = await DownLoaderPath.getBasePath(false);

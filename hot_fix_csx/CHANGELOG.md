@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-27 15:14:00
+ * @LastEditTime: 2022-08-11 11:03:52
  * @Description: 
 -->
+## 0.0.6 20220811
+* FlutterDownloader初始化支持http资源访问下载
+
 ## 0.0.5+3 20220718
 * 修复ResourceProvider下载本地文件命名后缀被覆盖问题
 * 补充下载管理，已下载资源的删除功能
