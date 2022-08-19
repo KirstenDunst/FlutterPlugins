@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-08-11 11:03:52
+ * @LastEditTime: 2022-08-19 16:49:00
  * @Description: 
 -->
+## 0.0.7 20220819
+* 修复资源解压桥接flutter和原生名称字段不一致问题
+
 ## 0.0.6 20220811
 * FlutterDownloader初始化支持http资源访问下载
 
