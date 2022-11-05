@@ -2,10 +2,10 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-31 20:52:06
+ * @LastEditTime: 2022-11-05 10:37:00
  * @Description: 
 -->
-## 0.0.8 20221101
+## 0.0.8+1 20221105
 * 修复批量下载中有暂停资源问题
 * 升级flutter 3.*版本
 
