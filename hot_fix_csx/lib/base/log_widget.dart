@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-22 17:52:31
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-22 18:09:37
+ * @LastEditTime: 2022-11-05 10:13:17
  * @Description: log显示器
  */
 import 'dart:async';
@@ -24,7 +24,7 @@ class _HotFixLogWidgetState extends State<HotFixLogWidget> {
   void initState() {
     super.initState();
     _historyLogs = LogHelper.instance.historyLogs;
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _streamSubscription = LogHelper.instance.logStream.listen((event) {
         setState(() {
           _historyLogs = LogHelper.instance.historyLogs;

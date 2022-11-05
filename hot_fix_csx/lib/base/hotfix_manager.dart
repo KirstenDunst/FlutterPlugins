@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-25 10:06:56
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-22 18:16:19
+ * @LastEditTime: 2022-11-05 10:13:12
  * @Description: 热更新资源管理
  */
 
@@ -40,7 +40,7 @@ class HotFixManager with WidgetsBindingObserver {
   late List<StreamSubscription> _streamSubscriptions;
 
   HotFixManager._internal() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _availablePath = '';
     _streamSubscriptions = <StreamSubscription>[];
     _refreshStreamController = StreamController<String>.broadcast();
@@ -119,7 +119,7 @@ class HotFixManager with WidgetsBindingObserver {
   }
 
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     DownloadOp.instance.dispose();
     PathOp.instance.dispose();
     ConfigHelp.instance.dispose();

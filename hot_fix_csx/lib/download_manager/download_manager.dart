@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-22 16:41:02
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-27 14:40:04
+ * @LastEditTime: 2022-11-05 10:17:34
  * @Description: 下载管理页面（用于开发检测查看使用）
  */
 import 'dart:math';
@@ -197,7 +197,8 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                   Text('original url:${resourceModel.resourceModel.url}'),
                   Text(
                     model.stateStr +
-                        '|' +
+                        ':${resourceModel.status}'
+                            '|' +
                         model.memoryProgressStr +
                         '|' +
                         'saveName:${resourceModel.fileName}',

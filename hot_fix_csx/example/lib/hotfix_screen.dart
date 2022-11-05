@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-03-02 09:40:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-22 18:16:28
+ * @LastEditTime: 2022-11-05 10:13:48
  * @Description: 
  */
 import 'dart:async';
@@ -34,7 +34,7 @@ class _HotFixScreenState extends State<HotFixScreen> {
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
     }
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       var basePath = Platform.isIOS
           ? await getApplicationDocumentsDirectory()
           : await getExternalStorageDirectory();

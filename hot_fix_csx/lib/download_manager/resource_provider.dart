@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-08-11 11:02:17
+ * @LastEditTime: 2022-10-31 20:42:03
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -386,7 +386,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       }
     }
     for (var i = 0; i < needDownModels.length; i++) {
-      var model = models[i];
+      var model = needDownModels[i];
       var headerModel = downHeaderDic[model.url];
       var taskId = await downResource(model: model, headerModel: headerModel);
       if (taskId != null) {
