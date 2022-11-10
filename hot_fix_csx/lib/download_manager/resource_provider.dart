@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-10-31 20:42:03
+ * @LastEditTime: 2022-11-10 18:11:00
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -15,6 +15,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_enhanced/device_info_enhanced.dart';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -66,9 +67,15 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
   late Stream<ConnectivityResult> _connectResultStream;
 
   late List<StreamSubscription> _connectSubscriptions;
+  String? _oomMessage;
+  int? _oomByte;
 
   // 初始化
-  void initData() {
+  void initData(
+      {String oomMessage = '当前设备存储空间不足,请检查设备存储之后重试',
+      int oomByte = 5 * 1024 * 1024}) {
+    _oomMessage = oomMessage;
+    _oomByte = oomByte;
     _resourceMapLoadding = <String, LocalResourceModel>{};
     _resourceMapLoaded = <String, LocalResourceModel>{};
     _resourceMapLoadedStreamControl = StreamController.broadcast();
@@ -262,6 +269,10 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
    */
   Future<String?> downResource(
       {ResourceModel? model, HeadVerifyModel? headerModel}) async {
+    var canEnter = await _checkOOM();
+    if (!canEnter) {
+      return null;
+    }
     if (model != null) {
       //校验网络切换弹窗
       var canDownload =
@@ -332,6 +343,26 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       unawaited(retryTasks());
       return null;
     }
+  }
+
+  Future<bool> _checkOOM() async {
+    num romUseB = 0, romAllB = 0;
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoEnhanced.androidInfo();
+      romAllB = androidInfo.storage.romAllB;
+      romUseB = androidInfo.storage.romUseB;
+    } else {
+      var iosInfo = await DeviceInfoEnhanced.iosInfo();
+      romAllB = iosInfo.storage.romAllB;
+      romUseB = iosInfo.storage.romUseB;
+    }
+    //阈值默认5M
+    var thresholdValue = _oomByte ?? (5 * 1024 * 1024);
+    if (romAllB != 0 && (romAllB - romUseB < thresholdValue)) {
+      BotToast.showText(text: _oomMessage ?? '当前设备存储空间不足,请检查设备存储之后重试');
+      return false;
+    }
+    return true;
   }
 
   /*
