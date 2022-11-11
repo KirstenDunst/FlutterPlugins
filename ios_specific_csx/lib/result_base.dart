@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:32:28
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-05-15 08:55:16
+ * @LastEditTime: 2022-07-26 10:26:54
  * @Description: 返回的模型接收
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -10,14 +10,15 @@
 
 class ResultBase {
   //是否操作成功，
-  late bool success;
+  bool success;
   //如果失败，失败的具体信息
-  late String errorDescri;
+  String errorDescri;
   ResultBase({this.success = false, this.errorDescri = ''});
 
-  ResultBase.fromJson(Map json) {
-    success = json['success'] ?? false;
-    errorDescri = json['errorDescri'] ?? '';
+  static fromJson(Map json) {
+    return ResultBase(
+      success: json['success'] ?? false,
+      errorDescri: json['errorDescri'] ?? '');
   }
 
   Map toJson() {
@@ -29,14 +30,12 @@ class ResultBase {
 }
 
 class GetHealthData {
-  late ResultBase resultBase;
-  late dynamic result;
+  ResultBase resultBase;
+  dynamic result;
   GetHealthData({required this.resultBase, this.result});
 
-  GetHealthData.fromJson(Map json) {
-    resultBase = json['resultBase'];
-    result = json['result'];
-  }
+  static fromJson(Map json) =>
+      GetHealthData(resultBase: json['resultBase'], result: json['result']);
 
   Map toJson() {
     var data = <String, dynamic>{};

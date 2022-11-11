@@ -1,6 +1,6 @@
 name: hot_fix_csx
 description: The update of the project's large resource pack does not require the repair tool of the app's re-release.
-version: 0.0.3
+version: 0.0.8+2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/hot_fix_csx
 publish_to: https://dart-pub.brainco.cn/
 
@@ -28,6 +28,7 @@ dependencies:
   archive: ^3.3.0
   convert: ^3.0.1
   crypto: ^3.0.1
+  synchronized: ^3.0.0+2
 
   flutter_utils:
     hosted:
@@ -39,6 +40,11 @@ dependencies:
       name: flutter_network
       url: https://dart-pub.brainco.cn/
     version: ^2.0.4
+  device_info_enhanced:
+    hosted:
+      name: device_info_enhanced
+      url: https://dart-pub.brainco.cn/
+    version: ^2.0.1+1
 
 dev_dependencies:
   flutter_test:

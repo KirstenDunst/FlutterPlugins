@@ -30,10 +30,12 @@ enum HealthAppSubclassification : Int {
     case cycling
     //心率
     case heartRate
+    //血氧
+    case bloodOxygen
     //未定义，安全占位扩展，
     case noDefined
     
     static func fromRow(index: Int)-> HealthAppSubclassification {
-        return ["0":mindfulness,"1":height,"2":bodyMassIndex,"3":bodyFatPercentage,"4":bodyMass,"5":leanBodyMass]["\(index)"] ?? .noDefined
+        return ["0":mindfulness,"1":height,"2":bodyMassIndex,"3":bodyFatPercentage,"4":bodyMass,"5":leanBodyMass,"6":stepCount,"7":walkingRunning,"8":cycling,"9":heartRate,"10":bloodOxygen]["\(index)"] ?? .noDefined
     }
 }

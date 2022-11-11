@@ -17,93 +17,99 @@ public class IosSpecificCsxHealthPlugin: NSObject, FlutterPlugin {
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case "addHealthMindfulness":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthMindfulness(startDateInMill: argument["startDate"] as! Int, endDateInMill: argument["endDate"] as! Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
+            case "requestHealthAuthority":
+            HealthNormalTool.sharedInstance.requestHealthAuthority(subclassificationIndex: call.arguments as! Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "getHealthAuthorityStatus":
+            let answer = HealthNormalTool.sharedInstance.getHealthAuthorityStatus(subclassificationIndex: call.arguments as! Int).rawValue
+                result(answer)
+                break;
+            case "isHealthDataAvailable":
+                result(HealthNormalTool.sharedInstance.isHealthDataAvailable())
+                break;
+            case "gotoHealthApp":
+            HealthNormalTool.sharedInstance.gotoHealthApp { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            //单独写入，读取
+            case "addHealthMindfulness":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthMindfulness(startDateInMill: argument["startDate"] as! Int, endDateInMill: argument["endDate"] as! Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthStature":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthStature(height: argument["height"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "getHealthStature":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.getHealthStature(startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr, arg)  in
+                    result(["resultBase":["success":success,"errorDescri":errorStr as Any],"result":arg])
+                }
+                break;
+            case "addHealthBodyMassIndex":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthBodyMassIndex(bodyMassIndex: argument["bodyMassIndex"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthBodyFatPercentage":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthBodyFatPercentage(bodyFatPercentage: argument["bodyFatPercentage"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthBodyMass":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthBodyMass(bodyMass: argument["bodyMass"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthLeanBodyMass":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthLeanBodyMass(leanBodyMass: argument["leanBodyMass"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthStepCount":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthStepCount(stepCount: argument["stepCount"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthWalkingRunning":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthWalkingRunning(walkingRunning: argument["walkingRunning"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthCycling":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthCycling(cycling: argument["cycling"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthHeartRate":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthHeartRate(heartRate: argument["heartRate"] as! Int,dateInMill:argument["time"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            case "addHealthBloodOxygen":
+                let argument = call.arguments as! NSDictionary;
+                HealthTool.addHealthBloodOxygen(bloodOxygen: argument["bloodOxygen"] as! Double,dateInMill:argument["time"] as? Int) { (success, errorStr) in
+                    result(["success":success,"errorDescri":errorStr as Any])
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        case "addHealthStature":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthStature(height: argument["height"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "getHealthStature":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.getHealthStature(startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr, arg)  in
-                result(["resultBase":["success":success,"errorDescri":errorStr as Any],"result":arg])
-            }
-            break;
-        case "addHealthBodyMassIndex":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthBodyMassIndex(bodyMassIndex: argument["bodyMassIndex"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthBodyFatPercentage":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthBodyFatPercentage(bodyFatPercentage: argument["bodyFatPercentage"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthBodyMass":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthBodyMass(bodyMass: argument["bodyMass"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthLeanBodyMass":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthLeanBodyMass(leanBodyMass: argument["leanBodyMass"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthStepCount":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthStepCount(stepCount: argument["stepCount"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthWalkingRunning":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthWalkingRunning(walkingRunning: argument["walkingRunning"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthCycling":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthCycling(cycling: argument["cycling"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "addHealthHeartRate":
-            let argument = call.arguments as! NSDictionary;
-            HealthTool.sharedInstance.addHealthHeartRate(heartRate: argument["heartRate"] as! Double,startDateInMill:argument["startDate"] as? Int, endDateInMill:argument["endDate"] as? Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "requestHealthAuthority":
-            HealthTool.sharedInstance.requestHealthAuthority(subclassificationIndex: call.arguments as! Int) { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        case "getHealthAuthorityStatus":
-            let answer = HealthTool.sharedInstance.getHealthAuthorityStatus(subclassificationIndex: call.arguments as! Int).rawValue
-            result(answer)
-            break;
-        case "isHealthDataAvailable":
-            result(HealthTool.sharedInstance.isHealthDataAvailable())
-            break;
-        case "gotoHealthApp":
-            HealthTool.sharedInstance.gotoHealthApp { (success, errorStr) in
-                result(["success":success,"errorDescri":errorStr as Any])
-            }
-            break;
-        default:
-            break;
-        }
-       
     }
 }
 

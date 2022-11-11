@@ -2,11 +2,15 @@
  * @Author: Cao Shixin
  * @Date: 2020-12-28 15:12:14
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-12-10 08:41:35
+ * @LastEditTime: 2022-09-15 09:35:33
  * @Description: 
 -->
+## 0.2.0 20220915
+* 安卓合规，屏蔽暂时没有用到的设备朝向监听
+
 ## 0.1.1 20211210
 * 支持安卓设备当前偏转状态的获取
+
 ## 0.1.0 20210414
 * nullsafety兼容flutter2.0
 

@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-22 16:41:02
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-24 11:06:12
+ * @LastEditTime: 2022-11-05 10:17:34
  * @Description: 下载管理页面（用于开发检测查看使用）
  */
 import 'dart:math';
@@ -73,38 +73,8 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                                 .values
                                 .toList();
                             return ListView.builder(
-                              itemBuilder: (BuildContext context, int index) {
-                                var model = tempArr[index];
-                                return SizedBox(
-                                    height: 72,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              model.resourceModel.name,
-                                              style: TextStyle(
-                                                  color: model.resourceModel
-                                                          .showDownloadList
-                                                      ? Colors.black
-                                                      : Colors.grey),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              '${model.resourceModel.kindName} | ${model.resourceByte.byteFormat()}',
-                                            ),
-                                          ],
-                                        ),
-                                        Text('saveName:${model.fileName}')
-                                      ],
-                                    ));
-                              },
+                              itemBuilder: (BuildContext context, int index) =>
+                                  _downloadArchiveWidget(tempArr[index]),
                               itemCount: tempArr.length,
                             );
                           }),
@@ -134,6 +104,59 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _downloadArchiveWidget(LocalResourceModel model) {
+    return SizedBox(
+      height: 72,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    model.resourceModel.name,
+                    style: TextStyle(
+                        color: model.resourceModel.showDownloadList
+                            ? Colors.black
+                            : Colors.grey),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '${model.resourceModel.kindName} | ${model.resourceByte.byteFormat()}',
+                  ),
+                ],
+              ),
+              Text('original url:${model.url}'),
+              Text('saveName:${model.fileName}')
+            ],
+          ),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              BotToast.showText(text: '删除下载:${model.url}');
+              ResourceProvider.instance
+                  .deleteTask([model.url], isComplete: true);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              height: 72,
+              width: 32,
+              child: const Text(
+                '删除下载',
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -171,9 +194,11 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green)),
                   ),
+                  Text('original url:${resourceModel.resourceModel.url}'),
                   Text(
                     model.stateStr +
-                        '|' +
+                        ':${resourceModel.status}'
+                            '|' +
                         model.memoryProgressStr +
                         '|' +
                         'saveName:${resourceModel.fileName}',
@@ -207,6 +232,7 @@ class _DownloadManagerScreenState extends State<DownloadManagerScreen>
                 ),
               ),
             ),
+            const SizedBox(width: 10),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

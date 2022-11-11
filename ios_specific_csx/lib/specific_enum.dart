@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-29 09:32:48
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-03-31 15:46:59
+ * @LastEditTime: 2022-07-26 09:23:08
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -21,23 +21,38 @@ enum AuthorityStatus {
 // 健康app的内部的子分类，定义和iOS枚举index同步
 enum HealthAppSubclassification {
   //正念
-  Mindfulness,
-  //身高
-  Height,
+  mindfulness,
+  //身高 （单位cm）
+  height,
   //身高体重指数
-  BodyMassIndex,
+  bodyMassIndex,
   //体脂率
-  BodyFatPercentage,
+  bodyFatPercentage,
   //体重
-  BodyMass,
+  bodyMass,
   //去脂体重
-  LeanBodyMass,
+  leanBodyMass,
   //步数
-  StepCount,
+  stepCount,
   //步行+跑步
-  WalkingRunning,
+  walkingRunning,
   //骑行
-  Cycling,
-  //心率
-  HeartRate,
+  cycling,
+  //心率（单位：次/分）
+  heartRate,
+  //血氧
+  bloodOxygen
 }
+const HealthAppSubclassMap = {
+  '正念': HealthAppSubclassification.mindfulness,
+  '身高': HealthAppSubclassification.height,
+  '身高体重指数': HealthAppSubclassification.bodyMassIndex,
+  '体脂率': HealthAppSubclassification.bodyFatPercentage,
+  '体重': HealthAppSubclassification.bodyMass,
+  '去脂体重': HealthAppSubclassification.leanBodyMass,
+  '步数': HealthAppSubclassification.stepCount,
+  '步行+跑步': HealthAppSubclassification.walkingRunning,
+  '骑行': HealthAppSubclassification.cycling,
+  '心率': HealthAppSubclassification.heartRate,
+  '血氧': HealthAppSubclassification.bloodOxygen,
+};

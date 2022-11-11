@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-06-26 18:10:15
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-04-24 10:50:39
+ * @LastEditTime: 2022-07-05 20:20:39
  * @Description: 
  */
 import 'dart:convert';
@@ -31,5 +31,14 @@ class Md5Helper {
     } else {
       return null;
     }
+  }
+
+  //资源下载url转本地文件name
+  static String urlMd5ToName(String url) {
+    //获取url文件后缀
+    var subStr = url.split('.').last;
+    var fileName = url.split('//').last.replaceAll('/', '_');
+    fileName = getStringMd5(fileName)! + '.' + subStr;
+    return fileName;
   }
 }

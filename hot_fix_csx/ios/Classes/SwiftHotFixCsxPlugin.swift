@@ -13,20 +13,20 @@ public class SwiftHotFixCsxPlugin: NSObject, FlutterPlugin {
     let method = call.method
     switch method {
         case "move_resource":
-        let argument = call.arguments as! Dictionary<String, String>
-        let back = NormalTool.copyFile(from: Bundle.main.path(forResource: argument["resourseName"], ofType: nil)!, to: argument["targetPath"]!)
-        result(back)
+          let argument = call.arguments as! Dictionary<String, String>
+          let back = NormalTool.copyFile(from: Bundle.main.path(forResource: argument["resourseName"], ofType: nil)!, to: argument["targetPath"]!)
+          result(back)
         break;
-    case "unzip_resource":
-        let param = call.arguments as! Dictionary<String, Any>
-        let zipName = param["zipName"] as! String
-        let targetPath = param["targetPath"] as! String
-        DispatchQueue.global().async {
-            let temp = SSZipArchive.unzipFile(atPath: Bundle.main.path(forResource: zipName, ofType: "zip")!, toDestination: targetPath)
-            DispatchQueue.main.async {
-                result(temp)
-            }
-        }
+        case "unzip_resource":
+          let param = call.arguments as! Dictionary<String, Any>
+          let zipName = param["resourseName"] as! String
+          let targetPath = param["targetDirectPath"] as! String
+          DispatchQueue.global().async {
+              let temp = SSZipArchive.unzipFile(atPath: Bundle.main.path(forResource: zipName, ofType: "")!, toDestination: targetPath)
+              DispatchQueue.main.async {
+                  result(temp)
+              }
+          }
         break;
     default:
         result("iOS " + UIDevice.current.systemVersion)

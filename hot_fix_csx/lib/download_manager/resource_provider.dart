@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-05-11 09:15:35
+ * @LastEditTime: 2022-11-10 18:11:00
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -15,10 +15,12 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_enhanced/device_info_enhanced.dart';
 import 'package:hot_fix_csx/hot_fix_csx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_utils/flutter_utils.dart';
+import 'package:synchronized/extension.dart';
 import 'download_share_key.dart';
 import 'downloader_model.dart';
 import 'downloader_path.dart';
@@ -65,9 +67,15 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
   late Stream<ConnectivityResult> _connectResultStream;
 
   late List<StreamSubscription> _connectSubscriptions;
+  String? _oomMessage;
+  int? _oomByte;
 
   // 初始化
-  void initData() {
+  void initData(
+      {String oomMessage = '当前设备存储空间不足,请检查设备存储之后重试',
+      int oomByte = 5 * 1024 * 1024}) {
+    _oomMessage = oomMessage;
+    _oomByte = oomByte;
     _resourceMapLoadding = <String, LocalResourceModel>{};
     _resourceMapLoaded = <String, LocalResourceModel>{};
     _resourceMapLoadedStreamControl = StreamController.broadcast();
@@ -101,7 +109,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
 
   //需要在启动的时候调用来预加载本地数据
   Future loadBaseData() async {
-    await FlutterDownloader.initialize(debug: true);
+    await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
     _connectResult = await (Connectivity().checkConnectivity());
     _saveListParentPath = await DownLoaderPath.getBasePath(true);
     _saveTmpParentPath = await DownLoaderPath.getBasePath(false);
@@ -261,6 +269,10 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
    */
   Future<String?> downResource(
       {ResourceModel? model, HeadVerifyModel? headerModel}) async {
+    var canEnter = await _checkOOM();
+    if (!canEnter) {
+      return null;
+    }
     if (model != null) {
       //校验网络切换弹窗
       var canDownload =
@@ -288,7 +300,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
           //下载到本地，并记录到数据库
           var parentDir =
               model.showDownloadList ? _saveListParentPath : _saveTmpParentPath;
-          var fileName = Md5Helper.getStringMd5(model.url);
+          var fileName = Md5Helper.urlMd5ToName(model.url);
           headerModel ??= await ResourceProviderTool.getUrlHeadVerify(model.url,
               resourceSize: model.resourceSize,
               verificationNumberStr: model.verificationNumberStr);
@@ -308,7 +320,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
               isShowList: model.showDownloadList ? 1 : 0,
               taskId: loaddingTaskId,
               isLoadSuccess: 0,
-              fileName: fileName!,
+              fileName: fileName,
               resourceByte: headerModel.byteNum,
               verifyStr: headerModel.verifyStr,
               resourceModel: model,
@@ -331,6 +343,26 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       unawaited(retryTasks());
       return null;
     }
+  }
+
+  Future<bool> _checkOOM() async {
+    num romUseB = 0, romAllB = 0;
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoEnhanced.androidInfo();
+      romAllB = androidInfo.storage.romAllB;
+      romUseB = androidInfo.storage.romUseB;
+    } else {
+      var iosInfo = await DeviceInfoEnhanced.iosInfo();
+      romAllB = iosInfo.storage.romAllB;
+      romUseB = iosInfo.storage.romUseB;
+    }
+    //阈值默认5M
+    var thresholdValue = _oomByte ?? (5 * 1024 * 1024);
+    if (romAllB != 0 && (romAllB - romUseB < thresholdValue)) {
+      BotToast.showText(text: _oomMessage ?? '当前设备存储空间不足,请检查设备存储之后重试');
+      return false;
+    }
+    return true;
   }
 
   /*
@@ -363,8 +395,8 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       var headerModel = await ResourceProviderTool.getUrlHeadVerify(model.url,
           resourceSize: model.resourceSize,
           verificationNumberStr: model.verificationNumberStr);
-      _downloadStateModel.taskProgressMap[model.url] = 0;
-      _downloadStateModel.addByte(increment: headerModel.byteNum);
+      _downloadStateModel.changeProgressMap(model.url, 0);
+      _downloadStateModel.changeByteMap(model.url, headerModel.byteNum);
       downHeaderDic[model.url] = headerModel;
       if (_resourceMapLoaded.containsKey(model.url)) {
         var tempModel = _resourceMapLoaded[model.url]!;
@@ -373,7 +405,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
         var contentAndVerity = await ResourceProviderTool.contentAndVerityPass(
             tempModel, path, headerModel);
         if (contentAndVerity) {
-          _downloadStateModel.taskProgressMap[model.url] = 100;
+          _downloadStateModel.changeProgressMap(model.url, 100);
           continue;
         } else {
           //清除本地sql、loaded、资源指引
@@ -385,17 +417,18 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       }
     }
     for (var i = 0; i < needDownModels.length; i++) {
-      var model = models[i];
+      var model = needDownModels[i];
       var headerModel = downHeaderDic[model.url];
       var taskId = await downResource(model: model, headerModel: headerModel);
       if (taskId != null) {
         var tempModel = _resourceMapLoadding[taskId]!;
-        _downloadStateModel.taskProgressMap[tempModel.url] = tempModel.progress;
+        _downloadStateModel.changeProgressMap(
+            tempModel.url, tempModel.progress);
         //共享资源
         streamSubscribes
             .add(tempModel.refreshStreamControl.stream.listen((value) {
-          _downloadStateModel.taskProgressMap[tempModel.url] =
-              tempModel.progress;
+          _downloadStateModel.changeProgressMap(
+              tempModel.url, tempModel.progress);
           if (ResourceProviderTool.isErrorTaskState(tempModel.status)) {
             _downloadStateModel.changeErrorState(errorState: true);
           }
@@ -458,23 +491,25 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
       BotToast.showText(text: '删除文件url不能为空');
       return false;
     }
-    await sqfliteUtil
-        .bcDeleteDataForTable({'url': urls}, tableName: _tableName);
+    await synchronized(() =>
+        sqfliteUtil.bcDeleteDataForTable({'url': urls}, tableName: _tableName));
     if (isComplete) {
       for (var url in urls) {
-        var tempModel = _resourceMapLoaded[url];
-        var path = tempModel == null
-            ? null
-            : _getFileAbsolutePath(tempModel.isShowList, tempModel.fileName);
-        if (path != null && await File(path).exists()) {
-          var result = await DownLoaderPath.deleteFile(path);
-          if (!result) {
-            _reloadArrStream();
-            BotToast.showText(text: '文件删除失败请重试!');
+        await synchronized(() async {
+          var tempModel = _resourceMapLoaded[url];
+          var path = tempModel == null
+              ? null
+              : _getFileAbsolutePath(tempModel.isShowList, tempModel.fileName);
+          if (path != null && await File(path).exists()) {
+            var result = await DownLoaderPath.deleteFile(path);
+            if (!result) {
+              _reloadArrStream();
+              BotToast.showText(text: '文件删除失败请重试!');
+            }
           }
-        }
-        _resourceMapLoaded.remove(url);
-        _reloadArrStream();
+          _resourceMapLoaded.remove(url);
+          _reloadArrStream();
+        });
       }
     } else {
       var urlTomodels = <LocalResourceModel>[];

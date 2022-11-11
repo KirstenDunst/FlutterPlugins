@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>用于更新用户的正念训练时间</string>
+	<string>zen需要您的同意，才能访问健康更新，给您带来更好的服务</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>用于更新用户的正念训练时间</string>
+	<string>zen需要您的同意，才能访问健康更新，给您带来更好的服务</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
