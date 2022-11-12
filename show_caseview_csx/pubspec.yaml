@@ -1,6 +1,6 @@
 name: show_caseview_csx
 description: A mask for novice guides.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/show_caseview_csx
 publish_to: https://dart-pub.brainco.cn/
 
