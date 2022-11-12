@@ -180,8 +180,11 @@ class _MailPageState extends State<MailPage> {
                                   children: <Widget>[
                                     Showcase(
                                       key: _one,
+                                      disableMovingAnimation: true,
                                       description: 'Tap to see menu options',
                                       disableDefaultTargetGestures: true,
+                                      isAdditionalBootArrow: false,
+                                      blurValue: 0,
                                       child: GestureDetector(
                                         onTap: () =>
                                             print('menu button clicked'),
@@ -191,9 +194,7 @@ class _MailPageState extends State<MailPage> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
+                                    const SizedBox(width: 10),
                                     const Text(
                                       'Search email',
                                       style: TextStyle(
@@ -279,6 +280,13 @@ class _MailPageState extends State<MailPage> {
         title: 'Compose Mail',
         description: 'Click here to compose mail',
         targetShapeBorder: const CircleBorder(),
+        disableMovingAnimation: true,
+        tooltipBorderRadius: BorderRadius.circular(20),
+        tooltipBackgroundColor: Colors.orange,
+        isAdditionalBootArrow: false,
+        targetAboveChild: TargetCenterOffsetWidget(
+            offset: const Offset(10, 10),
+            child: Container(width: 40, height: 40, color: Colors.red)),
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
@@ -291,9 +299,7 @@ class _MailPageState extends State<MailPage> {
                   .startShowCase([_one, _two, _three, _four, _five]);
             });
           },
-          child: const Icon(
-            Icons.add,
-          ),
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -316,6 +322,8 @@ class _MailPageState extends State<MailPage> {
             key: key,
             description: 'Tap to check mail',
             disposeOnTap: true,
+            forceTooltipPositionAbove: true,
+            tooltipOffset: const Offset(-100, 0),
             onTargetClick: () {
               Navigator.push<void>(
                 context,
