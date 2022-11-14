@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-11-10 18:11:00
+ * @LastEditTime: 2022-11-14 09:55:42
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -200,7 +200,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
               tableName: _tableName);
           _reloadArrStream();
         }
-        tempModel.refreshStreamControl.add(null);
+        tempModel.refreshStreamControl.sink.add(null);
       } else {
         FlutterDownloader.loadTasksWithRawQuery(
                 query: 'SELECT * FROM task WHERE task_id=$id')
