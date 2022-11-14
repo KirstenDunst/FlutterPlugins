@@ -2,10 +2,10 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-11-10 18:13:55
+ * @LastEditTime: 2022-11-14 10:01:17
  * @Description: 
 -->
-## 0.0.8+2 20221105
+## 0.0.8+3 20221105
 * 修复批量下载中有暂停资源问题
 * 升级flutter 3.*版本
 * 添加资源下载oom检测以及toast提醒功能
