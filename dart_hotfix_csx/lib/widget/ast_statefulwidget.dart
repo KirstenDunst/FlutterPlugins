@@ -1,6 +1,13 @@
+/*
+ * @Author: Cao Shixin
+ * @Date: 2020-04-23 00:25:29
+ * @LastEditors: Cao Shixin
+ * @LastEditTime: 2023-02-02 09:53:49
+ * @Description: 
+ */
 import 'dart:async';
 
-import 'package:dart_hotfix_csx/ast_node.dart';
+import 'package:dart_hotfix_csx/node/ast_node.dart';
 import 'package:flutter/material.dart';
 import 'widget_builders/widget_builders.dart';
 
@@ -29,8 +36,9 @@ class _AstStatefulWidgetState extends State<AstStatefulWidget> {
             if (bodyNode.isMethodDeclaration) {
               switch (bodyNode.asMethodDeclaration.name) {
                 case 'build':
-                  var buildBodyReturn = bodyNode.asMethodDeclaration.body.body;
-                  if (buildBodyReturn.isNotEmpty &&
+                  var buildBodyReturn = bodyNode.asMethodDeclaration.body?.body;
+                  if (buildBodyReturn != null &&
+                      buildBodyReturn.isNotEmpty &&
                       buildBodyReturn[0].isReturnStatement) {
                     setState(() {
                       _bodyWidget =

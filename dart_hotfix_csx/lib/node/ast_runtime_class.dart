@@ -68,10 +68,12 @@ class AstClass {
       if (b.isMethodDeclaration) {
         //解析类方法
         var method = b.asMethodDeclaration;
-        variableStack.setFunctionInstance<AstFunction>(
-            method.name,
-            AstFunction(method.name, method.parameterList, method.body,
-                method.isAsync));
+        if (method.body != null) {
+          variableStack.setFunctionInstance<AstFunction>(
+              method.name,
+              AstFunction(method.name, method.parameterList, method.body!,
+                  method.isAsync));
+        }
       } else if (b.isVariableDeclarationList) {
         //解析类成员变量
         variableStack.setVariableValue(
@@ -112,8 +114,10 @@ class AstFunction {
           function.expression.body, function.expression.isAsync);
     } else if (expression.isMethodDeclaration) {
       var method = expression.asMethodDeclaration;
-      return AstFunction(
-          method.name, method.parameterList, method.body, method.isAsync);
+      if (method.body != null) {
+        return AstFunction(
+            method.name, method.parameterList, method.body!, method.isAsync);
+      }
     }
     throw ArgumentError('AstFunction.fromExpression: $expression');
   }
@@ -121,8 +125,10 @@ class AstFunction {
   factory AstFunction.fromAst(Map ast) {
     if (ast['type'] == astNodeNameValue(AstNodeName.methodDeclaration)) {
       var method = MethodDeclaration.fromAst(ast);
-      return AstFunction(
-          method.name, method.parameterList, method.body, method.isAsync);
+      if (method.body != null) {
+        return AstFunction(
+            method.name, method.parameterList, method.body!, method.isAsync);
+      }
     } else if (ast['type'] ==
         astNodeNameValue(AstNodeName.functionDeclaration)) {
       var function = FunctionDeclaration.fromAst(ast);

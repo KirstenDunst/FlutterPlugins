@@ -2,7 +2,7 @@
 # check for errors, warnings, and lints.
 #
 # The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# IDEs (https://dart.cn/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
 # The following line activates a set of recommended lints for Flutter apps,
@@ -22,8 +22,48 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
+    constant_identifier_names: true
+    library_private_types_in_public_api: true
+    library_prefixes: true
+    unawaited_futures: true
+    prefer_void_to_null: true
+    throw_in_finally: true
+    empty_statements: true
+    avoid_print: true # Uncomment to disable the `avoid_print` rule
+    use_build_context_synchronously: true
+    cancel_subscriptions: true
+    close_sinks: true
+    prefer_const_constructors: true
+    unnecessary_to_list_in_spreads: true
+    no_logic_in_create_state: true
+    annotate_overrides: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_double_and_int_checks: true
+    avoid_function_literals_in_foreach_calls: true
+    avoid_unnecessary_containers: true
+    avoid_unused_constructor_parameters: true
+    deprecated_consistency: true
+    empty_catches: true
+    flutter_style_todos: true
+    non_constant_identifier_names: true
+    no_leading_underscores_for_library_prefixes: true
+    no_leading_underscores_for_local_identifiers: true
+    null_check_on_nullable_type_parameter: true
+    null_closures: true
+    only_throw_errors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    prefer_is_not_operator: true
+    prefer_iterable_whereType: true
+    unnecessary_late: true
+    use_colored_box: true
+    use_decorated_box: true
+    use_rethrow_when_possible: true
+    use_named_constants: true
+    depend_on_referenced_packages: false
+    # unnecessary_lambdas: true # 没有区分工厂构造函数和一般的处理函数区分
+    
 # Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+# https://dart.cn/guides/language/analysis-options

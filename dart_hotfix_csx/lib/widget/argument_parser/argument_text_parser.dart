@@ -1,4 +1,4 @@
-import 'package:dart_hotfix_csx/ast_node.dart';
+import 'package:dart_hotfix_csx/node/ast_node.dart';
 import 'package:flutter/material.dart';
 import 'argument_parser.dart';
 

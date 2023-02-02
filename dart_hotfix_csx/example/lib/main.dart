@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'package:flutter/material.dart';
+import 'dsl/listview_dsl.dart';
+import 'package:dart_hotfix_csx/dart_hotfix_csx.dart';
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,11 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
-        // Try running your application with "flutter run". You'll see the
+        // Try running your application with \"flutter run\". You'll see the
         // application has a blue toolbar. Then, without quitting the app, try
         // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // \"hot reload\" (press \"r\" in the console where you ran \"flutter run\",
+        // or simply save your changes to \"hot reload\" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
@@ -30,16 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -48,68 +41,81 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: ListView(
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            ListTile(
+              title: const Text('DSL模板'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => _DSLListPage()));
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            ListTile(
+              title: const Text('动态渲染'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => _DynamicFlutterList()));
+              },
             ),
           ],
-        ),
+        ));
+  }
+}
+
+class _DSLListPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('DSL模板列表'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: const Text('ListView'),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ListViewDSL()));
+            },
+          ),
+        ],
+      ),
     );
   }
 }
+
+class _DynamicFlutterList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('动态渲染列表'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: const Text('ListView'),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AstStatefulWidget(jsonDecode(listViewAst) as Map))),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+const listViewAst =
+    '{"type":"Program","body":[{"type":"ClassDeclaration","id":{"type":"Identifier","name":"ListViewDSL"},"superClause":{"type":"TypeName","name":"StatefulWidget"},"implementsClause":null,"mixinClause":null,"metadata":[],"body":[{"type":"MethodDeclaration","id":{"type":"Identifier","name":"createState"},"parameters":{"type":"FormalParameterList","parameterList":[]},"typeParameters":null,"body":null,"isAsync":false,"returnType":{"type":"TypeName","name":"_ListViewDSLState"}}]},{"type":"ClassDeclaration","id":{"type":"Identifier","name":"_ListViewDSLState"},"superClause":{"type":"TypeName","name":"State"},"implementsClause":null,"mixinClause":null,"metadata":[],"body":[{"type":"MethodDeclaration","id":{"type":"Identifier","name":"build"},"parameters":{"type":"FormalParameterList","parameterList":[{"type":"SimpleFormalParameter","paramType":{"type":"TypeName","name":"BuildContext"},"name":"context"}]},"typeParameters":null,"body":{"type":"BlockStatement","body":[{"type":"ReturnStatement","argument":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"Scaffold"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"appBar"},"expression":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"AppBar"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"backgroundColor"},"expression":{"type":"PrefixedIdentifier","identifier":{"type":"Identifier","name":"red"},"prefix":{"type":"Identifier","name":"Colors"}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"title"},"expression":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"Text"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"StringLiteral","value":"ListViewDSL"},{"type":"NamedExpression","id":{"type":"Identifier","name":"style"},"expression":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"TextStyle"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"fontSize"},"expression":{"type":"NumericLiteral","value":20}},{"type":"NamedExpression","id":{"type":"Identifier","name":"color"},"expression":{"type":"PrefixedIdentifier","identifier":{"type":"Identifier","name":"white"},"prefix":{"type":"Identifier","name":"Colors"}}}]}}}]}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"centerTitle"},"expression":{"type":"BooleanLiteral","value":true}}]}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"body"},"expression":{"type":"MethodInvocation","callee":{"type":"MemberExpression","object":{"type":"Identifier","name":"ListView"},"property":{"type":"Identifier","name":"builder"}},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"itemBuilder"},"expression":{"type":"FunctionExpression","parameters":{"type":"FormalParameterList","parameterList":[{"type":"SimpleFormalParameter","paramType":null,"name":"context"},{"type":"SimpleFormalParameter","paramType":null,"name":"index"}]},"body":{"type":"BlockStatement","body":[{"type":"ReturnStatement","argument":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"Container"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"padding"},"expression":{"type":"MethodInvocation","callee":{"type":"MemberExpression","object":{"type":"Identifier","name":"EdgeInsets"},"property":{"type":"Identifier","name":"only"}},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"left"},"expression":{"type":"NumericLiteral","value":16}},{"type":"NamedExpression","id":{"type":"Identifier","name":"right"},"expression":{"type":"NumericLiteral","value":16}}]}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"alignment"},"expression":{"type":"PrefixedIdentifier","identifier":{"type":"Identifier","name":"centerLeft"},"prefix":{"type":"Identifier","name":"Alignment"}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"child"},"expression":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"Text"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"StringLiteral","value":"Hellow World"},{"type":"NamedExpression","id":{"type":"Identifier","name":"style"},"expression":{"type":"MethodInvocation","callee":{"type":"Identifier","name":"TextStyle"},"typeArguments":null,"argumentList":{"type":"ArgumentList","argumentList":[{"type":"NamedExpression","id":{"type":"Identifier","name":"color"},"expression":{"type":"PrefixedIdentifier","identifier":{"type":"Identifier","name":"white"},"prefix":{"type":"Identifier","name":"Colors"}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"fontSize"},"expression":{"type":"NumericLiteral","value":18}}]}}}]}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"color"},"expression":{"type":"PropertyAccess","id":{"type":"Identifier","name":"shade300"},"expression":{"type":"PrefixedIdentifier","identifier":{"type":"Identifier","name":"lightBlue"},"prefix":{"type":"Identifier","name":"Colors"}}}},{"type":"NamedExpression","id":{"type":"Identifier","name":"height"},"expression":{"type":"NumericLiteral","value":45}}]}}}]},"isAsync":false}},{"type":"NamedExpression","id":{"type":"Identifier","name":"itemCount"},"expression":{"type":"NumericLiteral","value":50}}]}}}]}}}]},"isAsync":false,"returnType":{"type":"TypeName","name":"Widget"}}]}]}';

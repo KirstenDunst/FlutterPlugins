@@ -5,7 +5,7 @@
  * @LastEditTime: 2023-02-01 16:09:46
  * @Description: 
  */
-import 'package:dart_hotfix_csx/ast_node.dart';
+import 'package:dart_hotfix_csx/node/ast_node.dart';
 import 'package:flutter/material.dart';
 import 'basewidget_builder.dart';
 import 'basebuilder_box.dart';

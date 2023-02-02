@@ -255,7 +255,7 @@ class MemberExpression extends AstNode {
 }
 
 class SimpleFormalParameter extends AstNode {
-  TypeName paramType;
+  TypeName? paramType;
   String name;
 
   SimpleFormalParameter(this.paramType, this.name, Map ast) : super(ast: ast);
@@ -265,8 +265,11 @@ class SimpleFormalParameter extends AstNode {
       throw ArgumentError(
           'SimpleFormalParameter.fromAst: type is not AstNodeName.simpleFormalParameter');
     }
+    var hasTypeName = ast.containsKey('paramType') && ast['paramType'] is Map;
     return SimpleFormalParameter(
-        TypeName.fromAst(ast['paramType']), ast['name'], ast);
+        hasTypeName ? TypeName.fromAst(ast['paramType']) : null,
+        ast['name'],
+        ast);
   }
 
   @override
@@ -315,7 +318,7 @@ class BlockStatement extends AstNode {
 class MethodDeclaration extends AstNode {
   String name;
   List<SimpleFormalParameter> parameterList;
-  BlockStatement body;
+  BlockStatement? body;
   bool isAsync;
   MethodDeclaration(this.name, this.parameterList, this.body, Map ast,
       {this.isAsync = false})
@@ -334,10 +337,11 @@ class MethodDeclaration extends AstNode {
         parameters.add(SimpleFormalParameter.fromAst(arg));
       }
     }
+    var contentBlock = ast.containsKey('body') && ast['body'] is Map;
     return MethodDeclaration(
         Identifier.fromAst(ast['id']).name,
         parameters,
-        BlockStatement.fromAst(ast['body']),
+        contentBlock ? BlockStatement.fromAst(ast['body']) : null,
         isAsync: ast['isAsync'] as bool,
         ast);
   }
@@ -369,7 +373,7 @@ class FunctionDeclaration extends AstNode {
 class MethodInvocation extends AstNode {
   Expression callee;
   List<Expression> argumentList;
-  SelectAstClass selectAstClass;
+  SelectAstClass? selectAstClass;
 
   MethodInvocation(this.callee, this.argumentList, this.selectAstClass, Map ast)
       : super(ast: ast);
@@ -379,10 +383,14 @@ class MethodInvocation extends AstNode {
       throw ArgumentError(
           'MethodInvocation.fromAst: type is not AstNodeName.methodInvocation');
     }
+    var hasSelectAstClass =
+        ast.containsKey('selectAstClass') && ast['selectAstClass'] is Map;
     return MethodInvocation(
         Expression.fromAst(ast['callee']),
         _parseArgumentList(ast['argumentList']),
-        SelectAstClass.fromAst(ast['selectAstClass']),
+        hasSelectAstClass
+            ? SelectAstClass.fromAst(ast['selectAstClass'])
+            : null,
         ast);
   }
 

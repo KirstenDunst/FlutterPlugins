@@ -5,7 +5,7 @@
  * @LastEditTime: 2023-02-01 15:58:02
  * @Description: 
  */
-import 'package:dart_hotfix_csx/ast_node.dart';
+import 'package:dart_hotfix_csx/node/ast_node.dart';
 import 'package:flutter/material.dart';
 
 abstract class BaseBuilderBox {
