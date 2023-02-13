@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-18 15:03:02
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-11-24 11:49:37
+ * @LastEditTime: 2023-02-13 17:32:03
  * @Description: 
  */
 import 'dart:async';
@@ -178,7 +178,7 @@ class ResourceProviderTool {
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     var send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
+    send?.send([id, status.value, progress]);
   }
 }
 

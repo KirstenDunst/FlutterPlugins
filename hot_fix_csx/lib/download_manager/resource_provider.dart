@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-02-23 16:52:35
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-11-14 09:55:42
+ * @LastEditTime: 2023-02-13 17:32:15
  * @Description: 网络资源处理工具
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -178,7 +178,7 @@ class ResourceProvider extends ChangeNotifier with SafeNotifier {
         _receivePort!.sendPort, 'downloader_send_port');
     _receivePort!.listen((dynamic data) {
       String id = data[0];
-      DownloadTaskStatus status = data[1];
+      DownloadTaskStatus status = DownloadTaskStatus(data[1] as int);
       int progress = data[2];
       var tempModel = _resourceMapLoadding[id];
       if (tempModel != null) {
