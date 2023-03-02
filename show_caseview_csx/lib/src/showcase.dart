@@ -95,7 +95,10 @@ class Showcase extends StatefulWidget {
   /// Whether the default tooltip will have arrow to point out the target widget.
   ///
   /// Default to `true`
-  final bool showArrow;
+  final bool showAdditionalBoot;
+
+  //额外的引导是否是箭头，默认true。 false：曲线箭头
+  final bool isAdditionalBootArrow;
 
   /// Height of [container]
   final double? height;
@@ -199,6 +202,14 @@ class Showcase extends StatefulWidget {
   /// ```
   final Alignment? scaleAnimationAlignment;
 
+  /// 悬浮在蒙层之上的看起来像是在target上面的子元素设置
+  final TargetCenterOffsetWidget? targetAboveChild;
+
+  // 是否强制指定tooltip标签在target的上面，默认null:自动设定（都能放下就放下面），true:强制在target的上面， false:强制在target的下面
+  final bool? forceTooltipPositionAbove;
+  //tooltip标签整体默认自适应无主动偏移Offset.zero，这里扩展加上强制的可设置偏移量的参数，可以自适应个人公司UI
+  final Offset tooltipOffset;
+
   const Showcase({
     required this.key,
     required this.child,
@@ -219,7 +230,8 @@ class Showcase extends StatefulWidget {
     this.textColor = Colors.black,
     this.scrollLoadingWidget = const CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation(Colors.white)),
-    this.showArrow = true,
+    this.showAdditionalBoot = true,
+    this.isAdditionalBootArrow = true,
     this.onTargetClick,
     this.disposeOnTap,
     this.movingAnimationDuration = const Duration(milliseconds: 2000),
@@ -238,6 +250,9 @@ class Showcase extends StatefulWidget {
     this.scaleAnimationDuration = const Duration(milliseconds: 300),
     this.scaleAnimationCurve = Curves.easeIn,
     this.scaleAnimationAlignment,
+    this.targetAboveChild,
+    this.forceTooltipPositionAbove,
+    this.tooltipOffset = Offset.zero,
   })  : height = null,
         width = null,
         container = null,
@@ -280,7 +295,11 @@ class Showcase extends StatefulWidget {
     this.onTargetLongPress,
     this.onTargetDoubleTap,
     this.disableDefaultTargetGestures = false,
-  })  : showArrow = false,
+    this.targetAboveChild,
+    this.forceTooltipPositionAbove,
+    this.tooltipOffset = Offset.zero,
+  })  : showAdditionalBoot = false,
+        isAdditionalBootArrow = true,
         onToolTipClick = null,
         scaleAnimationDuration = const Duration(milliseconds: 300),
         scaleAnimationCurve = Curves.decelerate,
@@ -491,6 +510,12 @@ class _ShowcaseState extends State<Showcase> {
                   disableDefaultChildGestures:
                       widget.disableDefaultTargetGestures,
                 ),
+              if (!_isScrollRunning && widget.targetAboveChild != null)
+                Positioned(
+                  top: offset.dy + widget.targetAboveChild!.offset.dy,
+                  left: offset.dx + widget.targetAboveChild!.offset.dx,
+                  child: IgnorePointer(child: widget.targetAboveChild!.child),
+                ),
               if (!_isScrollRunning)
                 ToolTipWidget(
                   position: position,
@@ -505,7 +530,8 @@ class _ShowcaseState extends State<Showcase> {
                   container: widget.container,
                   tooltipBackgroundColor: widget.tooltipBackgroundColor,
                   textColor: widget.textColor,
-                  showArrow: widget.showArrow,
+                  showAdditionalBoot: widget.showAdditionalBoot,
+                  isArrow: widget.isAdditionalBootArrow,
                   contentHeight: widget.height,
                   contentWidth: widget.width,
                   onTooltipTap: _getOnTooltipTap,
@@ -520,6 +546,8 @@ class _ShowcaseState extends State<Showcase> {
                   scaleAnimationCurve: widget.scaleAnimationCurve,
                   scaleAnimationAlignment: widget.scaleAnimationAlignment,
                   isTooltipDismissed: _isTooltipDismissed,
+                  forceTooltipPositionAbove: widget.forceTooltipPositionAbove,
+                  tooltipOffset: widget.tooltipOffset,
                 ),
             ],
           )
@@ -529,7 +557,7 @@ class _ShowcaseState extends State<Showcase> {
 
 class _TargetWidget extends StatelessWidget {
   final Offset offset;
-  final Size? size;
+  final Size size;
   final VoidCallback? onTap;
   final VoidCallback? onDoubleTap;
   final VoidCallback? onLongPress;
@@ -540,7 +568,7 @@ class _TargetWidget extends StatelessWidget {
   const _TargetWidget({
     Key? key,
     required this.offset,
-    this.size,
+    required this.size,
     this.onTap,
     this.shapeBorder,
     this.radius,
@@ -570,20 +598,25 @@ class _TargetWidget extends StatelessWidget {
         onLongPress: onLongPress,
         onDoubleTap: onDoubleTap,
         child: Container(
-          height: size!.height + 16,
-          width: size!.width + 16,
+          height: size.height + 16,
+          width: size.width + 16,
           decoration: ShapeDecoration(
             shape: radius != null
                 ? RoundedRectangleBorder(borderRadius: radius!)
                 : shapeBorder ??
-                    const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                    ),
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
           ),
         ),
       ),
     );
   }
+}
+
+class TargetCenterOffsetWidget {
+  //相对于target元素中心的偏移
+  Offset offset;
+  //偏移显示的“悬浮蒙层之上”的子元素, 子元素目前会被禁掉点击事件
+  Widget child;
+  TargetCenterOffsetWidget({this.offset = Offset.zero, required this.child});
 }

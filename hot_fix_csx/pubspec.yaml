@@ -1,6 +1,6 @@
 name: hot_fix_csx
 description: The update of the project's large resource pack does not require the repair tool of the app's re-release.
-version: 0.0.8+2
+version: 0.0.9
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/hot_fix_csx
 publish_to: https://dart-pub.brainco.cn/
 
