@@ -6,17 +6,19 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:args/args.dart';
 import 'ast_runtime_class.dart';
+// ignore: depend_on_referenced_packages
+import 'package:pub_semver/pub_semver.dart';
 
 main(List<String> arguments) async {
-  exitCode = 0; // presume success
   final parser = ArgParser()..addFlag("file", negatable: false, abbr: 'f');
-
+  stdout.writeln('arguments: $arguments');
   var argResults = parser.parse(arguments);
   final paths = argResults.rest;
+  stdout.writeln('paths: $paths');
   if (paths.isEmpty) {
     stdout.writeln('No file found');
   } else {
-    var ast = await generate(paths[0]);
+    var ast = await astGenerate(paths.first);
     //测试Runtime
     var astRuntime = AstRuntime(ast);
     var res = await astRuntime.callFunction('incTen', [100]);
@@ -35,18 +37,19 @@ class DemoAstVisitor extends GeneralizingAstVisitor<Map> {
 
 class MyAstVisitor extends SimpleAstVisitor<Map> {
   /// 遍历节点
-  Map _safelyVisitNode(AstNode? node) {
-    var result = node?.accept(this);
-    return result ?? {};
+  Map? _safelyVisitNode(AstNode? node) {
+    stdout.writeln('_safelyVisitNode: $node');
+    return node?.accept(this);
   }
 
   /// 遍历节点列表
   List<Map> _safelyVisitNodeList(NodeList<AstNode>? nodes) {
-    List<Map> maps = [];
+    var maps = <Map>[];
     if (nodes != null) {
       int size = nodes.length;
       for (int i = 0; i < size; i++) {
         var node = nodes[i];
+        stdout.writeln('_safelyVisitNodeList: $i $node');
         var res = node.accept(this);
         if (res != null) {
           maps.add(res);
@@ -56,343 +59,323 @@ class MyAstVisitor extends SimpleAstVisitor<Map> {
     return maps;
   }
 
-  //构造根节点
-  Map? _buildAstRoot(List<Map> body) {
-    if (body.isNotEmpty) {
-      return {
-        "type": "Program",
-        "body": body,
-      };
-    } else {
-      return null;
-    }
-  }
-
-  //构造代码块Bloc 结构
-  Map _buildBloc(List body) => {"type": "BlockStatement", "body": body};
-
-  //构造运算表达式结构
-  Map _buildBinaryExpression(Map left, Map right, String lexeme) => {
-        "type": "BinaryExpression",
-        "operator": lexeme,
-        "left": left,
-        "right": right
-      };
-
-  //构造变量声明
-  Map _buildVariableDeclaration(Map id, Map init) => {
-        "type": "VariableDeclarator",
-        "id": id,
-        "init": init,
-      };
-
-  //构造变量声明
-  Map _buildVariableDeclarationList(
-          Map typeAnnotation, List<Map> declarations) =>
-      {
-        "type": "VariableDeclarationList",
-        "typeAnnotation": typeAnnotation,
-        "declarations": declarations,
-      };
-  //构造标识符定义
-  Map _buildIdentifier(String name) => {"type": "Identifier", "name": name};
-
-  //构造数值定义
-  Map _buildNumericLiteral(num? value) =>
-      {"type": "NumericLiteral", "value": value};
-
-  //构造函数声明
-  Map _buildFunctionDeclaration(Map id, Map expression) => {
-        "type": "FunctionDeclaration",
-        "id": id,
-        "expression": expression,
-      };
-
-  //构造函数表达式
-  Map _buildFunctionExpression(Map params, Map body, {bool isAsync = false}) =>
-      {
-        "type": "FunctionExpression",
-        "parameters": params,
-        "body": body,
-        "isAsync": isAsync,
-      };
-
-  //构造函数参数
-  Map _buildFormalParameterList(List<Map> parameterList) =>
-      {"type": "FormalParameterList", "parameterList": parameterList};
-
-  //构造函数参数
-  Map _buildSimpleFormalParameter(Map type, String? name) =>
-      {"type": "SimpleFormalParameter", "paramType": type, "name": name};
-
-  //构造函数参数类型
-  Map _buildTypeName(String name) => {
-        "type": "TypeName",
-        "name": name,
-      };
-
-  //构造返回数据定义
-  Map _buildReturnStatement(Map argument) => {
-        "type": "ReturnStatement",
-        "argument": argument,
-      };
-
-  Map _buildMethodDeclaration(
-          Map id, Map parameters, Map typeParameters, Map body, Map returnType,
-          {bool isAsync = false}) =>
-      {
-        "type": "MethodDeclaration",
-        "id": id,
-        "parameters": parameters,
-        "typeParameters": typeParameters,
-        "body": body,
-        "isAsync": isAsync,
-        "returnType": returnType,
-      };
-
-  Map _buildNamedExpression(Map id, Map expression) => {
-        "type": "NamedExpression",
-        "id": id,
-        "expression": expression,
-      };
-
-  Map _buildPrefixedIdentifier(Map identifier, Map prefix) => {
-        "type": "PrefixedIdentifier",
-        "identifier": identifier,
-        "prefix": prefix,
-      };
-
-  Map _buildMethodInvocation(Map callee, Map typeArguments, Map argumentList) =>
-      {
-        "type": "MethodInvocation",
-        "callee": callee,
-        "typeArguments": typeArguments,
-        "argumentList": argumentList,
-      };
-
-  Map _buildClassDeclaration(Map id, Map superClause, Map implementsClause,
-          Map mixinClause, List<Map> metadata, List<Map> body) =>
-      {
-        "type": "ClassDeclaration",
-        "id": id,
-        "superClause": superClause,
-        "implementsClause": implementsClause,
-        "mixinClause": mixinClause,
-        'metadata': metadata,
-        "body": body,
-      };
-
-  Map _buildArgumentList(List<Map> argumentList) =>
-      {"type": "ArgumentList", "argumentList": argumentList};
-
-  Map _buildStringLiteral(String value) =>
-      {"type": "StringLiteral", "value": value};
-
-  Map _buildBooleanLiteral(bool value) =>
-      {"type": "BooleanLiteral", "value": value};
-
-  Map _buildImplementsClause(List<Map> implementList) =>
-      {"type": "ImplementsClause", "implements": implementList};
-
-  Map _buildPropertyAccess(Map id, Map expression) => {
-        "type": "PropertyAccess",
-        "id": id,
-        "expression": expression,
-      };
-
   @override
   Map visitCompilationUnit(CompilationUnit node) {
-    return _buildAstRoot(_safelyVisitNodeList(node.declarations)) ?? {};
+    //构造根节点
+    stdout.writeln('visitCompilationUnit: ${node.declarations}');
+    return {
+      "type": "Program",
+      "body": _safelyVisitNodeList(node.declarations),
+    };
   }
 
   @override
   Map visitBlock(Block node) {
-    return _buildBloc(_safelyVisitNodeList(node.statements));
+    //构造代码块Bloc 结构
+    stdout.writeln('visitBlock: ${node.statements}');
+    return {
+      "type": "BlockStatement",
+      "body": _safelyVisitNodeList(node.statements)
+    };
   }
 
   @override
-  Map visitBlockFunctionBody(BlockFunctionBody node) {
+  Map? visitBlockFunctionBody(BlockFunctionBody node) {
+    stdout.writeln('visitBlockFunctionBody: ${node.block}');
     return _safelyVisitNode(node.block);
   }
 
   @override
   Map visitVariableDeclaration(VariableDeclaration node) {
-    return _buildVariableDeclaration(
-        _safelyVisitNode(node), _safelyVisitNode(node.initializer));
+    stdout.writeln('visitVariableDeclaration: $node>>>>>${node.initializer}');
+    return {
+      "type": "VariableDeclarator",
+      "id": _safelyVisitNode(node.name),
+      "init": _safelyVisitNode(node.initializer),
+    };
   }
 
   @override
-  Map visitVariableDeclarationStatement(VariableDeclarationStatement node) {
+  Map? visitVariableDeclarationStatement(VariableDeclarationStatement node) {
+    stdout.writeln('visitVariableDeclarationStatement: ${node.variables}');
     return _safelyVisitNode(node.variables);
   }
 
   @override
   Map visitVariableDeclarationList(VariableDeclarationList node) {
-    return _buildVariableDeclarationList(
-        _safelyVisitNode(node.type), _safelyVisitNodeList(node.variables));
+    //构造变量声明
+    stdout.writeln(
+        'visitVariableDeclarationList: ${node.type}>>>>>${node.variables}');
+    return {
+      "type": "VariableDeclarationList",
+      "typeAnnotation": _safelyVisitNode(node.type),
+      "declarations": _safelyVisitNodeList(node.variables),
+    };
   }
 
   @override
   Map visitSimpleIdentifier(SimpleIdentifier node) {
-    return _buildIdentifier(node.name);
+    stdout.writeln('visitSimpleIdentifier: ${node.name}');
+    //构造标识符定义
+    return {"type": "Identifier", "name": node.name};
   }
 
   @override
   Map visitBinaryExpression(BinaryExpression node) {
-    return _buildBinaryExpression(_safelyVisitNode(node.leftOperand),
-        _safelyVisitNode(node.rightOperand), node.operator.lexeme);
+    //构造运算表达式结构
+    stdout.writeln(
+        'visitBinaryExpression: ${node.leftOperand}>>>${node.rightOperand}>>>${node.operator.lexeme}');
+    return {
+      "type": "BinaryExpression",
+      "operator": node.operator.lexeme,
+      "left": _safelyVisitNode(node.leftOperand),
+      "right": _safelyVisitNode(node.rightOperand)
+    };
   }
 
   @override
   Map visitIntegerLiteral(IntegerLiteral node) {
-    return _buildNumericLiteral(node.value);
+    //构造数值定义
+    stdout.writeln('visitIntegerLiteral: ${node.value}');
+    return {"type": "NumericLiteral", "value": node.value};
   }
 
   @override
   Map visitFunctionDeclaration(FunctionDeclaration node) {
-    return _buildFunctionDeclaration(
-        _safelyVisitNode(node), _safelyVisitNode(node.functionExpression));
+    //构造函数声明
+    stdout.writeln(
+        'visitFunctionDeclaration: $node >>> ${node.functionExpression}');
+    return {
+      "type": "FunctionDeclaration",
+      "id": _safelyVisitNode(node.name),
+      "expression": _safelyVisitNode(node.functionExpression),
+    };
   }
 
   @override
-  Map visitFunctionDeclarationStatement(FunctionDeclarationStatement node) {
+  Map? visitFunctionDeclarationStatement(FunctionDeclarationStatement node) {
+    stdout.writeln(
+        'visitFunctionDeclarationStatement: ${node.functionDeclaration}');
     return _safelyVisitNode(node.functionDeclaration);
   }
 
   @override
   Map visitFunctionExpression(FunctionExpression node) {
-    return _buildFunctionExpression(
-        _safelyVisitNode(node.parameters), _safelyVisitNode(node.body),
-        isAsync: node.body.isAsynchronous);
+    //构造函数表达式
+    stdout.writeln(
+        'visitFunctionExpression: ${node.parameters}>>>${node.body}>>>>${node.body.isAsynchronous}');
+    return {
+      "type": "FunctionExpression",
+      "parameters": _safelyVisitNode(node.parameters),
+      "body": _safelyVisitNode(node.body),
+      "isAsync": node.body.isAsynchronous,
+    };
   }
 
   @override
   Map visitSimpleFormalParameter(SimpleFormalParameter node) {
-    return _buildSimpleFormalParameter(
-        _safelyVisitNode(node.type), node.name?.lexeme);
+    //构造函数参数
+    stdout.writeln(
+        'visitSimpleFormalParameter: ${node.type}>>>${node.identifier?.name}');
+    return {
+      "type": "SimpleFormalParameter",
+      "paramType": _safelyVisitNode(node.type),
+      "name": node.identifier?.name,
+    };
   }
 
   @override
   Map visitFormalParameterList(FormalParameterList node) {
-    return _buildFormalParameterList(_safelyVisitNodeList(node.parameters));
+    //构造函数参数
+    stdout.writeln('visitFormalParameterList: ${node.parameterElements}');
+    var tempArr = _safelyVisitNodeList(node.parameters);
+    stdout.writeln('visitFormalParameterList: end: $tempArr');
+    return {
+      "type": "FormalParameterList",
+      "parameterList": _safelyVisitNodeList(node.parameters)
+    };
   }
 
   @override
-  Map? visitNamedType(NamedType node) {
-    return _buildTypeName(node.name.name);
+  Map visitNamedType(NamedType node) {
+    //构造函数参数类型
+    stdout.writeln('visitNamedType: ${node.name}');
+    return {
+      "type": "TypeName",
+      "name": _safelyVisitNode(node.name),
+    };
   }
 
   @override
   Map visitReturnStatement(ReturnStatement node) {
-    return _buildReturnStatement(_safelyVisitNode(node.expression));
+    //构造返回数据定义
+    stdout.writeln('visitReturnStatement: ${node.expression}');
+    return {
+      "type": "ReturnStatement",
+      "argument": _safelyVisitNode(node.expression),
+    };
   }
 
   @override
-  visitMethodDeclaration(MethodDeclaration node) {
-    return _buildMethodDeclaration(
-        _safelyVisitNode(node),
-        _safelyVisitNode(node.parameters),
-        _safelyVisitNode(node.typeParameters),
-        _safelyVisitNode(node.body),
-        _safelyVisitNode(node.returnType),
-        isAsync: node.body.isAsynchronous);
+  Map visitMethodDeclaration(MethodDeclaration node) {
+    stdout.writeln(
+        'visitMethodDeclaration: $node>>>${node.parameters}>>>${node.typeParameters}>>>${node.body}>>>${node.returnType}');
+    return {
+      "type": "MethodDeclaration",
+      "id": _safelyVisitNode(node.name),
+      "parameters": _safelyVisitNode(node.parameters),
+      "typeParameters": _safelyVisitNode(node.typeParameters),
+      "body": _safelyVisitNode(node.body),
+      "returnType": _safelyVisitNode(node.returnType),
+      "isAsync": node.body.isAsynchronous,
+    };
   }
 
   @override
-  visitNamedExpression(NamedExpression node) {
-    return _buildNamedExpression(
-        _safelyVisitNode(node.name), _safelyVisitNode(node.expression));
-  }
-
-  @override
-  visitPrefixedIdentifier(PrefixedIdentifier node) {
-    return _buildPrefixedIdentifier(
-        _safelyVisitNode(node.identifier), _safelyVisitNode(node.prefix));
-  }
-
-  @override
-  visitMethodInvocation(MethodInvocation node) {
-    Map callee;
-    if (node.target != null) {
-      node.target!.accept(this);
-      callee = {
-        "type": "MemberExpression",
-        "object": _safelyVisitNode(node.target),
-        "property": _safelyVisitNode(node.methodName),
-      };
-    } else {
-      callee = _safelyVisitNode(node.methodName);
+  Map visitNamedExpression(NamedExpression node) {
+    stdout.writeln('visitNamedExpression: ${node.name}>>>>${node.expression}');
+    var tempDic = _safelyVisitNode(node.name);
+    var expressionDic = _safelyVisitNode(node.expression);
+    if (tempDic?['name'] == 'title') {
+      stdout.writeln('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      stdout.writeln('${node.expression}');
+      stdout.writeln('$expressionDic');
+      stdout.writeln('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     }
-    return _buildMethodInvocation(callee, _safelyVisitNode(node.typeArguments),
-        _safelyVisitNode(node.argumentList));
+    return {
+      "type": "NamedExpression",
+      "expression": expressionDic,
+      "id": tempDic,
+    };
   }
 
   @override
-  visitClassDeclaration(ClassDeclaration node) {
-    return _buildClassDeclaration(
-        _safelyVisitNode(node),
-        _safelyVisitNode(node.extendsClause),
-        _safelyVisitNode(node.implementsClause),
-        _safelyVisitNode(node.withClause),
-        _safelyVisitNodeList(node.metadata),
-        _safelyVisitNodeList(node.members));
+  Map visitPrefixedIdentifier(PrefixedIdentifier node) {
+    stdout.writeln(
+        'visitPrefixedIdentifier: ${node.identifier}>>>>${node.prefix}');
+    return {
+      "type": "PrefixedIdentifier",
+      "prefix": _safelyVisitNode(node.prefix),
+      "identifier": _safelyVisitNode(node.identifier),
+    };
   }
 
   @override
-  visitSimpleStringLiteral(SimpleStringLiteral node) {
-    return _buildStringLiteral(node.value);
+  Map visitMethodInvocation(MethodInvocation node) {
+    stdout.writeln('visitMethodInvocation: $node');
+    return {
+      "type": "MethodInvocation",
+      "typeArguments": _safelyVisitNode(node.typeArguments),
+      "callee": node.target != null
+          ? {
+              "type": "MemberExpression",
+              "object": _safelyVisitNode(node.target),
+              "property": _safelyVisitNode(node.methodName),
+            }
+          : _safelyVisitNode(node.methodName),
+      "argumentList": _safelyVisitNode(node.argumentList),
+    };
   }
 
   @override
-  visitBooleanLiteral(BooleanLiteral node) {
-    return _buildBooleanLiteral(node.value);
+  Map visitClassDeclaration(ClassDeclaration node) {
+    stdout.writeln('visitClassDeclaration: ${node.name}>>>${node.members}');
+    return {
+      "type": "ClassDeclaration",
+      "id": _safelyVisitNode(node.name),
+      "superClause": _safelyVisitNode(node.extendsClause),
+      "implementsClause": _safelyVisitNode(node.implementsClause),
+      "mixinClause": _safelyVisitNode(node.withClause),
+      'metadata': _safelyVisitNodeList(node.metadata),
+      "body": _safelyVisitNodeList(node.members),
+    };
   }
 
   @override
-  visitArgumentList(ArgumentList node) {
-    return _buildArgumentList(_safelyVisitNodeList(node.arguments));
+  Map visitSimpleStringLiteral(SimpleStringLiteral node) {
+    stdout.writeln('visitSimpleStringLiteral: ${node.value}');
+    return {
+      "type": "StringLiteral",
+      "value": node.value,
+    };
   }
 
   @override
-  visitLabel(Label node) {
+  Map? visitBooleanLiteral(BooleanLiteral node) {
+    stdout.writeln('visitBooleanLiteral: ${node.value}');
+    return {
+      "type": "BooleanLiteral",
+      "value": node.value,
+    };
+  }
+
+  @override
+  Map? visitArgumentList(ArgumentList node) {
+    stdout.writeln('visitArgumentList: ${node.arguments}');
+    return {
+      "type": "ArgumentList",
+      "argumentList": _safelyVisitNodeList(node.arguments),
+    };
+  }
+
+  @override
+  Map? visitLabel(Label node) {
+    stdout.writeln('visitLabel: ${node.label}');
     return _safelyVisitNode(node.label);
   }
 
   @override
-  visitExtendsClause(ExtendsClause node) {
+  Map? visitExtendsClause(ExtendsClause node) {
+    stdout.writeln('visitExtendsClause: ${node.superclass}');
     return _safelyVisitNode(node.superclass);
   }
 
   @override
-  visitImplementsClause(ImplementsClause node) {
-    return _buildImplementsClause(_safelyVisitNodeList(node.interfaces));
+  Map? visitImplementsClause(ImplementsClause node) {
+    stdout.writeln('visitImplementsClause: ${node.interfaces}');
+    return {
+      "type": "ImplementsClause",
+      "implements": _safelyVisitNodeList(node.interfaces)
+    };
   }
 
   @override
-  visitWithClause(WithClause node) {
+  Map? visitWithClause(WithClause node) {
+    stdout.writeln('visitWithClause: $node');
     return _safelyVisitNode(node);
   }
 
   @override
-  visitPropertyAccess(PropertyAccess node) {
-    return _buildPropertyAccess(
-        _safelyVisitNode(node.propertyName), _safelyVisitNode(node.target));
+  Map? visitPropertyAccess(PropertyAccess node) {
+    stdout
+        .writeln('visitPropertyAccess: ${node.propertyName}>>>${node.target}');
+    return {
+      "type": "PropertyAccess",
+      "id": _safelyVisitNode(node.propertyName),
+      "expression": _safelyVisitNode(node.target),
+    };
   }
 }
 
+final FeatureSet language_2_18_5 = FeatureSet.fromEnableFlags2(
+  sdkLanguageVersion: Version.parse('2.18.5'),
+  flags: [],
+);
+
 ///生成AST
-Future generate(String path) async {
+Future<Map> astGenerate(String path) async {
   if (path.isEmpty) {
     stdout.writeln("No file found");
   } else {
-    await _handleError(path);
-    if (exitCode == 2) {
+    if (await FileSystemEntity.isDirectory(path)) {
+      stderr.writeln('error: $path is a directory');
+    } else {
       try {
-        var parseResult = parseFile(
-            path: path, featureSet: FeatureSet.latestLanguageVersion());
+        var parseResult = parseFile(path: path, featureSet: language_2_18_5);
         var compilationUnit = parseResult.unit;
-        //遍历AST
+        //遍历AST DemoAstVisitor MyAstVisitor
         var astData = compilationUnit.accept(MyAstVisitor());
+        stdout.writeln('\n\n');
         stdout.writeln(jsonEncode(astData));
         return Future.value(astData);
       } catch (e) {
@@ -400,13 +383,5 @@ Future generate(String path) async {
       }
     }
   }
-  return Future.value();
-}
-
-Future _handleError(String path) async {
-  if (await FileSystemEntity.isDirectory(path)) {
-    stderr.writeln('error: $path is a directory');
-  } else {
-    exitCode = 2;
-  }
+  return Future.value({});
 }

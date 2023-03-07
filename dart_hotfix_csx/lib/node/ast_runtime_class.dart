@@ -101,7 +101,6 @@ class AstFunction {
         variableStack.setVariableValue(_parameterList[i].name, params[i]);
       }
     }
-
     var result = await _executeBlockStatement(_body, variableStack);
     variableStack.blockOut();
     return Future.value(result);

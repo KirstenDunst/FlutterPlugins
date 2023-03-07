@@ -285,7 +285,7 @@ class TypeName extends AstNode {
     if (ast['type'] != 'TypeName') {
       throw ArgumentError('TypeName.fromAst: type is not AstNodeName.TypeName');
     }
-    return TypeName(ast['name'], ast);
+    return TypeName(Identifier.fromAst(ast['name']).name, ast);
   }
 
   @override
@@ -479,7 +479,7 @@ class VariableDeclarationList extends AstNode {
       declarations.add(VariableDeclarator.fromAst(arg));
     }
     return VariableDeclarationList(
-        Identifier.fromAst(ast['typeAnnotation']).name, declarations, ast);
+        TypeName.fromAst(ast['typeAnnotation']).name, declarations, ast);
   }
 
   @override
