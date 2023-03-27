@@ -1,7 +1,8 @@
 name: ios_specific_csx
 description: For iOS special properties application development
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/ios_specific_csx
+publish_to: https://dart-pub.brainco.cn
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Flutter
 import HealthKit
 
 
@@ -17,19 +18,22 @@ class HealthNormalTool : NSObject {
     /*
      * 统一授权
      */
-    private func getPermissions(writeDataType:HKSampleType?, readDataType: HKSampleType?, completion: @escaping (Bool, String?) -> Void) {
+    private func getPermissions(writeDataTypes:[HKSampleType]?, readDataTypes: [HKSampleType]?,eventSink:FlutterEventSink?,  completion: @escaping (Bool, String?) -> Void) {
         if isHealthDataAvailable() {
-            var writeType: NSSet?
-            if writeDataType != nil {
-                writeType =  NSSet.init(object: writeDataType!)
+            var writeType: Set<HKSampleType>?
+            if writeDataTypes != nil {
+                writeType =  Set(writeDataTypes!)
             }
-            var readType: NSSet?
-            if readDataType != nil {
-                readType = NSSet.init(object: readDataType!)
+            var readType: Set<HKSampleType>?
+            if readDataTypes != nil {
+                readType = Set(readDataTypes!)
             }
+            eventSink?("getPermissions isHealthDataAvailable")
             //need main thread, orelse get permission timeout!
             DispatchQueue.main.async {
-                self.healthStore.requestAuthorization(toShare: writeType as? Set<HKSampleType>, read: readType as? Set<HKObjectType>) { (success, error) in
+                eventSink?("getPermissions DispatchQueue.main")
+                self.healthStore.requestAuthorization(toShare: writeType, read: readType) { (success, error) in
+                    eventSink?("getPermissions requestAuthorization：\(success),\(String(describing: error?.localizedDescription))")
                     completion(success, (error != nil) ? error!.localizedDescription: nil)
                 }
             }
@@ -42,7 +46,7 @@ class HealthNormalTool : NSObject {
      * 获取类型的授权状态
      */
     func getHealthAuthorityStatus(subclassificationIndex: Int) -> HKAuthorizationStatus {
-        let categoryType:HKSampleType = HealthNormalTool.sharedInstance.getCategoryType(subclassificationIndex:subclassificationIndex)
+        let categoryType:HKSampleType = getCategoryType(subclassificationIndex:subclassificationIndex)
         return self.healthStore.authorizationStatus(for: categoryType)
     }
     
@@ -78,9 +82,10 @@ class HealthNormalTool : NSObject {
     /*
      * 对不同类型进行系统的授权
      */
-    func requestHealthAuthority(subclassificationIndex: Int, completion: @escaping (Bool, String?) -> Void) {
-        let categoryType:HKSampleType = HealthNormalTool.sharedInstance.getCategoryType(subclassificationIndex:subclassificationIndex)
-        getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
+    func requestHealthAuthority(subclassificationIndex: Int, eventSink:FlutterEventSink?, completion: @escaping (Bool, String?) -> Void) {
+        let categoryType:HKSampleType = getCategoryType(subclassificationIndex:subclassificationIndex)
+        eventSink?("requestHealthAuthority categoryType:\(categoryType)")
+        getPermissions(writeDataTypes: [categoryType], readDataTypes: [categoryType],eventSink: eventSink) { (success, error) in
             if(success){
                 completion(success, (error != nil) ? error: nil)
             } else {
@@ -88,6 +93,25 @@ class HealthNormalTool : NSObject {
             }
         }
     }
+    
+    /*
+     * 批量请求对应健康app模块的权限
+     */
+    func requestHealthSubmodulesAuthority(subclassificationIndexs: [Int],eventSink:FlutterEventSink?,  completion: @escaping (Bool, String?) -> Void) {
+        var categoryTypes:[HKSampleType] = []
+        for subclassificationIndex in subclassificationIndexs {
+            categoryTypes.append(getCategoryType(subclassificationIndex:subclassificationIndex))
+        }
+        eventSink?("requestHealthSubmodulesAuthority categoryTypes:\(categoryTypes)")
+        getPermissions(writeDataTypes: categoryTypes, readDataTypes: categoryTypes,eventSink: eventSink) { (success, error) in
+            if(success){
+                completion(success, (error != nil) ? error: nil)
+            } else {
+                completion(false,error)
+            }
+        }
+    }
+    
     
     /*
     * 通用根据类型获取categoryType对象
@@ -144,13 +168,15 @@ class HealthNormalTool : NSObject {
     /*
      * 通用CategoryType写入
      */
-    func commonAddHKCategoryType(type:HealthAppSubclassification,typeIdentifier: HKCategoryTypeIdentifier, startDateInMill: Int?, endDateInMill: Int?, completion: @escaping (Bool, String?) -> Void) {
+    func commonAddHKCategoryType(type:HealthAppSubclassification,typeIdentifier: HKCategoryTypeIdentifier, startDateInMill: CLong?, endDateInMill: CLong?,eventSink:FlutterEventSink?, completion: @escaping (Bool, String?) -> Void) {
         guard let categoryType =
                 HealthKit.HKCategoryType.categoryType(forIdentifier: typeIdentifier) else {
             let errorStr = "\(typeIdentifier)创建HKCategoryType失败"
+            eventSink?("commonAddHKCategoryType\(errorStr)")
             completion(false,errorStr)
             fatalError(errorStr)
         }
+        eventSink?("commonAddHKCategoryType categoryType:\(categoryType)")
         var startDate: Date = Date()
         if startDateInMill != nil {
             startDate = Date.init(timeIntervalSince1970: TimeInterval(startDateInMill!/1000))
@@ -159,12 +185,15 @@ class HealthNormalTool : NSObject {
         if endDateInMill != nil {
             endDate = Date.init(timeIntervalSince1970: TimeInterval(endDateInMill!/1000))
         }
+        eventSink?("commonAddHKCategoryType startDate:\(startDate),endDate:\(endDate)")
         //value后面扩展需要关注一下
         let categorySample = HKCategorySample.init(type: categoryType, value: HKCategoryValue.notApplicable.rawValue, start:startDate, end:endDate)
+        eventSink?("commonAddHKCategoryType categorySample:\(categorySample)")
         let state = getHealthAuthorityStatus(subclassificationIndex: type.rawValue)
+        eventSink?("commonAddHKCategoryType state:\(state)")
         switch state {
             case HKAuthorizationStatus.notDetermined:
-                getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
+                getPermissions(writeDataTypes: [categoryType], readDataTypes: [categoryType],eventSink: eventSink) { (success, error) in
                     if(success){
                         self.healthStore.save([categorySample]) { (success, error) in
                             completion(success, (error != nil) ? error!.localizedDescription: nil)
@@ -189,12 +218,14 @@ class HealthNormalTool : NSObject {
     }
     
     //通用QuantityType写入
-    func commonAddHKQuantityType(contentValue:Double, type:HealthAppSubclassification,typeIdentifier: HKQuantityTypeIdentifier,unit:HKUnit, startDateInMill: Int?, endDateInMill: Int?, completion: @escaping (Bool, String?) -> Void) {
+    func commonAddHKQuantityType(contentValue:Double, type:HealthAppSubclassification,typeIdentifier: HKQuantityTypeIdentifier,unit:HKUnit, startDateInMill: CLong?, endDateInMill: CLong?,eventSink:FlutterEventSink?,  completion: @escaping (Bool, String?) -> Void) {
          guard let categoryType = HealthKit.HKQuantityType.quantityType(forIdentifier: typeIdentifier) else {
              let errorStr = "\(typeIdentifier)创建HKCategoryType失败"
+             eventSink?("commonAddHKQuantityType\(errorStr)")
              completion(false,errorStr)
              fatalError(errorStr)
          }
+        eventSink?("commonAddHKQuantityType categoryType:\(categoryType)")
          var startDate: Date = Date()
          if startDateInMill != nil {
              startDate = Date.init(timeIntervalSince1970: TimeInterval(startDateInMill!/1000))
@@ -203,12 +234,15 @@ class HealthNormalTool : NSObject {
          if endDateInMill != nil {
              endDate = Date.init(timeIntervalSince1970: TimeInterval(endDateInMill!/1000))
          }
+        eventSink?("commonAddHKQuantityType startDate:\(startDate),endDate:\(endDate)")
          let quantity = HKQuantity.init(unit: unit, doubleValue: contentValue)
          let quantitySample = HKQuantitySample.init(type: categoryType, quantity: quantity, start: startDate, end: endDate)
+        eventSink?("commonAddHKQuantityType quantitySample:\(quantitySample)")
          let state = getHealthAuthorityStatus(subclassificationIndex: type.rawValue)
+        eventSink?("commonAddHKQuantityType state:\(state)")
          switch state {
              case HKAuthorizationStatus.notDetermined:
-                 getPermissions(writeDataType: categoryType, readDataType: categoryType) { (success, error) in
+                 getPermissions(writeDataTypes: [categoryType], readDataTypes: [categoryType],eventSink: eventSink) { (success, error) in
                      if(success){
                          self.healthStore.save([quantitySample]) { (success, error) in
                              completion(success, error?.localizedDescription)

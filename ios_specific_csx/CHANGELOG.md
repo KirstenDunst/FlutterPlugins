@@ -2,11 +2,14 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:17:59
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-26 09:43:01
+ * @LastEditTime: 2023-03-24 18:25:58
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
 -->
+## 0.1.2 [20230324]
+* 扩展批量请求健康子模块权限方法:[requestHealthSubmodulesAuthority]
+
 ## 0.1.1 [20220726]
 * 扩展健康写入类型：'正念','身高','身高体重指数','体脂率','体重','去脂体重','步数','步行+跑步','骑行','心率','血氧',
 
