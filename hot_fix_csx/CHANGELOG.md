@@ -2,9 +2,12 @@
  * @Author: Cao Shixin
  * @Date: 2022-04-20 09:01:23
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2023-02-13 17:36:04
+ * @LastEditTime: 2023-04-12 15:06:38
  * @Description: 
 -->
+## 0.10.0 20230412
+* 升级依赖包版本号
+
 ## 0.0.9 20230213
 * 适配flutter3.7版本导致flutter_downloader下载状态无法回调问题
 
