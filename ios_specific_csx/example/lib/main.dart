@@ -2,7 +2,7 @@
  * @Author: Cao Shixin
  * @Date: 2021-03-26 10:21:00
  * @LastEditors: Cao Shixin
- * @LastEditTime: 2022-07-26 10:21:12
+ * @LastEditTime: 2023-03-27 09:07:28
  * @Description: 
  * @Email: cao_shixin@yahoo.com
  * @Company: BrainCo
@@ -41,6 +41,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    IosSpecificCsx.instance.healthHandle.logStream.listen((event) {
+      print('>>>>>>>>>>>>$event');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +90,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     : null,
               ),
               child: Text('请求权限'),
+            ),
+            ElevatedButton(
+              onPressed: () => IosSpecificCsx.instance.healthHandle
+                  .requestHealthSubmodulesAuthority([
+                HealthAppSubclassification.bloodOxygen,
+                HealthAppSubclassification.bodyFatPercentage,
+                HealthAppSubclassification.bodyMass,
+                HealthAppSubclassification.bodyMassIndex
+              ]).then((result) {
+                BotToast.showText(text: '请求权限:${result.toJson()}');
+              }),
+              child: Text('请求多个子模块权限'),
             ),
             ElevatedButton(
               onPressed: () => IosSpecificCsx.instance.healthHandle

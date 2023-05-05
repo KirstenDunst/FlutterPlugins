@@ -1,6 +1,6 @@
 name: hot_fix_csx
 description: The update of the project's large resource pack does not require the repair tool of the app's re-release.
-version: 0.0.9
+version: 0.10.0
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/hot_fix_csx
 publish_to: https://dart-pub.brainco.cn/
 
@@ -12,12 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ffi: ^1.1.2
+  ffi: ^2.0.1
   path_provider: ^2.0.1
   common_plugin_csx: ^0.0.2
   package_info_plus: ^1.4.2
   permission_handler: ^9.2.0
-  connectivity_plus: ^2.3.0
+  connectivity_plus: ^3.0.4
   sqflite: ^2.0.2+1
   bot_toast: ^4.0.1
   stack_trace: ^1.10.0

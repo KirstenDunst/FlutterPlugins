@@ -5,6 +5,9 @@ import 'ios_specific_csx.dart';
 
 class HealthHandle {
   final MethodChannel _channel = const MethodChannel('ios_specific_csx_health');
+  final EventChannel _eventChannel = const EventChannel('ios_specific_csx_health_event');
+
+  Stream get logStream => _eventChannel.receiveBroadcastStream('init');
 
   /*
    * 前往健康app
@@ -25,11 +28,24 @@ class HealthHandle {
   /*
    * 请求对应健康app模块的权限
    * subclassification：对应权限类型
+   * 调用前需要判断是否已经被用户拒绝，如果是拒绝状态需要应用内自己弹窗“需要用户打开相关健康数据开关”然后跳转健康做手动开启，否则调用请求仍然会返回success：true，error：
    */
   Future<ResultBase> requestHealthAuthority(
       HealthAppSubclassification subclassification) async {
     var result = await _channel.invokeMethod(
         'requestHealthAuthority', subclassification.index);
+    return ResultBase.fromJson(result);
+  }
+
+  /*
+   * 批量请求对应健康app模块的权限
+   * subclassifications：对应权限类型数组
+   * 调用前需要判断是否已经被用户拒绝，如果是拒绝状态需要应用内自己弹窗“需要用户打开相关健康数据开关”然后跳转健康做手动开启，否则调用请求仍然会返回success：true，error：
+   */
+  Future<ResultBase> requestHealthSubmodulesAuthority(
+      List<HealthAppSubclassification> subclassifications) async {
+    var result = await _channel.invokeMethod('requestHealthSubmodulesAuthority',
+        subclassifications.map((e) => e.index).toList());
     return ResultBase.fromJson(result);
   }
 

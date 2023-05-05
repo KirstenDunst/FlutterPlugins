@@ -11,7 +11,7 @@ int incTen(int a) {
   return b;
 }
 
-Future dealAnything(int a) async {
-  var end = a / 10;
-  return end;
-}
+// Future dealAnything(int a) async {
+//   var end = a / 10;
+//   return end;
+// }
