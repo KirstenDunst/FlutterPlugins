@@ -1,0 +1,28 @@
+PODS:
+  - Flutter (1.0.0)
+  - icon_replance_csx (0.0.1):
+    - Flutter
+  - integration_test (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - icon_replance_csx (from `.symlinks/plugins/icon_replance_csx/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  icon_replance_csx:
+    :path: ".symlinks/plugins/icon_replance_csx/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  icon_replance_csx: 8a435a98ac6d57600e39c830fb9983ebdd026ede
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+
+PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
+
+COCOAPODS: 1.16.2
