@@ -45,59 +45,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>春</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>春Icon-Small-20</string>
-					<string>春Icon-60</string>
-					<string>春Icon-Small-29</string>
-					<string>春Icon-Small-40</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>夏</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>夏Icon-Small-20</string>
-					<string>夏Icon-60</string>
-					<string>夏Icon-Small-29</string>
-					<string>夏Icon-Small-40</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>秋</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>秋Icon-Small-20</string>
-					<string>秋Icon-60</string>
-					<string>秋Icon-Small-29</string>
-					<string>秋Icon-Small-40</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>冬</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>冬Icon-Small-20</string>
-					<string>冬Icon-60</string>
-					<string>冬Icon-Small-29</string>
-					<string>冬Icon-Small-40</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-		</dict>
-	</dict>
 </dict>
 </plist>

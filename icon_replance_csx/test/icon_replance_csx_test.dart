@@ -12,11 +12,6 @@ class MockIconReplanceCsxPlatform
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 
-  @override
-  Future<EditIconBackModel?> changeIcon(EditIconParam param) {
-    // TODO: implement changeIcon
-    throw UnimplementedError();
-  }
 
   @override
   Future<bool?> removeSysAlert() {
@@ -27,6 +22,12 @@ class MockIconReplanceCsxPlatform
   @override
   Future<bool?> resetSysAlert() {
     // TODO: implement resetSysAlert
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<EditIconBackModel?> changeIcon(String? iconName) {
+    // TODO: implement changeIcon
     throw UnimplementedError();
   }
 }
