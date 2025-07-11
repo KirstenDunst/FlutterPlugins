@@ -29,20 +29,12 @@ class _MyAppState extends State<MyApp> {
               child: Text('reset alert'),
             ),
             ElevatedButton(
-              onPressed: () => NormalTool.changeIcon('春'),
-              child: Text('更换春icon'),
+              onPressed: () => NormalTool.changeIcon('AppIcon1'),
+              child: Text('更换AppIcon1'),
             ),
             ElevatedButton(
-              onPressed: () => NormalTool.changeIcon('夏'),
-              child: Text('更换夏icon'),
-            ),
-            ElevatedButton(
-              onPressed: () => NormalTool.changeIcon('秋'),
-              child: Text('更换秋icon'),
-            ),
-            ElevatedButton(
-              onPressed: () => NormalTool.changeIcon('冬'),
-              child: Text('更换冬icon'),
+              onPressed: () => NormalTool.changeIcon('AppIcon2'),
+              child: Text('更换AppIcon2'),
             ),
             ElevatedButton(
               onPressed: () => NormalTool.changeIcon(null),
@@ -57,9 +49,9 @@ class _MyAppState extends State<MyApp> {
 
 class NormalTool {
   static Future changeIcon(String? iconName) async {
-    await IconReplanceCsx().removeSysAlert();
+    // await IconReplanceCsx().removeSysAlert();
     var result = await IconReplanceCsx().changeIcon(iconName);
-    await IconReplanceCsx().resetSysAlert();
+    // await IconReplanceCsx().resetSysAlert();
     print('${result?.toJson()}');
   }
 }
