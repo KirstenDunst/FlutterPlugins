@@ -37,4 +37,11 @@ class MethodChannelIconReplanceCsx extends IconReplanceCsxPlatform {
     final result = await methodChannel.invokeMethod<bool>('resetSystemAlert');
     return result;
   }
+
+  //当前icon名称, null表示默认icon
+  @override
+  Future<String?> nowIconName() async {
+    final result = await methodChannel.invokeMethod<String?>('nowIconName');
+    return result;
+  }
 }

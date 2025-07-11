@@ -8,32 +8,33 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockIconReplanceCsxPlatform
     with MockPlatformInterfaceMixin
     implements IconReplanceCsxPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 
-
   @override
   Future<bool?> removeSysAlert() {
-    // TODO: implement removeSysAlert
     throw UnimplementedError();
   }
 
   @override
   Future<bool?> resetSysAlert() {
-    // TODO: implement resetSysAlert
     throw UnimplementedError();
   }
-  
+
   @override
   Future<EditIconBackModel?> changeIcon(String? iconName) {
-    // TODO: implement changeIcon
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> nowIconName() {
     throw UnimplementedError();
   }
 }
 
 void main() {
-  final IconReplanceCsxPlatform initialPlatform = IconReplanceCsxPlatform.instance;
+  final IconReplanceCsxPlatform initialPlatform =
+      IconReplanceCsxPlatform.instance;
 
   test('$MethodChannelIconReplanceCsx is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelIconReplanceCsx>());

@@ -29,6 +29,8 @@ public class IconReplanceCsxPlugin: NSObject, FlutterPlugin {
                 replanceCtl.runtimeResetAlert()
                 result(true)
             }
+        case "nowIconName":
+            result(UIApplication.shared.alternateIconName)
         default:
             result(FlutterMethodNotImplemented)
         }

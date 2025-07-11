@@ -18,4 +18,9 @@ class IconReplanceCsx {
   Future<EditIconBackModel?> changeIcon(String? iconName) {
     return IconReplanceCsxPlatform.instance.changeIcon(iconName);
   }
+
+  //当前icon名称, null表示默认icon
+  Future<String?> nowIconName() {
+    throw IconReplanceCsxPlatform.instance.nowIconName();
+  }
 }

@@ -42,4 +42,9 @@ abstract class IconReplanceCsxPlatform extends PlatformInterface {
   Future<bool?> resetSysAlert() {
     throw UnimplementedError('resetSysAlert() has not been implemented.');
   }
+
+  //当前icon名称, null表示默认icon
+  Future<String?> nowIconName() {
+    throw UnimplementedError('nowIconName() has not been implemented.');
+  }
 }
