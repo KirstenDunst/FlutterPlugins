@@ -50,7 +50,10 @@ class _MyAppState extends State<MyApp> {
 class NormalTool {
   static Future changeIcon(String? iconName) async {
     // await IconReplanceCsx().removeSysAlert();
-    var result = await IconReplanceCsx().changeIcon(iconName);
+    var result = await IconReplanceCsx().changeIcon(
+      iconName,
+      aliasNames: ['AppIcon', 'AppIcon1', 'AppIcon2'],
+    );
     // await IconReplanceCsx().resetSysAlert();
     print('${result?.toJson()}');
   }

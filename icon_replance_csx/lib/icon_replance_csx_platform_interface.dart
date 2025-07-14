@@ -29,21 +29,28 @@ abstract class IconReplanceCsxPlatform extends PlatformInterface {
   }
 
   //传null表示使用默认icon
-  Future<EditIconBackModel?> changeIcon(String? iconName) {
+  Future<EditIconBackModel?> changeIcon(
+    String? iconName, {
+    // 安卓需要知道其他所有的别名(第一个是默认)，iOS不需要设置
+    List<String>? aliasNames,
+  }) {
     throw UnimplementedError('changeIcon() has not been implemented.');
   }
 
-  //利用runtime移除替换icon带来的系统弹窗
+  //移除替换icon带来的系统弹窗
+  //only support ios
   Future<bool?> removeSysAlert() {
     throw UnimplementedError('removeSysAlert() has not been implemented.');
   }
 
-  //恢复runtime替换icon更换的系统弹窗方法替换
+  //恢复替换icon更换的系统弹窗方法替换
+  //only support ios
   Future<bool?> resetSysAlert() {
     throw UnimplementedError('resetSysAlert() has not been implemented.');
   }
 
   //当前icon名称, null表示默认icon
+  //only support ios
   Future<String?> nowIconName() {
     throw UnimplementedError('nowIconName() has not been implemented.');
   }

@@ -19,19 +19,28 @@ class MethodChannelIconReplanceCsx extends IconReplanceCsxPlatform {
   }
 
   @override
-  Future<EditIconBackModel?> changeIcon(String? iconName) async {
-    final back = await methodChannel.invokeMethod<Map>('changeIcon', iconName);
+  Future<EditIconBackModel?> changeIcon(
+    String? iconName, {
+    // 安卓需要知道其他所有的别名(第一个是默认)，iOS不需要设置
+    List<String>? aliasNames,
+  }) async {
+    final back = await methodChannel.invokeMethod<Map>('changeIcon', {
+      "iconName": iconName,
+      "aliasNames": aliasNames,
+    });
     return back == null ? null : EditIconBackModel.fromJson(back);
   }
 
-  //利用runtime移除替换icon带来的系统弹窗
+  //移除替换icon带来的系统弹窗
+  //only support ios
   @override
   Future<bool?> removeSysAlert() async {
     final result = await methodChannel.invokeMethod<bool>('removeSystemAlert');
     return result;
   }
 
-  //恢复runtime替换icon更换的系统弹窗方法替换
+  //恢复替换icon更换的系统弹窗方法替换
+  //only support ios
   @override
   Future<bool?> resetSysAlert() async {
     final result = await methodChannel.invokeMethod<bool>('resetSystemAlert');
@@ -39,6 +48,7 @@ class MethodChannelIconReplanceCsx extends IconReplanceCsxPlatform {
   }
 
   //当前icon名称, null表示默认icon
+  //only support ios
   @override
   Future<String?> nowIconName() async {
     final result = await methodChannel.invokeMethod<String?>('nowIconName');

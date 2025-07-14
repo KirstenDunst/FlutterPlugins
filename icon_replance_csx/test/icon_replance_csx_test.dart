@@ -22,12 +22,15 @@ class MockIconReplanceCsxPlatform
   }
 
   @override
-  Future<EditIconBackModel?> changeIcon(String? iconName) {
+  Future<String?> nowIconName() {
     throw UnimplementedError();
   }
 
   @override
-  Future<String?> nowIconName() {
+  Future<EditIconBackModel?> changeIcon(
+    String? iconName, {
+    List<String>? aliasNames,
+  }) {
     throw UnimplementedError();
   }
 }

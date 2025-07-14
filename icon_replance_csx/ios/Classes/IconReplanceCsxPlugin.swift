@@ -16,8 +16,8 @@ public class IconReplanceCsxPlugin: NSObject, FlutterPlugin {
             result("iOS " + UIDevice.current.systemVersion)
         case "changeIcon":
             do {
-                let iconName = call.arguments as! String?
-                replanceIcon(iconName, result: result)
+                let argument = call.arguments as! NSDictionary?
+                replanceIcon(argument?["iconName"] as! String?, result: result)
             }
         case "removeSystemAlert":
             do {
