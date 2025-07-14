@@ -25,6 +25,8 @@
 <!--                <category android:name="android.intent.category.LAUNCHER"/>-->
             </intent-filter>
         </activity>
+
+<!--        https://developer.android.google.cn/guide/topics/manifest/activity-alias-element.html?hl=zh-cn-->
         <activity-alias
             android:name=".AppIcon"
             android:enabled="true"

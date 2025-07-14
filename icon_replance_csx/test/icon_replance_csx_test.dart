@@ -30,6 +30,7 @@ class MockIconReplanceCsxPlatform
   Future<EditIconBackModel?> changeIcon(
     String? iconName, {
     List<String>? aliasNames,
+    bool changeNow = false,
   }) {
     throw UnimplementedError();
   }

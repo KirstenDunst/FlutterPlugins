@@ -23,10 +23,13 @@ class IconReplanceCsx {
     String? iconName, {
     // 安卓需要知道其他所有的别名(第一个是默认)，iOS不需要设置
     List<String>? aliasNames,
+    // 安卓是否是立即更换，默认false：当应用进入后台时更换（因为更换入口会导致应用退出（非闪退），且有些设备更换需要时间）
+    bool changeNow = false,
   }) {
     return IconReplanceCsxPlatform.instance.changeIcon(
       iconName,
       aliasNames: aliasNames,
+      changeNow: changeNow,
     );
   }
 

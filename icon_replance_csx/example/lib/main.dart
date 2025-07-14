@@ -53,6 +53,7 @@ class NormalTool {
     var result = await IconReplanceCsx().changeIcon(
       iconName,
       aliasNames: ['AppIcon', 'AppIcon1', 'AppIcon2'],
+      // changeNow: true,
     );
     // await IconReplanceCsx().resetSysAlert();
     print('${result?.toJson()}');
