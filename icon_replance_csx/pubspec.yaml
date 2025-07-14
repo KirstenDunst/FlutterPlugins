@@ -1,7 +1,7 @@
 name: icon_replance_csx
-description: "A new Flutter plugin project."
+description: "dynamically set icon for Android, iOS"
 version: 0.0.1
-homepage:
+homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/icon_replance_csx
 
 environment:
   sdk: ^3.8.0
