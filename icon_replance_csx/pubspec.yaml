@@ -1,11 +1,11 @@
 name: icon_replance_csx
-description: "dynamically set icon for Android, iOS"
-version: 0.0.1
+description: "A versatile library supporting dynamic replacement of app launch icons on Android and iOS, helping apps achieve customizable branding and visual identity management."
+version: 0.0.2
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/icon_replance_csx
 
 environment:
-  sdk: ^3.8.0
-  flutter: '>=3.3.0'
+  sdk: ^3.3.4
+  flutter: '>=3.0.0'
 
 dependencies:
   flutter:

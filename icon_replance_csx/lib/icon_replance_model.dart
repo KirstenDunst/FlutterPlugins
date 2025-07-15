@@ -1,4 +1,3 @@
-
 class EditIconBackModel {
   bool? isSuccess;
   String? errorMsg;
@@ -6,14 +5,14 @@ class EditIconBackModel {
   int? errorCode;
   EditIconBackModel(this.isSuccess, this.errorCode, this.errorMsg);
   factory EditIconBackModel.fromJson(Map? json) => EditIconBackModel(
-    json?['isSuccess'] ?? false,
-    json?["errorCode"] ,
-    json?["msg"] ?? '',
-  );
+        json?['isSuccess'] ?? false,
+        json?["errorCode"],
+        json?["msg"] ?? '',
+      );
 
   Map toJson() => {
-    "isSuccess": isSuccess,
-    "errorCode": errorCode,
-    "errorMsg": errorMsg,
-  };
+        "isSuccess": isSuccess,
+        "errorCode": errorCode,
+        "errorMsg": errorMsg,
+      };
 }

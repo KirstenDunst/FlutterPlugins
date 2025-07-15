@@ -1,3 +1,8 @@
+
+## 0.0.2
+
+* Increase points score
+
 ## 0.0.1
 
-* 支持iOS，Android 双端动态设置icon插件。
+* A dual-end dynamic icon setting plugin supporting iOS and Android.
