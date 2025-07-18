@@ -28,11 +28,8 @@ class IconReplanceCsx {
     List<String>? aliasNames,
     bool changeNow = false,
   }) {
-    return IconReplanceCsxPlatform.instance.changeIcon(
-      iconName,
-      aliasNames: aliasNames,
-      changeNow: changeNow,
-    );
+    return IconReplanceCsxPlatform.instance
+        .changeIcon(iconName, aliasNames: aliasNames, changeNow: changeNow);
   }
 
   /// 当前icon名称, null表示默认icon

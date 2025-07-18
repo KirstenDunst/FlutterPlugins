@@ -2,8 +2,6 @@ import Flutter
 import UIKit
 
 public class IconReplanceCsxPlugin: NSObject, FlutterPlugin {
-    let replanceCtl = ReplanceController()
-
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "icon_replance_csx", binaryMessenger: registrar.messenger())
         let instance = IconReplanceCsxPlugin()
@@ -16,17 +14,20 @@ public class IconReplanceCsxPlugin: NSObject, FlutterPlugin {
             result("iOS " + UIDevice.current.systemVersion)
         case "changeIcon":
             do {
-                let argument = call.arguments as! NSDictionary?
-                replanceIcon(argument?["iconName"] as! String?, result: result)
+                guard let argument = call.arguments as? NSDictionary else {
+                    return
+                }
+                let iconName = argument["iconName"] as? String
+                replanceIcon(iconName, result: result)
             }
         case "removeSystemAlert":
             do {
-                replanceCtl.runtimeRemoveAlert()
+                UIViewController.swizzlePresentMethod()
                 result(true)
             }
         case "resetSystemAlert":
             do {
-                replanceCtl.runtimeResetAlert()
+                UIViewController.unswizzlePresentMethod()
                 result(true)
             }
         case "nowIconName":

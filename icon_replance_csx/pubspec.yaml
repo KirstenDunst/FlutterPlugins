@@ -1,6 +1,6 @@
 name: icon_replance_csx
 description: "A versatile library supporting dynamic replacement of app launch icons on Android and iOS, helping apps achieve customizable branding and visual identity management."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/icon_replance_csx
 
 environment:
