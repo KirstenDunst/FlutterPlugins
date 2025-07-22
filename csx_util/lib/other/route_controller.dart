@@ -30,12 +30,18 @@ class RouteHistory with ChangeNotifier {
   }
 
   ///是否存在匹配[routeSettingName]且[Route.isActive]的route
-  bool isActive(String routeSettingName) {
-    return history
-        .where(
-          (route) => route.settings.name == routeSettingName && route.isActive,
-        )
-        .isNotEmpty;
+  bool isActive(
+    String routeSettingName, {
+    bool needParam = false,
+    Object? arguments,
+  }) {
+    return history.where((route) {
+      var result = route.settings.name == routeSettingName && route.isActive;
+      if (needParam) {
+        result = result && route.settings.arguments == arguments;
+      }
+      return result;
+    }).isNotEmpty;
   }
 
   ///移除Route，直到[predicate]条件满足 可以指定pop时传递的result
