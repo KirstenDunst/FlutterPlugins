@@ -25,3 +25,9 @@ export 'mixin/delay_init_mixin.dart';
 export 'other/case_builder.dart';
 export 'other/input_format.dart';
 export 'other/route_controller.dart';
+
+// dio http util
+export 'http/model/wrapped_response.dart';
+export 'http/model/dio_http_config.dart';
+export 'http/util/dio_http_util.dart';
+export 'http/widget/network_settings_screen.dart';
