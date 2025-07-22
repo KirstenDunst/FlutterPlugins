@@ -9,14 +9,12 @@ class RouteHistory with ChangeNotifier {
   void add(Route<dynamic> route) {
     history.add(route);
     removeUnActive(); //删除非active的
-
     notifyListeners();
   }
 
   void remove(Route<dynamic> route) {
     history.remove(route);
     removeUnActive(); //删除非active的
-
     notifyListeners();
   }
 
@@ -57,7 +55,6 @@ class RouteHistory with ChangeNotifier {
   ///移除符合[predicate]条件的Route 可以指定pop时传递的result
   void removeRoute<T>(RoutePredicate predicate, [T? result]) {
     removeUnActive(); //删除非active的
-
     // 需要新创建一个列表，否则会报错
     for (var route in List.of(history.where((e) => predicate(e)))) {
       route.didPop(result);
