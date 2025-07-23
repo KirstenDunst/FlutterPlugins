@@ -25,9 +25,11 @@ extension UIViewController {
 
     // MARK: - 执行交换
     static func swizzlePresentMethod() {
-        let result = swizzleMethod()
-        if result == true {
-            hasSwizzledPresent = true
+        if hasSwizzledPresent == false {
+            let result = swizzleMethod()
+            if result == true {
+                hasSwizzledPresent = true
+            }
         }
     }
     
@@ -44,9 +46,11 @@ extension UIViewController {
 
     // MARK: - 恢复原始实现（再次交换）
     static func unswizzlePresentMethod() {
-        let result = swizzleMethod()
-        if result == true {
-            hasSwizzledPresent = false
+        if hasSwizzledPresent == true {
+            let result = swizzleMethod()
+            if result == true {
+                hasSwizzledPresent = false
+            }
         }
     }
 }
