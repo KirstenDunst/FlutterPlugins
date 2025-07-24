@@ -35,6 +35,8 @@ abstract class IconReplanceCsxPlatform extends PlatformInterface {
     List<String>? aliasNames,
     // 安卓是否是立即更换，默认false：当应用进入后台时更换（因为更换入口会导致应用退出（非闪退），且有些设备更换需要时间）
     bool changeNow = false,
+    //当项目接入flavor后，AndroidManifest.xml中的package和applicationId不一致的时候，需要传入package
+    String? androidPackage,
   }) {
     throw UnimplementedError('changeIcon() has not been implemented.');
   }

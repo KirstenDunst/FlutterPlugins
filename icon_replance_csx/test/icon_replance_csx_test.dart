@@ -28,7 +28,9 @@ class MockIconReplanceCsxPlatform
 
   @override
   Future<EditIconBackModel?> changeIcon(String? iconName,
-      {List<String>? aliasNames, bool changeNow = false}) {
+      {List<String>? aliasNames,
+      bool changeNow = false,
+      String? androidPackage}) {
     throw UnimplementedError();
   }
 }

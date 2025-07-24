@@ -1,5 +1,5 @@
 
-## 0.0.3+1
+## 0.0.3+2
 
 * Resolve the invalid issues caused by the "present" method's removal and restoration processes.
 

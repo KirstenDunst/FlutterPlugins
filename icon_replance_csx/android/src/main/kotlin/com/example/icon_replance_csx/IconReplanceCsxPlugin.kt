@@ -56,40 +56,37 @@ class IconReplanceCsxPlugin : FlutterPlugin, MethodCallHandler, DefaultLifecycle
         if (changeIconParam != null) {
             var needSetIcon = changeIconParam?.get("iconName") as String?
             val aliasNames = changeIconParam?.get("aliasNames") as List<*>?
+            val packageCustom = changeIconParam?.get("androidPackage") as String?
             if (needSetIcon == null && !aliasNames.isNullOrEmpty()) {
                 needSetIcon = aliasNames[0] as String
             }
             if (aliasNames != null) {
                 for (e in aliasNames) {
                     if (e != needSetIcon) {
-                        disableComponent(e as String)
+                        disableComponent(e as String, packageCustom)
                     }
                 }
             }
             if (!needSetIcon.isNullOrEmpty()) {
-                enableComponent(needSetIcon)
+                enableComponent(needSetIcon, packageCustom)
             }
             changeIconParam = null
         }
     }
 
-    private fun enableComponent(componentName: String) {
+    private fun enableComponent(componentName: String, packageCustom: String? ) {
+        val packageName = packageCustom ?: applicationContext.packageName
         applicationContext.packageManager.setComponentEnabledSetting(
-            ComponentName(
-                applicationContext,
-                applicationContext.packageName + '.' + componentName
-            ),
+            ComponentName(applicationContext.packageName, "$packageName.$componentName"),
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
     }
 
-    private fun disableComponent(componentName: String) {
+    private fun disableComponent(componentName: String,packageCustom: String?) {
+        val packageName = packageCustom ?: applicationContext.packageName
         applicationContext.packageManager.setComponentEnabledSetting(
-            ComponentName(
-                applicationContext,
-                applicationContext.packageName + '.' + componentName
-            ),
+            ComponentName(applicationContext.packageName, "$packageName.$componentName"),
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
             PackageManager.DONT_KILL_APP
         )
