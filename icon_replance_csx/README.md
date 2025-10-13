@@ -13,7 +13,17 @@ A new Flutter plugin project.
 ### Android  接入项目
 建议使用 flutter_launcher_icons 生成icon比较便捷，可以在运行命令“dart run flutter_launcher_icons”之前修改flutter_launcher_icons.yaml文件中的 android: "launcher_icon"，修改为想要生成的图片文件名成，eg：android: "launcher_icon_1".
 
-1. 在app文件夹下的AndroidManifest.xml里面删除mainActivity（<application>的<activity>里面）标签的<categoryandroid:name="android.intent.category.LAUNCHER" />属性
+1. 在app文件夹下的AndroidManifest.xml里面删除mainActivity
+```dart
+（<application>的<activity>里面）标签的<categoryandroid:name="android.intent.category.LAUNCHER" />属性
+
+//但是这样会导致clean之后首次flutter run的时候flutter校验manifest报错，因为flutter_tools里面的android包文件application_package.dart校验只检查了activity标签里面的MAIN和LAUNCHER，不会校验activity-alias里面的（问题一直还在官方也未解决https://github.com/flutter/flutter/issues/38965）（这位网友解了一半未完成被关闭掉了https://github.com/flutter/flutter/pull/146548/commits），至此有两个解决方案：
+1.运行前先执行一次build，或者先把activity标签里面MAIN和LAUNCHER都设置。然后再关掉之后再次run就绕过了mainfest的校验就不影响了。
+2. 移除节点“tools:node="remove"”
+把activity里面的LAUNCHER移除：<category android:name="android.intent.category.LAUNCHER" tools:node="remove"/>
+
+
+```
 
 2. 创建多个<activity-alias>,每一个的targetActivity没有特殊需要可以都指向mainActivity, android:label="",如果没有特殊变化应用名称则不需要配置，示例代码里面也没有设置
 ```xml
