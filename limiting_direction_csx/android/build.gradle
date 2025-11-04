@@ -22,6 +22,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    namespace "cn.brainco.limiting_direction_csx"
     compileSdkVersion 29
 
     defaultConfig {
