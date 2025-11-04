@@ -25,6 +25,11 @@ android {
     namespace "cn.brainco.limiting_direction_csx"
     compileSdkVersion 29
 
+    complieOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JacaVersion.VERSION_17
+    }
+
     defaultConfig {
         minSdkVersion 16
     }
