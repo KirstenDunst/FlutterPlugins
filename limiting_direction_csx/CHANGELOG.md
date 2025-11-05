@@ -6,8 +6,8 @@
  * @Description: 
 -->
 
-## 0.2.0+1 20251104
-* android 添加namespace
+## 0.2.0+5 20251104
+* android 添加namespace，java依赖升级17
 
 ## 0.2.0 20220915
 * 安卓合规，屏蔽暂时没有用到的设备朝向监听
