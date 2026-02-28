@@ -10,24 +10,24 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRController extends StatefulWidget {
+  const QRController({super.key});
+
   @override
-  _QRControllerState createState() => _QRControllerState();
+  State<QRController> createState() => _QRControllerState();
 }
 
 class _QRControllerState extends State<QRController> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode result;
-  QRViewController _qrController;
-  bool _isOver;
+  QRViewController? _qrController;
+  late bool _isOver;
 
   @override
   void reassemble() {
     super.reassemble();
-    print('触发。。。。。');
     if (Platform.isAndroid) {
-      _qrController.pauseCamera();
+      _qrController?.pauseCamera();
     } else if (Platform.isIOS) {
-      _qrController.resumeCamera();
+      _qrController?.resumeCamera();
     }
   }
 
@@ -40,16 +40,11 @@ class _QRControllerState extends State<QRController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('扫描界面'),
-      ),
+      appBar: AppBar(title: Text('扫描界面')),
       body: Column(
         children: <Widget>[
           Expanded(
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
+            child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated),
           ),
         ],
       ),
@@ -61,7 +56,9 @@ class _QRControllerState extends State<QRController> {
     controller.scannedDataStream.listen((scanData) {
       if (!_isOver) {
         _isOver = true;
-        Navigator.of(context, rootNavigator: true).pop(scanData.code);
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true).pop(scanData.code);
+        }
       }
     });
   }

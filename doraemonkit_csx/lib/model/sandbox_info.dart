@@ -6,22 +6,28 @@
  * @Description: 
  */
 
-import 'package:doraemonkit_csx/util/extension/num_ext.dart';
-
 //沙盒文件的类型
+import 'package:doraemonkit_csx/utils/num_ext.dart';
+
 enum FileType {
   //文件夹
-  Directory,
+  directory,
   // 文件
-  File,
+  file,
 }
 
 class SandBoxModel {
   String name;
   String path;
   num byte;
-  String get byteStr => (byte ?? 0).byteFormat();
-  FileType fileType;
-  List<SandBoxModel> childrens;
-  SandBoxModel({this.name = '', this.path = '', this.byte = 0, this.fileType});
+  String get byteStr => byte.byteFormat();
+  FileType? fileType;
+  List<SandBoxModel>? childrens;
+  SandBoxModel({
+    this.name = '',
+    this.path = '',
+    this.byte = 0,
+    this.fileType,
+    this.childrens,
+  });
 }

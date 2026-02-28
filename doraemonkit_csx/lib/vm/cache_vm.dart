@@ -9,10 +9,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:doraemonkit_csx/util/util.dart';
+import 'package:doraemonkit_csx/utils/num_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../csx_kit.dart';
 
 /* path_provider 中获取文件夹的方法
  * getExternalStorageDirectory();  // 在iOS上，抛出异常，在Android上，这是getExternalStorageDirectory的返回值
@@ -40,25 +41,23 @@ class CacheVM {
     if (file is Directory) {
       final List<FileSystemEntity> children = file.listSync();
       var total = 0;
-      if (children != null)
-        for (final FileSystemEntity child in children)
-          total += await _getTotalSizeOfFilesInDir(child);
+      for (final FileSystemEntity child in children) {
+        total += await _getTotalSizeOfFilesInDir(child);
+      }
       return total;
     }
     return 0;
   }
 
   //清除缓存
-  static Future clearCache({VoidCallback callback}) async {
+  static Future clearCache(VoidCallback callback) async {
     Directory tempDir = await getTemporaryDirectory();
     if (await tempDir.exists()) {
       //删除缓存目录
       await _delDir(tempDir);
     }
-    if (callback != null) {
-      callback();
-    }
-    BotToast.showText(text: '清除缓存成功');
+    callback();
+    CsxKitShare.instance.toast('清除缓存成功');
   }
 
   ///递归方式删除目录

@@ -5,18 +5,20 @@
  * @LastEditTime: 2021-02-18 16:12:42
  * @Description: 
  */
-import 'package:doraemonkit_csx/dokit.dart';
-import 'package:doraemonkit_csx/model/dokit_model.dart';
-import 'package:doraemonkit_csx/resource/assets.dart';
-import 'package:doraemonkit_csx/vm/web_vm.dart';
+import 'package:doraemonkit_csx/page/kits_page.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../csx_kit.dart';
+import '../dokit.dart';
+import '../model/dokit_model.dart';
+import '../vm/web_vm.dart';
+
 class WebCell extends StatefulWidget {
   final String url;
-  WebCell(this.url);
+  const WebCell(this.url, {super.key});
   @override
-  _WebCellState createState() => _WebCellState();
+  State<WebCell> createState() => _WebCellState();
 }
 
 class _WebCellState extends State<WebCell> {
@@ -31,18 +33,13 @@ class _WebCellState extends State<WebCell> {
         child: Row(
           children: [
             Image.asset(
-              Images.dk_memory_search,
+              'assets/images/dk_memory_search.png',
               width: 20,
               height: 20,
-              package: DoKit.PACKAGE_NAME,
+              package: dkPackageName,
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              widget.url ?? '',
-              maxLines: 100,
-            ),
+            SizedBox(width: 10),
+            Text(widget.url, maxLines: 100),
           ],
         ),
       ),
@@ -52,10 +49,10 @@ class _WebCellState extends State<WebCell> {
 
 class WebCellFooter extends StatefulWidget {
   final bool canTap;
-  final VoidCallback callback;
-  WebCellFooter({this.canTap = false, this.callback});
+  final VoidCallback? callback;
+  const WebCellFooter({super.key, this.canTap = false, this.callback});
   @override
-  _WebCellFooterState createState() => _WebCellFooterState();
+  State<WebCellFooter> createState() => _WebCellFooterState();
 }
 
 class _WebCellFooterState extends State<WebCellFooter> {
@@ -68,9 +65,7 @@ class _WebCellFooterState extends State<WebCellFooter> {
         onTap: () async {
           if (widget.canTap) {
             await WebVM.delectSearchList();
-            if (widget.callback != null) {
-              widget.callback();
-            }
+            widget.callback?.call();
           }
         },
         child: Text(widget.canTap ? '清除搜索历史' : '暂无搜索历史'),
@@ -82,15 +77,15 @@ class _WebCellFooterState extends State<WebCellFooter> {
 typedef ValueChanged = Function(String value);
 
 class EditView extends StatefulWidget {
-  final ValueChanged valueChanged;
-  final VoidCallback skipBtnCall;
-  EditView({Key key, this.valueChanged, this.skipBtnCall}) : super(key: key);
+  final ValueChanged? valueChanged;
+  final VoidCallback? skipBtnCall;
+  const EditView({super.key, this.valueChanged, this.skipBtnCall});
   @override
   EditViewState createState() => EditViewState();
 }
 
 class EditViewState extends State<EditView> {
-  String _contentStr;
+  late String _contentStr;
 
   @override
   void initState() {
@@ -106,7 +101,7 @@ class EditViewState extends State<EditView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
       child: TextFormField(
         decoration: InputDecoration(fillColor: Colors.blueGrey),
@@ -115,17 +110,16 @@ class EditViewState extends State<EditView> {
         onFieldSubmitted: (text) {
           FocusScope.of(context).requestFocus(FocusNode());
           _textChange(text);
-          if (widget.skipBtnCall != null) {
-            widget.skipBtnCall();
-          }
+          widget.skipBtnCall?.call();
         },
         controller: TextEditingController.fromValue(
           TextEditingValue(
-            text: _contentStr ?? '',
+            text: _contentStr,
             selection: TextSelection.fromPosition(
               TextPosition(
-                  affinity: TextAffinity.downstream,
-                  offset: _contentStr.isEmpty ? 0 : _contentStr.length),
+                affinity: TextAffinity.downstream,
+                offset: _contentStr.isEmpty ? 0 : _contentStr.length,
+              ),
             ),
           ),
         ),
@@ -136,35 +130,23 @@ class EditViewState extends State<EditView> {
 
   void _textChange(String text) {
     _contentStr = text;
-    if (widget.valueChanged != null) {
-      widget.valueChanged(_contentStr);
-    }
+    widget.valueChanged?.call(_contentStr);
   }
 }
 
 class EnterWebTool {
   static void enterWeb(BuildContext context, String url) {
-    if (DoKit.doCustomCallMap != null &&
-        DoKit.doCustomCallMap.containsKey(DokitCallType.BASE_WEB)) {
-      CustomCallback callback = DoKit.doCustomCallMap[DokitCallType.BASE_WEB];
-      if (callback != null) {
-        callback(context, url);
-        return;
-      }
+    var callback =
+        CsxKitShare.instance.doCustomCallMap?[DokitCallType.BASE_WEB];
+    if (callback != null) {
+      callback(context, url);
+      return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Text('内部浏览器'),
-          ),
-          body: WebView(
-            initialUrl: url,
-          ),
-        ),
-      ),
+    var webViewController = WebViewController();
+    webViewController.loadRequest(Uri.parse(url));
+    CommonPageInsertTool.overlayInsert(
+      '内部浏览器',
+      WebViewWidget(controller: webViewController),
     );
   }
 }

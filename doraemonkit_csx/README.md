@@ -1,21 +1,15 @@
-
 # doraemonkit_csx
-Doraemonkit的flutter版本，用于开发自检工具。
+
+A new Flutter plugin project.
 
 ## Getting Started
-```
-import 'package:doraemonkit_csx/doraemonkit_csx.dart';
 
-void main() {
-  DoKit.runApp(
-    app: DoKitApp(MyApp()),
-    useInRelease: true,
-    logCallback: (log) {
-      String i = log;
-    },
-    exceptionCallback: (obj, trace) {
-      print('ttt$obj');
-    },
-  );
-}
-```
+This project is a starting point for a Flutter
+[plug-in package](https://flutter.dev/to/develop-plugins),
+a specialized package that includes platform-specific implementation code for
+Android and/or iOS.
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+

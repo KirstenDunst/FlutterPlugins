@@ -1,85 +1,80 @@
 PODS:
+  - device_info_plus (0.0.1):
+    - Flutter
   - doraemonkit_csx (0.0.1):
     - Flutter
-    - Masonry (~> 1.1.0)
-    - ReactiveObjC (~> 3.1.1)
   - Flutter (1.0.0)
-  - Masonry (1.1.0)
+  - integration_test (0.0.1):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - package_info (0.0.1):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_foundation (0.0.1):
     - Flutter
-  - "permission_handler (5.1.0+2)":
-    - Flutter
+    - FlutterMacOS
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - ReactiveObjC (3.1.1)
   - share (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_foundation (0.0.1):
     - Flutter
-  - wakelock (0.0.1):
+    - FlutterMacOS
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
-  - webview_flutter (0.0.1):
-    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - doraemonkit_csx (from `.symlinks/plugins/doraemonkit_csx/ios`)
   - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - share (from `.symlinks/plugins/share/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
   trunk:
-    - Masonry
     - MTBBarcodeScanner
-    - ReactiveObjC
 
 EXTERNAL SOURCES:
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   doraemonkit_csx:
     :path: ".symlinks/plugins/doraemonkit_csx/ios"
   Flutter:
     :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  doraemonkit_csx: 26f84bc338c35b2945143e3bbb991244496b52b5
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
+  doraemonkit_csx: 74a7b0cf44128b7deed9e45d5c263583f45ba40c
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
-  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
+  package_info: cce50adca9873c79f931618469d2114b91d71189
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
+  share: a34936589f3090d59481bcdc5c30cc9dd47c75f6
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
 
-PODFILE CHECKSUM: 404edc19341baeec2db3466ba492f7fd6bce1fdf
+PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.16.2

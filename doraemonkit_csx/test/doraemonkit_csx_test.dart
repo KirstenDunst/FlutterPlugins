@@ -1,26 +1,41 @@
-/*
- * @Author: Cao Shixin
- * @Date: 2021-02-04 17:28:14
- * @LastEditors: Cao Shixin
- * @LastEditTime: 2021-02-07 12:03:53
- * @Description: 
- */
-import 'package:flutter/services.dart';
+import 'package:doraemonkit_csx/channel/channel.dart';
+import 'package:doraemonkit_csx/channel/common/common_method_channel.dart';
+import 'package:doraemonkit_csx/channel/common/common_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+class MockDoraemonkitCsxPlatform
+    with MockPlatformInterfaceMixin
+    implements DoraemonkitCsxPlatform {
+  @override
+  Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<Map> getUserDefaults() => Future.value({});
+  @override
+  Future setUserDefault(Map<String, dynamic> tempJson) => Future.value();
+  @override
+  Future<bool> openiOSSettingPage() => Future.value(true);
+
+  @override
+  Future openAndroidDeveloperOptions() => Future.value();
+
+  @override
+  Future<bool> openAndroidLocalLanguagesPage() => Future.value(true);
+}
 
 void main() {
-  const MethodChannel channel = MethodChannel('doraemonkit_csx');
+  final DoraemonkitCsxPlatform initialPlatform =
+      DoraemonkitCsxPlatform.instance;
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  test('$MethodChannelDoraemonkitCsx is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelDoraemonkitCsx>());
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  test('getPlatformVersion', () async {
+    MockDoraemonkitCsxPlatform fakePlatform = MockDoraemonkitCsxPlatform();
+    DoraemonkitCsxPlatform.instance = fakePlatform;
 
+    expect(await DoraemonkitCsx.getPlatformVersion(), '42');
+  });
 }

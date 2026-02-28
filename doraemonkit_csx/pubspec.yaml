@@ -1,47 +1,51 @@
 name: doraemonkit_csx
-description: An app development detection tool, based on the Didi Doraemonkit.
-version: 0.0.2
-homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.20.0"
+  sdk: ^3.9.2
+  flutter: '>=3.3.0'
 
 dependencies:
+  date_format: ^2.0.9
+  device_info_plus: ^12.1.0
   flutter:
     sdk: flutter
-
-  date_format: ^1.0.8
-  vm_service: ^5.5.0
-  package_info: ^0.4.3+2
-  shared_preferences: ^0.5.12+4 #usedefaults
-  path_provider: ^1.6.11
-  share: ^0.6.5+4 # 系统分享
-  bot_toast: ^3.0.5 # toast
-  qr_flutter: ^3.2.0 # 二维码生成器
-  qr_code_scanner: ^0.3.2 # 二维码扫描
-  permission_handler: ^5.0.1+1 # 权限管理
-  webview_flutter: ^2.0.2
-  wakelock: ^0.2.1+1 # 屏幕常亮
-
+  package_info: ^2.0.2
+  path_provider: ^2.1.5
+  plugin_platform_interface: ^2.0.2
+  qr_code_scanner: ^1.0.1
+  qr_flutter: ^4.1.0
+  share: ^2.0.4
+  shared_preferences: ^2.5.3
+  vm_service: ^15.0.2
+  webview_flutter: ^4.13.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
   # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
+  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
+  # which should be registered in the plugin registry. This is required for
+  # using method channels.
+  # The Android 'package' specifies package in which the registered class is.
+  # This is required for using method channels on Android.
+  # The 'ffiPlugin' specifies that native code should be built and bundled.
+  # This is required for using `dart:ffi`.
+  # All these are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
     platforms:
       android:
-        package: cn.brainco.doraemonkit_csx
+        package: com.example.doraemonkit_csx
         pluginClass: DoraemonkitCsxPlugin
       ios:
         pluginClass: DoraemonkitCsxPlugin
@@ -49,12 +53,13 @@ flutter:
   # To add assets to your plugin package, add an assets section, like this:
   assets:
     - assets/images/
-  #
+  
   # For details regarding assets in packages, see
-  # https://flutter.dev/assets-and-images/#from-packages
+  # https://flutter.dev/to/asset-from-package
   #
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/to/resolution-aware-images
+
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -73,4 +78,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts in packages, see
-  # https://flutter.dev/custom-fonts/#from-packages
+  # https://flutter.dev/to/font-from-package
