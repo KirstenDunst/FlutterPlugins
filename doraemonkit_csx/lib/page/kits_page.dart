@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:doraemonkit_csx/csx_kit.dart';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apm.dart';
 import '../apm/fps_kit.dart';
@@ -24,7 +25,6 @@ import '../common/basic_userdefaults.dart';
 import '../common/biz.dart';
 import '../common/common.dart';
 import '../kit.dart';
-import '../ui/kit_page.dart';
 
 class KitsPage extends StatefulWidget {
   const KitsPage({super.key});
@@ -38,6 +38,15 @@ class KitsPage extends StatefulWidget {
 }
 
 class KitsPageState extends State<KitsPage> {
+  late bool _onDrag;
+  final GlobalKey _residentContainerKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _onDrag = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -182,9 +191,10 @@ class KitsPageState extends State<KitsPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _sectionContent(
+          _normalStateContent(
             '常驻工具',
-            KitPageManager.instance.getResidentKit().values.toList(),
+            subTitle: '[最多放置4个]',
+            KitPageManager.instance.getResidentKit(),
           ),
           _sectionContent('基础工具', [
             BasicInfoKit(),
@@ -195,19 +205,157 @@ class KitsPageState extends State<KitsPage> {
             BasicSandBoxKit(),
             BasicUserDefaultsKit(),
             ...specialArr,
-          ]),
-          _sectionContent('性能检测工具', [HttpKit(), LogKit(), MethodChannelKit()]),
-          _sectionContent('其他工具', [FpsKit(), RouteKit(), MemoryKit()]),
+          ], subTitle: '[拖动图标放入常驻工具]'),
+          _sectionContent('性能检测工具', [
+            HttpKit(),
+            LogKit(),
+            MethodChannelKit(),
+          ], subTitle: '[拖动图标放入常驻工具]'),
+          _sectionContent('其他工具', [
+            FpsKit(),
+            RouteKit(),
+            MemoryKit(),
+          ], subTitle: '[拖动图标放入常驻工具]'),
         ],
       ),
     );
   }
 
-  Widget _sectionContent(String title, List<IKit> arr) {
+  Widget _normalStateContent(
+    String title,
+    Map<String, IKit> kitMap, {
+    String? subTitle,
+  }) {
+    return _contentContent(
+      title,
+      kitMap
+          .map(
+            (key, value) => MapEntry(
+              key,
+              Draggable(
+                feedback: _cellWidget(value),
+                onDragStarted: () {
+                  setState(() {
+                    _onDrag = true;
+                  });
+                },
+                onDraggableCanceled: (Velocity velocity, Offset offset) {
+                  setState(() {
+                    _onDrag = false;
+                    if (!inResidentContainerEdge(offset)) {
+                      KitPageManager.instance.removeResidentKit(key);
+                    }
+                  });
+                },
+                onDragEnd: (DraggableDetails detail) {
+                  setState(() {
+                    _onDrag = false;
+                    if (!inResidentContainerEdge(detail.offset)) {
+                      KitPageManager.instance.removeResidentKit(key);
+                    }
+                  });
+                },
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      value.tabAction();
+                    });
+                  },
+                  padding: const EdgeInsets.all(0),
+                  minWidth: 40,
+                  child: _cellWidget(value),
+                ),
+              ),
+            ),
+          )
+          .values
+          .toList(),
+      subTitle: subTitle,
+      needGlobalKey: true,
+    );
+  }
+
+  bool inResidentContainerEdge(Offset? offset) {
+    final size = _residentContainerKey.currentContext?.size;
+    if (offset == null || size == null) {
+      return false;
+    }
+
+    final position =
+        (_residentContainerKey.currentContext?.findRenderObject() as RenderBox)
+            .localToGlobal(Offset.zero);
+    final rc1 = Rect.fromLTWH(offset.dx, offset.dy, 80, 80);
+    final rc2 = Rect.fromLTWH(
+      position.dx,
+      position.dy,
+      size.width,
+      size.height,
+    );
+
+    return rc1.left + rc1.width > rc2.left &&
+        rc2.left + rc2.width > rc1.left &&
+        rc1.top + rc1.height > rc2.top &&
+        rc2.top + rc2.height > rc1.top;
+  }
+
+  Widget _sectionContent(String title, List<IKit> arr, {String? subTitle}) {
+    return _contentContent(
+      title,
+      arr
+          .map(
+            (e) => Draggable(
+              feedback: _cellWidget(e),
+              onDragStarted: () {
+                setState(() {
+                  _onDrag = true;
+                });
+              },
+              onDraggableCanceled: (Velocity velocity, Offset offset) {
+                setState(() {
+                  _onDrag = false;
+                  if (!inResidentContainerEdge(offset)) {
+                    KitPageManager.instance.removeResidentKit(e.getKitName());
+                  }
+                });
+              },
+              onDragEnd: (DraggableDetails detail) {
+                setState(() {
+                  _onDrag = false;
+                  if (!inResidentContainerEdge(detail.offset)) {
+                    KitPageManager.instance.removeResidentKit(e.getKitName());
+                  }
+                });
+              },
+              child: MaterialButton(
+                onPressed: () {
+                  setState(() {
+                    e.tabAction();
+                  });
+                },
+                padding: const EdgeInsets.all(0),
+                minWidth: 40,
+                child: _cellWidget(e),
+              ),
+            ),
+          )
+          .toList(),
+      subTitle: subTitle,
+    );
+  }
+
+  Widget _contentContent(
+    String title,
+    List<Widget> wrapChildrens, {
+    String? subTitle,
+    bool needGlobalKey = false,
+  }) {
     return Container(
+      key: needGlobalKey ? _residentContainerKey : null,
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      color: Colors.white,
+      color: needGlobalKey
+          ? (_onDrag ? Colors.red : Colors.white)
+          : Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -218,14 +366,12 @@ class KitsPageState extends State<KitsPage> {
                 title,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
+              if (subTitle != null)
+                Text('  $subTitle', style: TextStyle(fontSize: 12)),
             ],
           ),
           SizedBox(height: 10),
-          Wrap(
-            spacing: 20,
-            runSpacing: 10,
-            children: arr.map((e) => _cellWidget(e)).toList(),
-          ),
+          Wrap(spacing: 20, runSpacing: 10, children: wrapChildrens),
         ],
       ),
     );
@@ -253,5 +399,115 @@ class CommonPageInsertTool {
     Navigator.of(
       CsxKitShare.instance.overlayContext!,
     ).push(MaterialPageRoute(builder: (_) => child));
+  }
+}
+
+class KitPageManager {
+  KitPageManager._privateConstructor();
+
+  static const String kitAll = '全部';
+  static const String keyKitPageCache = 'key_kit_page_cache';
+  List<String> residentList = <String>[ApmKitName.kitHttp, ApmKitName.kitLog];
+
+  static final KitPageManager _instance = KitPageManager._privateConstructor();
+
+  static KitPageManager get instance => _instance;
+
+  String listToString(List<String>? list) {
+    if (list == null || list.isEmpty) {
+      return '';
+    }
+    String? result;
+    for (final item in list) {
+      if (result == null) {
+        result = item;
+      } else {
+        result = '$result,$item';
+      }
+    }
+
+    return result.toString();
+  }
+
+  bool addResidentKit(String? tag) {
+    assert(tag != null);
+    if (!residentList.contains(tag)) {
+      if (residentList.length >= 4) {
+        return false;
+      }
+      residentList.add(tag!);
+      SharedPreferences.getInstance().then(
+        (SharedPreferences prefs) =>
+            prefs.setString(keyKitPageCache, listToString(residentList)),
+      );
+      return true;
+    }
+    return false;
+  }
+
+  bool removeResidentKit(String tag) {
+    if (residentList.contains(tag)) {
+      residentList.remove(tag);
+      SharedPreferences.getInstance().then(
+        (SharedPreferences prefs) =>
+            prefs.setString(keyKitPageCache, listToString(residentList)),
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Map<String, IKit> getOtherKit() {
+    final kits = <String, IKit>{};
+    CommonKitManager.instance.kitMap.forEach((String key, CommonKit value) {
+      if (!residentList.contains(key)) {
+        kits[key] = value;
+      }
+    });
+    ApmKitManager.instance.kitMap.forEach((String key, ApmKit value) {
+      if (!residentList.contains(key)) {
+        kits[key] = value;
+      }
+    });
+    // VisualKitManager.instance.kitMap.forEach((String key, IKit value) {
+    //   if (!residentList.contains(key)) {
+    //     kits[key] = value;
+    //   }
+    // });
+    return kits;
+  }
+
+  Map<String, IKit> getResidentKit() {
+    final kits = <String, IKit>{};
+    for (final element in residentList) {
+      if (ApmKitManager.instance.getKit(element) != null) {
+        kits[element] = ApmKitManager.instance.getKit(element)!;
+      }
+      // else if (VisualKitManager.instance.getKit(element) != null) {
+      //   kits[element] = VisualKitManager.instance.getKit(element)!;
+      // }
+      else if (CommonKitManager.instance.getKit(element) != null) {
+        kits[element] = CommonKitManager.instance.getKit(element)!;
+      }
+    }
+    return kits;
+  }
+
+  void loadCache() {
+    SharedPreferences.getInstance().then<dynamic>((SharedPreferences prefs) {
+      if (prefs.getString(KitPageManager.keyKitPageCache) != null) {
+        if (prefs.getString(KitPageManager.keyKitPageCache) == '') {
+          KitPageManager.instance.residentList = <String>[];
+        } else {
+          KitPageManager.instance.residentList =
+              prefs.getString(KitPageManager.keyKitPageCache)?.split(',') ?? [];
+        }
+      }
+      if (KitPageManager.instance.residentList.isNotEmpty) {
+        KitsPage.tag = KitPageManager.instance.residentList.first;
+      } else {
+        KitsPage.tag = KitPageManager.kitAll;
+      }
+    });
   }
 }

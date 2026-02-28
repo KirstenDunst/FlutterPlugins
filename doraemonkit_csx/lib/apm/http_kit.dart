@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -292,9 +293,12 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
       onLongPress: () {
         if (widget.item.response.result != null) {
           Clipboard.setData(
-            ClipboardData(text: widget.item.response.result ?? ''),
+            ClipboardData(
+              text:
+                  'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.parameters)}\nResponse: ${widget.item.response.result}',
+            ),
           );
-          CsxKitShare.instance.toast('请求返回已拷贝至剪贴板');
+          CsxKitShare.instance.toast('请求已拷贝至剪贴板');
         }
       },
       onTap: () {
