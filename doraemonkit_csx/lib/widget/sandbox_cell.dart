@@ -28,7 +28,7 @@ class SandboxCell extends StatefulWidget {
 class _SandboxCellState extends State<SandboxCell> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: _ontapDeal,
       onLongPress: _onLongPressDeal,
       child: Container(
@@ -80,7 +80,10 @@ class _SandboxCellState extends State<SandboxCell> {
           if (mounted) {
             CommonPageInsertTool.overlayInsert(
               widget.model.name,
-              SingleChildScrollView(child: Text(str)),
+              Scaffold(
+                appBar: AppBar(title: Text(widget.model.name)),
+                body: SingleChildScrollView(child: Text(str)),
+              ),
             );
           }
         });
@@ -92,7 +95,10 @@ class _SandboxCellState extends State<SandboxCell> {
     } else {
       CommonPageInsertTool.overlayInsert(
         widget.model.name,
-        SandBoxPage(basePath: widget.model.path),
+        Scaffold(
+          appBar: AppBar(title: Text(widget.model.name)),
+          body: SandBoxPage(basePath: widget.model.path),
+        ),
       );
     }
   }

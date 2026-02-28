@@ -466,7 +466,6 @@ class KitPageManager {
 
   Map<String, IKit> getResidentKit() {
     final kits = <String, IKit>{};
-
     for (final element in residentList) {
       if (ApmKitManager.instance.getKit(element) != null) {
         kits[element] = ApmKitManager.instance.getKit(element)!;

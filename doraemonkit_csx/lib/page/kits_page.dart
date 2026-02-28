@@ -87,7 +87,11 @@ class KitsPageState extends State<KitsPage> {
         Expanded(
           flex: 1,
           child: GestureDetector(
-            onTap: kit.tabAction,
+            onTap: () {
+              setState(() {
+                kit.tabAction();
+              });
+            },
             behavior: HitTestBehavior.opaque,
             child: Container(
               alignment: Alignment.center,
@@ -121,7 +125,9 @@ class KitsPageState extends State<KitsPage> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            _tapListener(KitPageManager.kitAll);
+            setState(() {
+              KitsPage.tag = KitPageManager.kitAll;
+            });
           },
           behavior: HitTestBehavior.opaque,
           child: Container(
@@ -143,12 +149,6 @@ class KitsPageState extends State<KitsPage> {
       ),
     );
     return list;
-  }
-
-  void _tapListener(String current) {
-    setState(() {
-      KitsPage.tag = current;
-    });
   }
 
   Widget _getPage() {
@@ -182,7 +182,10 @@ class KitsPageState extends State<KitsPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _sectionContent('常驻工具', [HttpKit(), LogKit(), MethodChannelKit()]),
+          _sectionContent(
+            '常驻工具',
+            KitPageManager.instance.getResidentKit().values.toList(),
+          ),
           _sectionContent('基础工具', [
             BasicInfoKit(),
             BasicClearCacheKit(),
@@ -193,6 +196,7 @@ class KitsPageState extends State<KitsPage> {
             BasicUserDefaultsKit(),
             ...specialArr,
           ]),
+          _sectionContent('性能检测工具', [HttpKit(), LogKit(), MethodChannelKit()]),
           _sectionContent('其他工具', [FpsKit(), RouteKit(), MemoryKit()]),
         ],
       ),
@@ -233,19 +237,7 @@ class KitsPageState extends State<KitsPage> {
         setState(() {
           apm.tabAction();
         });
-        
       },
-      // () {
-      //   Widget? diaplayPage;
-      //   if (apm is ApmKit) {
-      //     diaplayPage = apm.createDisplayPage();
-      //   } else if (apm is CommonKit) {
-      //     diaplayPage = apm.createDisplayPage();
-      //   }
-      //   if (diaplayPage != null) {
-      //     CommonPageInsertTool.overlayInsert(apm.getKitName(), diaplayPage);
-      //   }
-      // },
       child: Column(
         children: [
           Image.asset(apm.getIcon(), width: 40, package: dkPackageName),
@@ -258,19 +250,8 @@ class KitsPageState extends State<KitsPage> {
 
 class CommonPageInsertTool {
   static overlayInsert(String title, Widget child) {
-    Navigator.of(CsxKitShare.instance.overlayContext!).push(
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-            leading: InkWell(
-              onTap: () => Navigator.pop(CsxKitShare.instance.overlayContext!),
-              child: Icon(Icons.arrow_back_ios_new),
-            ),
-          ),
-          body: child,
-        ),
-      ),
-    );
+    Navigator.of(
+      CsxKitShare.instance.overlayContext!,
+    ).push(MaterialPageRoute(builder: (_) => child));
   }
 }
