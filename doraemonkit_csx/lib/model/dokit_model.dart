@@ -10,5 +10,5 @@
 
 enum DokitCallType {
   //H5任意门
-  BASE_WEB,
+  baseWeb,
 }

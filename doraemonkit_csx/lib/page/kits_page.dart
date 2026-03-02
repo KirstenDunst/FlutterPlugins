@@ -305,26 +305,26 @@ class KitsPageState extends State<KitsPage> {
           .map(
             (e) => Draggable(
               feedback: _cellWidget(e),
-              onDragStarted: () {
+              onDragStarted: () => {
                 setState(() {
                   _onDrag = true;
-                });
+                }),
               },
-              onDraggableCanceled: (Velocity velocity, Offset offset) {
+              onDragEnd: (detail) => {
                 setState(() {
-                  _onDrag = false;
-                  if (!inResidentContainerEdge(offset)) {
-                    KitPageManager.instance.removeResidentKit(e.getKitName());
+                  if (inResidentContainerEdge(detail.offset)) {
+                    KitPageManager.instance.addResidentKit(e.getKitName());
                   }
-                });
+                  _onDrag = false;
+                }),
               },
-              onDragEnd: (DraggableDetails detail) {
+              onDraggableCanceled: (v, offset) => {
                 setState(() {
-                  _onDrag = false;
-                  if (!inResidentContainerEdge(detail.offset)) {
-                    KitPageManager.instance.removeResidentKit(e.getKitName());
+                  if (inResidentContainerEdge(offset)) {
+                    KitPageManager.instance.addResidentKit(e.getKitName());
                   }
-                });
+                  _onDrag = false;
+                }),
               },
               child: MaterialButton(
                 onPressed: () {
@@ -332,7 +332,7 @@ class KitsPageState extends State<KitsPage> {
                     e.tabAction();
                   });
                 },
-                padding: const EdgeInsets.all(0),
+                padding: EdgeInsets.all(0),
                 minWidth: 40,
                 child: _cellWidget(e),
               ),

@@ -136,8 +136,7 @@ class EditViewState extends State<EditView> {
 
 class EnterWebTool {
   static void enterWeb(BuildContext context, String url) {
-    var callback =
-        CsxKitShare.instance.doCustomCallMap?[DokitCallType.BASE_WEB];
+    var callback = CsxKitShare.instance.doCustomCallMap?[DokitCallType.baseWeb];
     if (callback != null) {
       callback(context, url);
       return;
