@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/material.dart';
 
-import 'engine/csx_http.dart';
 import 'model/dokit_model.dart';
 import 'page/kits_page.dart';
 import 'widget/enter_widget.dart';
@@ -61,8 +60,6 @@ class CsxKitShare {
     _areaPadding = MediaQueryData.fromView(
       WidgetsBinding.instance.platformDispatcher.views.first,
     ).padding;
-    final origin = HttpOverrides.current;
-    HttpOverrides.global = DoKitHttpOverrides(origin);
     var flutterView = WidgetsBinding.instance.platformDispatcher.views.first;
     _screenSize = Size(
       flutterView.physicalSize.width / flutterView.devicePixelRatio,

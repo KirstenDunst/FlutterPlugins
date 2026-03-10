@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:doraemonkit_csx/csx_kit.dart';
+import 'package:doraemonkit_csx/engine/dio_log_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,9 @@ class _MockPageState extends State<MockPage> {
           ElevatedButton(onPressed: stopAll, child: const Text('stopAllt')),
           ElevatedButton(
             onPressed: () async {
-              var response = await Dio().requestUri(
+              var dioObj = Dio();
+              dioObj.interceptors.add(AppLogInterceptor());
+              var response = await dioObj.requestUri(
                 Uri.parse(
                   // 'https://pinzhi.didichuxing.com/kop_stable/gateway?api=hhh',
                   'https://noa-test.hyxicloud.com/gfnbqgateway/hyx-plant/system/v1/getPlantDataDictionary?dataType=3,7,11,12,13,16,17,24,25',

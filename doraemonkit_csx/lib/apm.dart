@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'apm/crash_kit.dart';
 import 'apm/fps_kit.dart';
-import 'apm/http_kit.dart';
+// import 'apm/http_kit.dart';
+import 'apm/http_kit_dio.dart';
 import 'apm/log_kit.dart';
 import 'apm/memory_kit.dart';
 import 'apm/method_channel_kit.dart';

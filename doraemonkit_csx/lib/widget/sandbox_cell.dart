@@ -12,7 +12,7 @@ import 'package:doraemonkit_csx/dokit.dart';
 import 'package:doraemonkit_csx/page/kits_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../common/basic_sandbox.dart';
 import '../model/sandbox_info.dart';
@@ -143,7 +143,9 @@ class _SandboxCellState extends State<SandboxCell> {
         ElevatedButton(
           onPressed: () {
             //系统分享桥接
-            Share.shareFiles([widget.model.path]);
+            SharePlus.instance.share(
+              ShareParams(files: [XFile(widget.model.path)]),
+            );
             Navigator.of(context, rootNavigator: true).pop();
           },
           child: Container(

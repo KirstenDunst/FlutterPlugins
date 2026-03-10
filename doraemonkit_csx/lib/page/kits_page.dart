@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apm.dart';
 import '../apm/fps_kit.dart';
-import '../apm/http_kit.dart';
+// import '../apm/http_kit.dart';
+import '../apm/http_kit_dio.dart';
 import '../apm/log_kit.dart';
 import '../apm/memory_kit.dart';
 import '../apm/method_channel_kit.dart';
@@ -17,7 +18,6 @@ import '../common/basic_dev_options.dart';
 import '../common/basic_h5.dart';
 import '../common/basic_info.dart';
 import '../common/basic_languages.dart';
-import '../common/basic_location.dart';
 import '../common/basic_qr.dart';
 import '../common/basic_sandbox.dart';
 import '../common/basic_setting.dart';
@@ -200,7 +200,6 @@ class KitsPageState extends State<KitsPage> {
             BasicInfoKit(),
             BasicClearCacheKit(),
             BasicH5Kit(),
-            BasicLocationsKit(),
             BasicQRKit(),
             BasicSandBoxKit(),
             BasicUserDefaultsKit(),
