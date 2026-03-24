@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:doraemonkit_csx/apm/version.dart';
+import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 import 'package:vm_service/vm_service.dart';
 
@@ -81,7 +82,9 @@ class VmHelper {
   void testPrintScript() async {
     // Script script = await compute(getScriptList, 'main.dart');
     var script = await getScriptList('main.dart');
-    print(script?.source ?? 'null');
+    if (kDebugMode) {
+      print(script?.source ?? 'null');
+    }
   }
 }
 

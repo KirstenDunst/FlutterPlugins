@@ -1,5 +1,4 @@
 
-import 'dart:async';
 import 'dart:core';
 import 'package:flutter/foundation.dart';
 
@@ -13,8 +12,8 @@ const String dkPackageVersion = '0.8.0-nullsafety.0';
 //默认release模式不开启该功能
 const bool release = kReleaseMode;
 
-//记录当前zone
-Zone? _zone;
+// //记录当前zone
+// Zone? _zone;
 
 // // ignore: avoid_classes_with_only_static_members
 // class DoKit {

@@ -8,10 +8,10 @@ import '../kit.dart';
 import '../utils/time_util.dart';
 
 class ChannelInfo implements IInfo {
-  static const int TYPE_USER_SEND = 0;
-  static const int TYPE_USER_RECEIVE = 1;
-  static const int TYPE_SYSTEM_SEND = 2;
-  static const int TYPE_SYSTEM_RECEIVE = 3;
+  static const int typeUserSend = 0;
+  static const int typeuserReceive = 1;
+  static const int typeSystemSend = 2;
+  static const int typeSystemReceive = 3;
   final String channelName;
 
   final String method;
@@ -31,11 +31,11 @@ class ChannelInfo implements IInfo {
 
   @override
   String getValue() {
-    return '${type == TYPE_USER_SEND
+    return '${type == typeUserSend
         ? 'dart端调用方法\n'
-        : type == TYPE_USER_RECEIVE
+        : type == typeuserReceive
         ? 'native端调用方法\n'
-        : type == TYPE_SYSTEM_SEND
+        : type == typeSystemSend
         ? 'dart端调用方法[系统]\n'
         : 'native端调用方法[系统]\n'}channelName:$channelName\nmethod:$method\narguments:$arguments\nresults:$results';
   }
@@ -71,8 +71,8 @@ class MethodChannelKit extends ApmKit {
   @override
   bool save(IInfo? info) {
     if (!ChannelPageState.showSystemChannel &&
-        ((info as ChannelInfo).type == ChannelInfo.TYPE_SYSTEM_RECEIVE ||
-            info.type == ChannelInfo.TYPE_SYSTEM_SEND)) {
+        ((info as ChannelInfo).type == ChannelInfo.typeSystemReceive ||
+            info.type == ChannelInfo.typeSystemSend)) {
       super.save(info);
       return false;
     }
@@ -154,8 +154,8 @@ class ChannelPageState extends State<ChannelPage> {
               (element) => showSystemChannel
                   ? true
                   : ((element as ChannelInfo).type ==
-                            ChannelInfo.TYPE_USER_SEND ||
-                        (element).type == ChannelInfo.TYPE_USER_RECEIVE),
+                            ChannelInfo.typeUserSend ||
+                        (element).type == ChannelInfo.typeuserReceive),
             )
             .toList() ??
         [];
@@ -305,13 +305,13 @@ class ChannelItemWidget extends StatefulWidget {
 class _ChannelItemWidgetState extends State<ChannelItemWidget> {
   String getChannelType() {
     switch (widget.item.type) {
-      case ChannelInfo.TYPE_USER_SEND:
+      case ChannelInfo.typeUserSend:
         return 'Flutter > 终端';
-      case ChannelInfo.TYPE_USER_RECEIVE:
+      case ChannelInfo.typeuserReceive:
         return '终端 > Flutter';
-      case ChannelInfo.TYPE_SYSTEM_SEND:
+      case ChannelInfo.typeSystemSend:
         return 'Flutter > 终端 [系统调用]';
-      case ChannelInfo.TYPE_SYSTEM_RECEIVE:
+      case ChannelInfo.typeSystemReceive:
         return '终端 > Flutter [系统调用]';
       default:
         return 'Flutter > 终端';

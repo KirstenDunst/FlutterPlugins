@@ -198,8 +198,10 @@ class ExtensionService {
 
 class StdoutLog extends Log {
   @override
+  // ignore: avoid_print
   void warning(String message) => print(message);
 
   @override
+  // ignore: avoid_print
   void severe(String message) => print(message);
 }

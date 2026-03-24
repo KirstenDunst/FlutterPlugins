@@ -23,6 +23,7 @@ class _MockPageState extends State<MockPage> {
     super.initState();
     CsxKitShare.instance.init(
       (msg) => BotToast.showText(text: msg),
+      // ignore: avoid_print
       print,
       context,
       GlobalStatic.navigatorKey,

@@ -23,9 +23,9 @@ class _FloatingIconOverlayState extends State<FloatingIconOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<bool>(
       valueListenable: CsxKitShare.instance.showMenuNotifier,
-      builder: (cont, showMenu, child) => ValueListenableBuilder(
+      builder: (cont, showMenu, child) => ValueListenableBuilder<Offset>(
         valueListenable: _offsetNotifier,
         builder: (_, offset, child) => Offstage(
           offstage: !showMenu,

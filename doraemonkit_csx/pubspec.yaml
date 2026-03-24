@@ -1,10 +1,11 @@
 name: doraemonkit_csx
 description: "A new Flutter plugin project."
-version: 0.0.1
-homepage:
+version: 1.0.0
+homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
 
 environment:
-  sdk: ^3.9.2
+  sdk: ">=2.17.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   date_format: ^2.0.9
@@ -21,6 +22,7 @@ dependencies:
   vm_service: ^15.0.2
   webview_flutter: ^4.13.0
   dio: ^5.9.0
+  string_scanner: ^1.4.1
 
 dev_dependencies:
   flutter_test:
