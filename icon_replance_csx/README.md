@@ -15,7 +15,7 @@ A new Flutter plugin project.
 
 1. 在app文件夹下的AndroidManifest.xml里面删除mainActivity
 ```dart
-（<application>的<activity>里面）标签的<categoryandroid:name="android.intent.category.LAUNCHER" />属性
+<application>的<activity>里面,  标签的<categoryandroid:name="android.intent.category.LAUNCHER" />属性
 
 //但是这样会导致clean之后首次flutter run的时候flutter校验manifest报错，因为flutter_tools里面的android包文件application_package.dart校验只检查了activity标签里面的MAIN和LAUNCHER，不会校验activity-alias里面的（问题一直还在官方也未解决https://github.com/flutter/flutter/issues/38965）（这位网友解了一半未完成被关闭掉了https://github.com/flutter/flutter/pull/146548/commits），至此有两个解决方案：
 1.运行前先执行一次build，或者先把activity标签里面MAIN和LAUNCHER都设置。然后再关掉之后再次run就绕过了mainfest的校验就不影响了。
