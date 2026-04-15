@@ -40,13 +40,15 @@ public class IconReplanceCsxPlugin: NSObject, FlutterPlugin {
     func replanceIcon(_ iconName: String?, result: @escaping FlutterResult) {
         if #available(iOS 10.3, *) {
             if UIApplication.shared.supportsAlternateIcons {
-                UIApplication.shared.setAlternateIconName(iconName, completionHandler: { (error: Error?) in
-                    if error != nil {
-                        result(["isSuccess": false, "msg": "更换\(iconName ?? "原始图标")可能未成功:\(String(describing: error))", "errorCode": 3])
-                    } else {
-                        result(["isSuccess": true, "msg": nil, "errorCode": nil])
-                    }
-                })
+                if UIApplication.shared.alternateIconName != iconName {
+                    UIApplication.shared.setAlternateIconName(iconName, completionHandler: { (error: Error?) in
+                        if error != nil {
+                            result(["isSuccess": false, "msg": "更换\(iconName ?? "原始图标")可能未成功:\(String(describing: error))", "errorCode": 3])
+                        } else {
+                            result(["isSuccess": true, "msg": nil, "errorCode": nil])
+                        }
+                    })
+                }
             } else {
                 result(["isSuccess": false, "msg": "不支持修改icon:\(iconName ?? "原始图标")", "errorCode": 2])
             }

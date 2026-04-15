@@ -1,8 +1,10 @@
+## 0.0.5
+
+* iOS has added a pre-switch detection function to check if the icon is consistent with the current one. If not, the switch will be made
 
 ## 0.0.4
 
 * Reduce the minimum supported version of Android，Extend support for custom package key in Android
-
 
 ## 0.0.3+2
 
