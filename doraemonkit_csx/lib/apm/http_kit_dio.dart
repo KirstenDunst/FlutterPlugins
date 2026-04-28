@@ -13,7 +13,7 @@ import '../utils/time_util.dart';
 
 class HttpInfo1 implements IInfo {
   HttpInfo1(this.uri, this.method, this.requestId)
-    : startTimestamp = DateTime.now().millisecondsSinceEpoch;
+      : startTimestamp = DateTime.now().millisecondsSinceEpoch;
 
   final Uri? uri;
   final String method;
@@ -59,7 +59,7 @@ class HttpResponse {
   final dynamic data;
 
   HttpResponse({this.statusCode, this.data, this.header})
-    : endTimestamp = DateTime.now().millisecondsSinceEpoch;
+      : endTimestamp = DateTime.now().millisecondsSinceEpoch;
 
   @override
   String toString() {
@@ -158,8 +158,7 @@ class HttpPageState extends State<HttpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final items =
-        ApmKitManager.instance
+    final items = ApmKitManager.instance
             .getKit<HttpKit>(ApmKitName.kitHttp)
             ?.getStorage()
             .getAll()
@@ -235,10 +234,10 @@ class HttpPageState extends State<HttpPage> {
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) =>
                     HttpItemWidget(
-                      item: items[index] as HttpInfo1,
-                      index: index,
-                      isLast: index == items.length - 1,
-                    ),
+                  item: items[index] as HttpInfo1,
+                  index: index,
+                  isLast: index == items.length - 1,
+                ),
               ),
             ),
           ),
@@ -274,11 +273,12 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
-        Clipboard.setData(
+      onLongPress: () async {
+        var text =
+            'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.queryParameters)}\nRequestBody: ${jsonEncode(widget.item.request.body)}\nResponse: ${widget.item.response?.data}';
+        await Clipboard.setData(
           ClipboardData(
-            text:
-                'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.queryParameters)}\nResponse: ${widget.item.response?.data}',
+            text: text,
           ),
         );
         CsxKitShare.instance.toast('请求已拷贝至剪贴板');
@@ -324,11 +324,10 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                           borderRadius: const BorderRadius.all(
                             Radius.circular(2),
                           ),
-                          color:
-                              [
-                                200,
-                                0,
-                              ].contains(widget.item.response?.statusCode)
+                          color: [
+                            200,
+                            0,
+                          ].contains(widget.item.response?.statusCode)
                               ? const Color(0xff337cc4)
                               : const Color(0xffd0607e),
                         ),
@@ -343,8 +342,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text:
-                          '  ${widget.item.method}'
+                      text: '  ${widget.item.method}'
                           '  Cost:${(widget.item.response?.endTimestamp ?? 0) > 0 ? ('${widget.item.response!.endTimestamp - widget.item.startTimestamp}ms') : '-'} ',
                       style: const TextStyle(
                         fontSize: 9,
