@@ -103,7 +103,7 @@ class CsxKitShare {
 
   OverlayEntry? _kitOverlay;
   void _showEnterIcon(BuildContext context) {
-    _overlayState = Overlay.of(context);
+    _overlayState = Overlay.of(context,rootOverlay: true);
     _kitOverlay ??= OverlayEntry(builder: (cont) => FloatingIconOverlay());
     if (_kitOverlay != null) {
       WidgetsBinding.instance.addPostFrameCallback(

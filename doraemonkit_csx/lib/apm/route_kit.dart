@@ -217,7 +217,9 @@ class RouteInfoPageState extends State<RouteInfoPage> {
 
   RouteInfo? findRoute() {
     Element? topElement;
-    var rootRoute = ModalRoute.of(CsxKitShare.instance.overlayContext!);
+    var context = CsxKitShare.instance.overlayContext;
+    if (context == null) return null;
+    final ModalRoute<dynamic>? rootRoute = ModalRoute.of(context);
     void listTopView(Element element) {
       if (element.widget is! PositionedDirectional) {
         if (element is RenderObjectElement &&
@@ -231,7 +233,7 @@ class RouteInfoPageState extends State<RouteInfoPage> {
       }
     }
 
-    CsxKitShare.instance.overlayContext?.visitChildElements(listTopView);
+    context.visitChildElements(listTopView);
     if (topElement != null) {
       var routeInfo = RouteInfo();
       routeInfo.current = ModalRoute.of(topElement!);

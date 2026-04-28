@@ -66,7 +66,10 @@ class KitsPageState extends State<KitsPage> {
             child: Center(
               child: Text(
                 _getTitle(),
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16),
               ),
             ),
           ),
@@ -163,9 +166,8 @@ class KitsPageState extends State<KitsPage> {
   Widget _getPage() {
     Widget? page;
     page ??= ApmKitManager.instance.getKit(KitsPage.tag)?.createDisplayPage();
-    page ??= CommonKitManager.instance
-        .getKit(KitsPage.tag)
-        ?.createDisplayPage();
+    page ??=
+        CommonKitManager.instance.getKit(KitsPage.tag)?.createDisplayPage();
     page ??= BizKitManager.instance.getKit(KitsPage.tag)?.displayPage();
     page ??= _initWidget();
     return page;
@@ -196,25 +198,34 @@ class KitsPageState extends State<KitsPage> {
             subTitle: '[最多放置4个]',
             KitPageManager.instance.getResidentKit(),
           ),
-          _sectionContent('基础工具', [
-            BasicInfoKit(),
-            BasicClearCacheKit(),
-            BasicH5Kit(),
-            BasicQRKit(),
-            BasicSandBoxKit(),
-            BasicUserDefaultsKit(),
-            ...specialArr,
-          ], subTitle: '[拖动图标放入常驻工具]'),
-          _sectionContent('性能检测工具', [
-            HttpKit(),
-            LogKit(),
-            MethodChannelKit(),
-          ], subTitle: '[拖动图标放入常驻工具]'),
-          _sectionContent('其他工具', [
-            FpsKit(),
-            RouteKit(),
-            MemoryKit(),
-          ], subTitle: '[拖动图标放入常驻工具]'),
+          _sectionContent(
+              '基础工具',
+              [
+                BasicInfoKit(),
+                BasicClearCacheKit(),
+                BasicH5Kit(),
+                BasicQRKit(),
+                BasicSandBoxKit(),
+                BasicUserDefaultsKit(),
+                ...specialArr,
+              ],
+              subTitle: '[拖动图标放入常驻工具]'),
+          _sectionContent(
+              '性能检测工具',
+              [
+                HttpKit(),
+                LogKit(),
+                MethodChannelKit(),
+              ],
+              subTitle: '[拖动图标放入常驻工具]'),
+          _sectionContent(
+              '其他工具',
+              [
+                FpsKit(),
+                RouteKit(),
+                MemoryKit(),
+              ],
+              subTitle: '[拖动图标放入常驻工具]'),
         ],
       ),
     );
@@ -352,9 +363,8 @@ class KitsPageState extends State<KitsPage> {
       key: needGlobalKey ? _residentContainerKey : null,
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      color: needGlobalKey
-          ? (_onDrag ? Colors.red : Colors.white)
-          : Colors.white,
+      color:
+          needGlobalKey ? (_onDrag ? Colors.red : Colors.white) : Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -363,10 +373,14 @@ class KitsPageState extends State<KitsPage> {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
               if (subTitle != null)
-                Text('  $subTitle', style: TextStyle(fontSize: 12)),
+                Text('  $subTitle',
+                    style: TextStyle(fontSize: 12, color: Colors.black)),
             ],
           ),
           SizedBox(height: 10),
@@ -386,7 +400,8 @@ class KitsPageState extends State<KitsPage> {
       child: Column(
         children: [
           Image.asset(apm.getIcon(), width: 40, package: dkPackageName),
-          Text(apm.getKitName(), style: TextStyle(fontSize: 12)),
+          Text(apm.getKitName(),
+              style: TextStyle(fontSize: 12, color: Colors.black)),
         ],
       ),
     );
