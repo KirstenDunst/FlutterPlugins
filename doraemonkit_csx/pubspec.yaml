@@ -1,6 +1,6 @@
 name: doraemonkit_csx
 description: An app development detection tool, based on the Didi Doraemonkit.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/KirstenDunst/FlutterPlugins/tree/main/doraemonkit_csx
 
 environment:
