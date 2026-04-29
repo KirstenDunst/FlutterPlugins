@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:doraemonkit_csx/csx_kit.dart';
+import 'package:doraemonkit_csx/doraemonkit_csx.dart';
 import 'package:flutter/material.dart';
 
 import '../apm.dart';
@@ -21,7 +21,7 @@ class SourceCodeKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dk_source_code.png';
+    return 'assets/images/dk_source_code.png';
   }
 
   @override
@@ -93,7 +93,7 @@ class _SourceCodePageState extends State<SourceCodePage> {
 
   RenderObject? findTopRenderObject() {
     Element? topElement;
-    var context = CsxKitShare.instance.overlayContext;
+    var context = CsxDokit.i.overlayContext;
     if (context == null) {
       return null;
     }

@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
-import 'package:doraemonkit_csx/csx_kit.dart';
 import 'package:doraemonkit_csx/engine/dio_log_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'global_static.dart';
 
 class MockPage extends StatefulWidget {
   const MockPage({super.key});
@@ -21,13 +17,6 @@ class _MockPageState extends State<MockPage> {
   @override
   void initState() {
     super.initState();
-    CsxKitShare.instance.init(
-      (msg) => BotToast.showText(text: msg),
-      // ignore: avoid_print
-      print,
-      context,
-      GlobalStatic.navigatorKey,
-    );
   }
 
   @override
@@ -70,7 +59,7 @@ class _MockPageState extends State<MockPage> {
 
   @override
   void dispose() {
-    CsxKitShare.instance.close();
+    // CsxKitShare.instance.close();
     super.dispose();
   }
 

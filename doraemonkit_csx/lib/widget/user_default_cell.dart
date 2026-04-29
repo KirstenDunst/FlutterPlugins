@@ -5,7 +5,7 @@
  * @LastEditTime: 2021-02-18 18:04:28
  * @Description: 
  */
-import 'package:doraemonkit_csx/page/kits_page.dart';
+import 'package:doraemonkit_csx/page/dokit_app.dart';
 import 'package:flutter/material.dart';
 
 import '../channel/common/common_channel.dart';
@@ -23,12 +23,14 @@ class _UserDefaultCellPageState extends State<UserDefaultCellPage> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          // 进入下一界面编辑
-          CommonPageInsertTool.overlayInsert(
-            '编辑本地存储',
-            UserDefaultEditPage(widget.userModel),
-          ),
+      // 进入下一界面编辑
+      onTap: () => enterNewOverLayer(
+          (entry) => UserDefaultEditPage(widget.userModel, (needRefresh) {
+                entry?.remove();
+                if (needRefresh) {
+                  setState(() {});
+                }
+              })),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         alignment: Alignment.centerLeft,
@@ -45,7 +47,9 @@ class _UserDefaultCellPageState extends State<UserDefaultCellPage> {
 
 class UserDefaultEditPage extends StatefulWidget {
   final UserDefaultModel userModel;
-  const UserDefaultEditPage(this.userModel, {super.key});
+  //返回是否需要刷新上一页面
+  final Function(bool) archiveCall;
+  const UserDefaultEditPage(this.userModel, this.archiveCall, {super.key});
   @override
   State<UserDefaultEditPage> createState() => _UserDefaultEditPageState();
 }
@@ -62,26 +66,31 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Edit'),
+          title: Text('编辑UseDefault内容'),
+          leading: GestureDetector(
+            onTap: () => widget.archiveCall.call(false),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 20,
+            ),
+          ),
           actions: [
             ElevatedButton(
               onPressed: () async {
+                var isSame = _contentStr == widget.userModel.value.toString();
                 FocusScope.of(context).requestFocus(FocusNode());
                 widget.userModel.value = _contentStr;
                 DoraemonkitCsx.setUserDefault({
                   ((widget.userModel.isFlutter
-                              ? flutterUserdefaultsPrefix
-                              : '') +
-                          widget.userModel.key):
-                      _contentStr,
+                          ? flutterUserdefaultsPrefix
+                          : '') +
+                      widget.userModel.key): _contentStr,
                 });
-                Navigator.of(context, rootNavigator: true).pop(_contentStr);
+                widget.archiveCall.call(!isSame);
               },
               child: Text('完成'),
             ),

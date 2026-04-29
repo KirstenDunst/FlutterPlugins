@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 
 import '../channel/common/common_channel.dart';
-import '../dokit.dart';
+import '../csx_dokit.dart';
 import '../model/userdefaults_model.dart';
 import '../widget/user_default_cell.dart';
 import 'common.dart';
@@ -93,9 +93,9 @@ class _UserDefaultsPageState extends State<UserDefaultsPage> {
               List<UserDefaultModel>? result = snapshot.data;
               return ListView.separated(
                 itemCount: result?.length ?? 0,
-                itemBuilder: (BuildContext context, int index) =>
+                itemBuilder: (_, int index) =>
                     UserDefaultCellPage(result![index]),
-                separatorBuilder: (BuildContext context, int index) => Padding(
+                separatorBuilder: (_, int index) => Padding(
                   padding: EdgeInsets.only(left: 30),
                   child: Divider(color: Colors.grey, height: 2),
                 ),

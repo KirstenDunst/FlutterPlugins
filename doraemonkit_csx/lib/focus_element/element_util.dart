@@ -19,7 +19,6 @@ class ElementUtil {
 
     void filter(Element element) {
       // 兼容IOS，IOS的MaterialApp会在Navigator后再插入一个PositionedDirectional控件，用以处理右滑关闭手势，遍历的时候跳过该控件
-      // ignore:
       if (element.widget is! PositionedDirectional) {
         if (element is RenderObjectElement &&
             element.renderObject is RenderBox) {

@@ -1,10 +1,8 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../kit.dart';
-import '../page/kits_page.dart';
+import '../page/resident_page.dart';
 
 typedef KitPageBuilder = Widget Function();
 
@@ -75,7 +73,6 @@ class BizKitManager {
 
   /// 添加group的tip信息，不可在添加group前操作
   void _addBizKitGroupTip(String name, String? tip) {
-    assert(name != null);
     final groupExist = kitGroupMap.keys.contains(name);
     assert(
       groupExist,
@@ -98,17 +95,15 @@ class BizKitManager {
   }
 
   /// 创建BizKit对象
-  T createBizKit<T extends BizKit>({
+  T createBizKit<T extends BizKit>(
+    String name,
+    String group, {
     String? key,
-    required String name,
     String? icon,
-    required String group,
     String? desc,
     KitPageBuilder? kitBuilder,
     Function? action,
   }) {
-    assert(name != null && group != null);
-
     final kit = BizKit(
       name,
       group,
@@ -148,9 +143,9 @@ class BizKitManager {
   void addBizKit<S extends BizKit>(String? key, S kit) {
     BizKit ikit = kit;
     buildBizKit(
+      ikit.name,
+      ikit.group,
       key: key,
-      name: ikit.name,
-      group: ikit.group,
       icon: ikit.icon,
       desc: ikit.desc,
       kitBuilder: ikit.kitPageBuilder,
@@ -165,17 +160,15 @@ class BizKitManager {
   /// [desc] kit的描述信息，不会以任何形式显示出来;
   /// [kitBuilder] kit对应的页面的WidgetBuilder，点击该kit的图标后跳转到的Widget页面.
   /// [action] 点击该kit的图标后响应事件, 用于不需要跳转widget页面的情况.
-  void buildBizKit({
+  void buildBizKit(
+    String name,
+    String group, {
     String? key,
-    required String name,
     String? icon,
-    required String group,
     String? desc,
     KitPageBuilder? kitBuilder,
     Function? action,
   }) {
-    assert(name != null && group != null);
-
     if (!_kitGroupMap.containsKey(group)) {
       _addBizKit2Group(group, name, icon, desc, kitBuilder, key, action);
     } else {
@@ -239,7 +232,8 @@ class BizKit extends IKit {
   @override
   void tabAction() {
     if (kitPageBuilder != null) {
-      KitsPage.tag = key ?? _defaultKey;
+      ResidentPage.residentPageKey.currentState
+          ?.tapListener(key ?? _defaultKey);
     }
     action?.call();
   }

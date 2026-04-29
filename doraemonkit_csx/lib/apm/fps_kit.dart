@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/material.dart';
 
 import '../apm.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import '../widget/fps_chart.dart';
 

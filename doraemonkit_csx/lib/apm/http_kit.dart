@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import '../apm.dart';
-import '../csx_kit.dart';
-import '../dokit.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import '../utils/byte_util.dart';
 import '../utils/time_util.dart';
@@ -298,7 +297,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                   'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.parameters)}\nResponse: ${widget.item.response.result}',
             ),
           );
-          CsxKitShare.instance.toast('请求已拷贝至剪贴板');
+          CsxDokit.i.toast?.call('请求已拷贝至剪贴板');
         }
       },
       onTap: () {

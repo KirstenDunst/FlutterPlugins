@@ -13,7 +13,7 @@ import 'package:doraemonkit_csx/utils/num_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../csx_kit.dart';
+import '../csx_dokit.dart';
 
 /* path_provider 中获取文件夹的方法
  * getExternalStorageDirectory();  // 在iOS上，抛出异常，在Android上，这是getExternalStorageDirectory的返回值
@@ -57,7 +57,7 @@ class CacheVM {
       await _delDir(tempDir);
     }
     callback();
-    CsxKitShare.instance.toast('清除缓存成功');
+    CsxDokit.i.toast?.call('清除缓存成功');
   }
 
   ///递归方式删除目录

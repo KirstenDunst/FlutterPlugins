@@ -1,6 +1,6 @@
-import 'package:doraemonkit_csx/csx_kit.dart';
 import 'package:flutter/material.dart';
 import '../apm.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 
 class RouteKit extends ApmKit {
@@ -217,7 +217,7 @@ class RouteInfoPageState extends State<RouteInfoPage> {
 
   RouteInfo? findRoute() {
     Element? topElement;
-    var context = CsxKitShare.instance.overlayContext;
+    var context = CsxDokit.i.overlayContext;
     if (context == null) return null;
     final ModalRoute<dynamic>? rootRoute = ModalRoute.of(context);
     void listTopView(Element element) {

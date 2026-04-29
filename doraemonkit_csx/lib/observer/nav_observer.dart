@@ -1,38 +1,80 @@
-import 'package:doraemonkit_csx/csx_kit.dart';
 import 'package:flutter/material.dart';
 
 class CsxKitNavObserver extends NavigatorObserver {
+  final List<NavigatorObserver> _observers = [LaunchObserver()];
+
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
-    var previousName = '';
-    if (null == previousRoute) {
-      previousName = 'null';
-    } else {
-      previousName = previousRoute.settings.name ?? '';
-    }
-    CsxKitShare.instance.printLog(
-      'NavObserverDidPush-Current:${route.settings.name ?? ''}   Previous:$previousName',
-    );
-    if (route.settings != routeSettings) {
-      CsxKitShare.instance.hiddenMenu();
+    for (var element in _observers) {
+      element.didPush(route, previousRoute);
     }
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
-    var previousName = '';
-    if (null == previousRoute) {
-      previousName = 'null';
-    } else {
-      previousName = previousRoute.settings.name ?? '';
-    }
-    CsxKitShare.instance.printLog(
-      'NavObserverDidPop--Current:${route.settings.name ?? ''}   Previous:$previousName',
-    );
-    if (previousRoute?.settings == routeSettings) {
-      CsxKitShare.instance.showMenu();
+    for (var element in _observers) {
+      element.didPop(route, previousRoute);
     }
   }
+
+  @override
+  void didRemove(Route route, Route? previousRoute) {
+    super.didRemove(route, previousRoute);
+    for (var element in _observers) {
+      element.didRemove(route, previousRoute);
+    }
+  }
+
+  @override
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    for (var element in _observers) {
+      element.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    }
+  }
+
+  @override
+  void didStartUserGesture(Route route, Route? previousRoute) {
+    super.didStartUserGesture(route, previousRoute);
+    for (var element in _observers) {
+      element.didStartUserGesture(route, previousRoute);
+    }
+  }
+
+  @override
+  void didStopUserGesture() {
+    super.didStopUserGesture();
+    for (var element in _observers) {
+      element.didStopUserGesture();
+    }
+  }
+}
+
+ValueNotifier<LaunchInfo> notifier = ValueNotifier(LaunchInfo(0, '', ''));
+
+bool enabled = false;
+
+class LaunchObserver extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    if (enabled) {
+      var before = DateTime.now().millisecondsSinceEpoch;
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        var now = DateTime.now().millisecondsSinceEpoch;
+        notifier.value = LaunchInfo(
+            now - before, previousRoute?.settings.name, route.settings.name);
+      });
+    }
+  }
+}
+
+class LaunchInfo {
+  final int costTime;
+  final String? previousPage;
+  final String? newPage;
+
+  LaunchInfo(this.costTime, this.previousPage, this.newPage);
 }

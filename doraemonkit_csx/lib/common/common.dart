@@ -3,7 +3,7 @@ import 'package:doraemonkit_csx/common/basic_clear_cache.dart';
 import 'package:doraemonkit_csx/common/basic_dev_options.dart';
 import 'package:doraemonkit_csx/common/basic_h5.dart';
 import 'package:doraemonkit_csx/common/basic_languages.dart';
-import 'package:doraemonkit_csx/common/basic_location.dart';
+// import 'package:doraemonkit_csx/common/basic_location.dart';
 import 'package:doraemonkit_csx/common/basic_qr.dart';
 import 'package:doraemonkit_csx/common/basic_sandbox.dart';
 import 'package:doraemonkit_csx/common/basic_setting.dart';
@@ -11,13 +11,13 @@ import 'package:doraemonkit_csx/common/basic_userdefaults.dart';
 import 'package:flutter/material.dart';
 
 import '../kit.dart';
-import '../page/kits_page.dart';
+import '../page/resident_page.dart';
 import 'basic_info.dart';
 
 abstract class CommonKit extends IKit {
   @override
   void tabAction() {
-    KitsPage.tag = getKitName();
+    ResidentPage.residentPageKey.currentState?.tapListener(getKitName());
   }
 
   Widget createDisplayPage();
@@ -27,7 +27,7 @@ class CommonKitManager {
   Map<String, CommonKit> kitMap = {
     CommonKitName.kitBaseInfo: BasicInfoKit(),
     CommonKitName.kitBaseSandbox: BasicSandBoxKit(),
-    CommonKitName.kitBaseLocation: BasicLocationsKit(),
+    // CommonKitName.kitBaseLocation: BasicLocationsKit(),
     CommonKitName.kitBaseH5: BasicH5Kit(),
     CommonKitName.kitBaseClearcache: BasicClearCacheKit(),
     CommonKitName.kitBaseUserDefaults: BasicUserDefaultsKit(),
