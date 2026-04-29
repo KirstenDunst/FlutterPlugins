@@ -125,8 +125,8 @@ class ExtensionService {
       (await isProtocolVersionSupported(
         supportedVersion: SemanticVersion(major: 3, minor: 22),
       ))
-      ? 'Service'
-      : '_Service';
+          ? 'Service'
+          : '_Service';
 
   Future<bool> isProtocolVersionSupported({
     required SemanticVersion supportedVersion,
@@ -198,10 +198,8 @@ class ExtensionService {
 
 class StdoutLog extends Log {
   @override
-  // ignore: avoid_print
-  void warning(String message) => print(message);
+  void warning(String message) => debugPrint(message);
 
   @override
-  // ignore: avoid_print
-  void severe(String message) => print(message);
+  void severe(String message) => debugPrint(message);
 }

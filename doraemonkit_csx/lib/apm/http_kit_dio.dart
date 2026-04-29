@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,8 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import '../apm.dart';
-import '../csx_kit.dart';
-import '../dokit.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import '../utils/time_util.dart';
 
@@ -281,7 +279,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
             text: text,
           ),
         );
-        CsxKitShare.instance.toast('请求已拷贝至剪贴板');
+        CsxDokit.i.toast?.call('请求已拷贝至剪贴板');
       },
       onTap: () {
         setState(() {

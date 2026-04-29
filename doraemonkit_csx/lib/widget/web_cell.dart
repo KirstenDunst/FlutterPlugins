@@ -5,12 +5,11 @@
  * @LastEditTime: 2021-02-18 16:12:42
  * @Description: 
  */
-import 'package:doraemonkit_csx/page/kits_page.dart';
+import 'package:doraemonkit_csx/page/dokit_app.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../csx_kit.dart';
-import '../dokit.dart';
+import '../csx_dokit.dart';
 import '../model/dokit_model.dart';
 import '../vm/web_vm.dart';
 
@@ -25,9 +24,10 @@ class _WebCellState extends State<WebCell> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        EnterWebTool.enterWeb(context, widget.url);
-      },
+      onTap: () => EnterWebTool.enterWeb(
+        context,
+        widget.url,
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         child: Row(
@@ -135,17 +135,27 @@ class EditViewState extends State<EditView> {
 }
 
 class EnterWebTool {
-  static void enterWeb(BuildContext context, String url) {
-    var callback = CsxKitShare.instance.doCustomCallMap?[DokitCallType.baseWeb];
+  static enterWeb(BuildContext context, String url) {
+    var callback = CsxDokit.i.doCustomCallMap?[DokitCallType.baseWeb];
     if (callback != null) {
       callback(context, url);
-      return;
+      return null;
     }
     var webViewController = WebViewController();
     webViewController.loadRequest(Uri.parse(url));
-    CommonPageInsertTool.overlayInsert(
-      '内部浏览器',
-      WebViewWidget(controller: webViewController),
+    return enterNewOverLayer(
+      (entry) => Scaffold(
+          appBar: AppBar(
+            title: Text(url),
+            leading: GestureDetector(
+              onTap: () => entry?.remove(),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 20,
+              ),
+            ),
+          ),
+          body: WebViewWidget(controller: webViewController)),
     );
   }
 }

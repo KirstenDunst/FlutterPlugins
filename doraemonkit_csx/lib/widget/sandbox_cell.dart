@@ -8,14 +8,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:doraemonkit_csx/dokit.dart';
-import 'package:doraemonkit_csx/page/kits_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../common/basic_sandbox.dart';
+import '../csx_dokit.dart';
 import '../model/sandbox_info.dart';
+import '../page/dokit_app.dart';
 
 class SandboxCell extends StatefulWidget {
   final SandBoxModel model;
@@ -78,10 +78,18 @@ class _SandboxCellState extends State<SandboxCell> {
         file.readAsBytes().then((byte) {
           String str = utf8.decode(byte, allowMalformed: true);
           if (mounted) {
-            CommonPageInsertTool.overlayInsert(
-              widget.model.name,
-              Scaffold(
-                appBar: AppBar(title: Text(widget.model.name)),
+            enterNewOverLayer(
+              (entry) => Scaffold(
+                appBar: AppBar(
+                  title: Text(widget.model.name),
+                  leading: GestureDetector(
+                    onTap: () => entry?.remove(),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 20,
+                    ),
+                  ),
+                ),
                 body: SingleChildScrollView(child: Text(str)),
               ),
             );
@@ -93,10 +101,18 @@ class _SandboxCellState extends State<SandboxCell> {
         }
       }
     } else {
-      CommonPageInsertTool.overlayInsert(
-        widget.model.name,
-        Scaffold(
-          appBar: AppBar(title: Text(widget.model.name)),
+      enterNewOverLayer(
+        (entry) => Scaffold(
+          appBar: AppBar(
+            title: Text(widget.model.name),
+            leading: GestureDetector(
+              onTap: () => entry?.remove(),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 20,
+              ),
+            ),
+          ),
           body: SandBoxPage(basePath: widget.model.path),
         ),
       );
@@ -110,56 +126,58 @@ class _SandboxCellState extends State<SandboxCell> {
       fontSize: 15,
       decoration: TextDecoration.none,
     );
-    var widgets = <Widget>[
-      ElevatedButton(
-        onPressed: () {
-          //删除
-          if (widget.model.fileType == FileType.file) {
-            File(widget.model.path).deleteSync(recursive: true);
-          } else {
-            Directory(widget.model.path).deleteSync(recursive: true);
-          }
-          Navigator.of(context, rootNavigator: true).pop();
-          setState(() {
-            widget.refreshBlock?.call();
-          });
-        },
-        child: Container(
-          alignment: Alignment.center,
-          height: 50,
-          child: Text('删除', style: style),
-        ),
-      ),
-    ];
-    if (widget.model.fileType == FileType.file) {
-      widgets.add(
-        Container(
-          color: Colors.transparent,
-          height: 4,
-          width: context.size!.width - 50,
-        ),
-      );
-      widgets.add(
-        ElevatedButton(
-          onPressed: () {
-            //系统分享桥接
-            SharePlus.instance.share(
-              ShareParams(files: [XFile(widget.model.path)]),
-            );
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          child: Container(
-            alignment: Alignment.center,
-            height: 50,
-            child: Text('分享', style: style),
+
+    enterNewOverLayer(
+      (entry) => Center(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ElevatedButton(
+            onPressed: () {
+              //删除
+              if (widget.model.fileType == FileType.file) {
+                File(widget.model.path).deleteSync(recursive: true);
+              } else {
+                Directory(widget.model.path).deleteSync(recursive: true);
+              }
+              entry?.remove();
+              widget.refreshBlock?.call();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              constraints: BoxConstraints(minHeight: 50),
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                '删除\n${widget.model.name}',
+                style: style,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
-        ),
-      );
-    }
-    showDialog(
-      context: context,
-      builder: (_) => Center(
-        child: Column(mainAxisSize: MainAxisSize.min, children: widgets),
+          if (widget.model.fileType == FileType.file) ...[
+            Container(
+              color: Colors.transparent,
+              height: 4,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //系统分享桥接
+                SharePlus.instance.share(
+                  ShareParams(files: [XFile(widget.model.path)]),
+                );
+                entry?.remove();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                constraints: BoxConstraints(minHeight: 50),
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  '分享\n${widget.model.name}',
+                  style: style,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ]
+        ]),
       ),
     );
   }

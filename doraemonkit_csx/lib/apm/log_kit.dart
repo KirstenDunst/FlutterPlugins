@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -8,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apm.dart';
-import '../csx_kit.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import '../utils/time_util.dart';
 
@@ -329,7 +328,7 @@ class _LogItemWidgetState extends State<LogItemWidget> {
     return GestureDetector(
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: widget.item.msg));
-        CsxKitShare.instance.toast('已拷贝至剪贴板');
+        CsxDokit.i.toast?.call('已拷贝至剪贴板');
       },
       onTap: () {
         setState(() {
@@ -339,7 +338,7 @@ class _LogItemWidgetState extends State<LogItemWidget> {
               if (!prefs.containsKey(keyShowLogExpandTips))
                 {
                   prefs.setBool(keyShowLogExpandTips, true),
-                  CsxKitShare.instance.toast('日志超过7行时，点击可展开日志详情'),
+                  CsxDokit.i.toast?.call('日志超过7行时，点击可展开日志详情'),
                 },
             },
           );

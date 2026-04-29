@@ -3,18 +3,18 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import '../apm.dart';
-import '../dokit.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import '../utils/time_util.dart';
 
 class ChannelInfo implements IInfo {
   static const int typeUserSend = 0;
-  static const int typeuserReceive = 1;
+  static const int typeUserReceive = 1;
   static const int typeSystemSend = 2;
   static const int typeSystemReceive = 3;
   final String channelName;
 
-  final String method;
+  final String? method;
 
   final dynamic arguments;
   final int startTimestamp;
@@ -27,17 +27,11 @@ class ChannelInfo implements IInfo {
   MessageCodec? messageCodec;
 
   ChannelInfo(this.channelName, this.method, this.arguments, this.type)
-    : startTimestamp = DateTime.now().millisecondsSinceEpoch;
+      : startTimestamp = DateTime.now().millisecondsSinceEpoch;
 
   @override
   String getValue() {
-    return '${type == typeUserSend
-        ? 'dart端调用方法\n'
-        : type == typeuserReceive
-        ? 'native端调用方法\n'
-        : type == typeSystemSend
-        ? 'dart端调用方法[系统]\n'
-        : 'native端调用方法[系统]\n'}channelName:$channelName\nmethod:$method\narguments:$arguments\nresults:$results';
+    return '${type == typeUserSend ? 'dart端调用方法\n' : type == typeUserReceive ? 'native端调用方法\n' : type == typeSystemSend ? 'dart端调用方法[系统]\n' : 'native端调用方法[系统]\n'}channelName:$channelName\nmethod:$method\narguments:$arguments\nresults:$results';
   }
 
   factory ChannelInfo.error(String channelName, int type) {
@@ -144,8 +138,7 @@ class ChannelPageState extends State<ChannelPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<IInfo> items =
-        ApmKitManager.instance
+    List<IInfo> items = ApmKitManager.instance
             .getKit<MethodChannelKit>(ApmKitName.kitChannel)
             ?.getStorage()
             .getAll()
@@ -154,8 +147,8 @@ class ChannelPageState extends State<ChannelPage> {
               (element) => showSystemChannel
                   ? true
                   : ((element as ChannelInfo).type ==
-                            ChannelInfo.typeUserSend ||
-                        (element).type == ChannelInfo.typeuserReceive),
+                          ChannelInfo.typeUserSend ||
+                      (element).type == ChannelInfo.typeUserReceive),
             )
             .toList() ??
         [];
@@ -307,7 +300,7 @@ class _ChannelItemWidgetState extends State<ChannelItemWidget> {
     switch (widget.item.type) {
       case ChannelInfo.typeUserSend:
         return 'Flutter > 终端';
-      case ChannelInfo.typeuserReceive:
+      case ChannelInfo.typeUserReceive:
         return '终端 > Flutter';
       case ChannelInfo.typeSystemSend:
         return 'Flutter > 终端 [系统调用]';
@@ -456,6 +449,7 @@ class _ChannelItemWidgetState extends State<ChannelItemWidget> {
                   : 'assets/images/dk_channel_expand_n.png',
               height: 14,
               width: 9,
+              package: dkPackageName,
             ),
           ],
         ),

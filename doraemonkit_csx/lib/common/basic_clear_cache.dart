@@ -7,9 +7,10 @@
  */
 import 'dart:async';
 
-import 'package:doraemonkit_csx/dokit.dart';
 import 'package:flutter/material.dart';
 
+import '../csx_dokit.dart';
+import '../page/dokit_app.dart';
 import '../vm/cache_vm.dart';
 import 'common.dart';
 
@@ -45,7 +46,7 @@ class _CachePageState extends State<CachePage> {
     return Column(
       children: [
         InkWell(
-          onTap: () => clearDialog(context),
+          onTap: () => enterNewOverLayer((entry) => clearWidget(entry)),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
             height: 60,
@@ -56,10 +57,8 @@ class _CachePageState extends State<CachePage> {
                 StreamBuilder(
                   stream: _streamController.stream,
                   initialData: '加载中...',
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                        return Text(snapshot.data.toString());
-                      },
+                  builder: (_, AsyncSnapshot<dynamic> snapshot) =>
+                      Text(snapshot.data.toString()),
                 ),
                 SizedBox(width: 10),
                 Image.asset(
@@ -80,21 +79,22 @@ class _CachePageState extends State<CachePage> {
     );
   }
 
-  void clearDialog(BuildContext context) => showDialog(
-    context: context,
-    useRootNavigator: false,
-    builder: (_) => Center(
+  Widget clearWidget(OverlayEntry? overlayEntry) {
+    return Center(
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context, rootNavigator: true).pop();
+          overlayEntry?.remove();
           CacheVM.clearCache(() async {
             _streamController.sink.add(await CacheVM.loadCache());
           });
         },
         child: Container(
-          color: Colors.white,
           alignment: Alignment.center,
           height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+          ),
           child: Text(
             '清除',
             style: TextStyle(
@@ -105,6 +105,6 @@ class _CachePageState extends State<CachePage> {
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'apm/crash_kit.dart';
+// import 'apm/crash_kit.dart';
 import 'apm/fps_kit.dart';
 // import 'apm/http_kit.dart';
 import 'apm/http_kit_dio.dart';
@@ -8,19 +8,21 @@ import 'apm/log_kit.dart';
 import 'apm/memory_kit.dart';
 import 'apm/method_channel_kit.dart';
 import 'apm/route_kit.dart';
-import 'apm/source_code_kit.dart';
+// import 'apm/source_code_kit.dart';
 import 'kit.dart';
-import 'page/kits_page.dart';
+import 'page/resident_page.dart';
 
 class ApmKitManager {
-  Map<String, ApmKit> kitMap = { ApmKitName.kitLog: LogKit(),
+  Map<String, ApmKit> kitMap = {
+    ApmKitName.kitLog: LogKit(),
     ApmKitName.kitChannel: MethodChannelKit(),
     ApmKitName.kitRoute: RouteKit(),
     ApmKitName.kitFps: FpsKit(),
     ApmKitName.kitMemory: MemoryKit(),
     ApmKitName.kitHttp: HttpKit(),
-    ApmKitName.kitSourceCode: SourceCodeKit(),
-    ApmKitName.kitCarsh: CrashKit()};
+    // ApmKitName.kitSourceCode: SourceCodeKit(),
+    // ApmKitName.kitCarsh: CrashKit()
+  };
 
   ApmKitManager._privateConstructor();
 
@@ -64,7 +66,7 @@ abstract class ApmKit implements IKit {
 
   @override
   void tabAction() {
-    KitsPage.tag = getKitName();
+    ResidentPage.residentPageKey.currentState?.tapListener(getKitName());
   }
 
   bool save(IInfo? info) {

@@ -51,7 +51,6 @@ class SyntaxHighlighterStyle {
 }
 
 abstract class SyntaxHighlighter {
-  // ignore: one_member_abstracts
   TextSpan format(String src);
 }
 

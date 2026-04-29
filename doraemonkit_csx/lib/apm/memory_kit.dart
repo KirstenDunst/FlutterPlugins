@@ -1,9 +1,9 @@
-import 'package:doraemonkit_csx/dokit.dart';
 import 'package:doraemonkit_csx/utils/num_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vm_service/vm_service.dart';
 import '../apm.dart';
+import '../csx_dokit.dart';
 import '../kit.dart';
 import 'vm_helper.dart';
 
@@ -90,10 +90,11 @@ class MemoryPageState extends State<MemoryPage> {
   void initHeaps() {
     if (kit?.getAllocationProfile() != null) {
       kit?.getAllocationProfile()?.members?.sort(
-        (left, right) => right.bytesCurrent != null && left.bytesCurrent != null
-            ? right.bytesCurrent!.compareTo(left.bytesCurrent!)
-            : 0,
-      );
+            (left, right) =>
+                right.bytesCurrent != null && left.bytesCurrent != null
+                    ? right.bytesCurrent!.compareTo(left.bytesCurrent!)
+                    : 0,
+          );
       kit?.getAllocationProfile()?.members?.forEach((element) {
         if (heaps.length < 32) {
           heaps.add(element);
@@ -170,14 +171,6 @@ class MemoryPageState extends State<MemoryPage> {
                     child: TextField(
                       controller: editingController,
                       style: TextStyle(color: Color(0xff333333), fontSize: 16),
-                      inputFormatters: [
-                        FilteringTextInputFormatter(
-                          RegExp(
-                            '[^\\u0020-\\u007E\\u00A0-\\u00BE\\u2E80-\\uA4CF\\uF900-\\uFAFF\\uFE30-\\uFE4F\\uFF00-\\uFFEF\\u0080-\\u009F\\u2000-\\u201f\r\n]',
-                          ),
-                          allow: true,
-                        ),
-                      ],
                       onSubmitted: (value) => {filterAllocations()},
                       decoration: InputDecoration(
                         border: InputBorder.none,

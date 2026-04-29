@@ -38,8 +38,7 @@ class SandBoxPage extends StatefulWidget {
   State<SandBoxPage> createState() => _SandBoxPageState();
 }
 
-class _SandBoxPageState extends State<SandBoxPage>
-    with AutomaticKeepAliveClientMixin {
+class _SandBoxPageState extends State<SandBoxPage> {
   late StreamController<List<SandBoxModel>> _sandboxStreamController;
   String? _basePath;
 
@@ -47,31 +46,31 @@ class _SandBoxPageState extends State<SandBoxPage>
   void initState() {
     super.initState();
     _sandboxStreamController = StreamController<List<SandBoxModel>>();
+    _checkData();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
+  void _checkData() {
     _getSandBoxPath().then((path) {
       _basePath = path;
       _getFileStream();
     });
-    return StreamBuilder(
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<SandBoxModel>>(
       stream: _sandboxStreamController.stream,
       initialData: [SandBoxModel()],
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        List<SandBoxModel> arr = snapshot.data;
+      builder: (context, snapshot) {
+        var arr = snapshot.data!;
         return ListView.separated(
           itemCount: arr.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SandboxCell(arr[index], () => _getFileStream());
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: EdgeInsets.only(left: 30),
-              child: Divider(color: Colors.grey, height: 2),
-            );
-          },
+          itemBuilder: (BuildContext context, int index) =>
+              SandboxCell(arr[index], () => _getFileStream()),
+          separatorBuilder: (BuildContext context, int index) => Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Divider(color: Colors.grey, height: 2),
+          ),
         );
       },
     );
@@ -96,7 +95,17 @@ class _SandBoxPageState extends State<SandBoxPage>
     if (_basePath?.isNotEmpty ?? false) {
       var baseDire = Directory(_basePath!);
       if (await baseDire.exists()) {
-        baseDire.listSync().forEach((fileSys) async {
+        final entities = baseDire.listSync();
+        //文件夹在前，文件在后，且都按名称字母排序
+        entities.sort((a, b) {
+          var aIsDir = a.statSync().type == FileSystemEntityType.directory;
+          final bIsDir = b.statSync().type == FileSystemEntityType.directory;
+          if (aIsDir && !bIsDir) return -1;
+          if (!aIsDir && bIsDir) return 1;
+          return a.path.compareTo(b.path);
+        });
+
+        for (var fileSys in entities) {
           var isDire = await Directory(fileSys.path).exists();
           var byte = 0;
           if (!isDire) {
@@ -110,14 +119,11 @@ class _SandBoxPageState extends State<SandBoxPage>
               fileType: isDire ? FileType.directory : FileType.file,
             ),
           );
-        });
+        }
       }
     }
     _sandboxStreamController.sink.add(tempArr);
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void dispose() {

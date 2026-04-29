@@ -26,7 +26,7 @@ class CrashKit extends ApmKit {
 
   @override
   String getIcon() {
-    return 'images/dokit_crash.png';
+    return 'assets/images/dokit_crash.png';
   }
 
   @override
@@ -324,7 +324,6 @@ class _LogItemWidgetState extends State<LogItemWidget> {
           ) {
             if (!prefs.containsKey(keyShowLogExpandTips)) {
               prefs.setBool(keyShowLogExpandTips, true);
-              // ignore: use_build_context_synchronously
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   duration: Duration(milliseconds: 2000),
