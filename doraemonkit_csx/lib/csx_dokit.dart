@@ -24,7 +24,7 @@ typedef CustomCallback = Function(BuildContext context, dynamic value);
 
 class CsxDokit {
   // 初始化方法,app或者appCreator必须设置一个
-  static Future<void> run(
+  static run(
       {DoKitApp? app,
       bool useRunZoned = true,
       Future<IDoKitApp> Function()? appCreator,
@@ -32,28 +32,42 @@ class CsxDokit {
       Function(String)? logCallback,
       Function(dynamic, StackTrace)? exceptionCallback,
       List<String> methodChannelBlackList = const <String>[],
-      Function? releaseAction}) async {
+      VoidCallback? releaseAction}) async {
     assert(
         app != null || appCreator != null, 'app and appCreator are both null');
     if (kReleaseMode && !useInRelease) {
-      if (releaseAction != null) {
-        releaseAction.call();
-      } else {
+      void appCreatorFunc() async {
         if (app != null) {
           runApp(app.origin);
         } else {
-          runApp((await appCreator!()).origin);
+          WidgetsFlutterBinding.ensureInitialized();
+          var kitApp = await appCreator!();
+          runApp(kitApp.origin);
         }
+      }
+
+      if (releaseAction != null) {
+        releaseAction.call();
+      } else if (useRunZoned) {
+        runZonedGuarded(() async {
+          appCreatorFunc();
+        }, (error, stack) => exceptionCallback?.call(error, stack));
+      } else {
+        appCreatorFunc();
       }
       return;
     }
     blackList = methodChannelBlackList;
 
+    IDoKitApp? kitApp = app;
+    if (kitApp == null) {
+      DoKitWidgetsFlutterBinding.ensureInitialized();
+      kitApp = await appCreator!();
+    }
     if (!useRunZoned) {
-      await runZonedGuarded(
-        () async => <void>{
-          _ensureDoKitBinding(app ?? await appCreator!(),
-              useInRelease: useInRelease),
+      runZonedGuarded(
+        () => {
+          _ensureDoKitBinding(kitApp!, useInRelease: useInRelease),
           _zone = Zone.current
         },
         (Object obj, StackTrace stack) {
@@ -64,7 +78,8 @@ class CsxDokit {
         },
         zoneSpecification: ZoneSpecification(
           print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-            _collectLog(line); //手机日志
+            //收集日志
+            _collectLog(line);
             parent.print(zone, line);
             if (logCallback != null) {
               _zone?.runUnary(logCallback, line);
@@ -73,12 +88,11 @@ class CsxDokit {
         ),
       );
     } else {
-      Future<Set<void>> f() async => {
-            _ensureDoKitBinding(app ?? await appCreator!(),
-                useInRelease: useInRelease),
+      f() => {
+            _ensureDoKitBinding(kitApp!, useInRelease: useInRelease),
             _zone = Zone.current
           };
-      await f();
+      f();
     }
   }
 
@@ -219,6 +233,8 @@ void _ensureDoKitBinding(IDoKitApp wrapper, {bool useInRelease = false}) {
   var binding = DoKitWidgetsFlutterBinding.ensureInitialized();
   if (binding != null) {
     var defaultWidget = binding.wrapWithDefaultView(wrapper);
+    // // ignore: invalid_use_of_protected_member
+    // binding.scheduleAttachRootWidget(defaultWidget);
     binding.attachRootWidget(defaultWidget);
     binding.scheduleWarmUpFrame();
   }
