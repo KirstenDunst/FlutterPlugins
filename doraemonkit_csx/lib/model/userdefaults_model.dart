@@ -5,6 +5,7 @@
  * @LastEditTime: 2021-02-08 15:10:52
  * @Description: 
  */
+
 class UserDefaultModel {
   //是都属于flutter存储的
   bool isFlutter;

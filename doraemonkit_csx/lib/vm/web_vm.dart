@@ -5,7 +5,9 @@
  * @LastEditTime: 2021-02-18 15:19:27
  * @Description: 
  */
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+import '../utils/shared_prefer_util.dart';
 
 class WebVM {
   //搜索保存本地的key值
@@ -14,17 +16,19 @@ class WebVM {
    * 获取搜索历史
    */
   static Future<List<String>> getLocalWebSearchList() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> tempArr = prefs.getStringList(urlSearchHis) ?? <String>[];
-    return tempArr;
+    var result = await SPService.instance.get(urlSearchHis, '');
+    if (result.isEmpty) {
+      return <String>[];
+    } else {
+      return jsonDecode(result).cast<String>();
+    }
   }
 
   /*
    * 添加搜索历史,最多十条
    */
   static Future<bool> addSearchList(String url) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> tempArr = prefs.getStringList(urlSearchHis) ?? <String>[];
+    var tempArr = await getLocalWebSearchList();
     if (tempArr.contains(url)) {
       tempArr.remove(url);
     }
@@ -32,7 +36,8 @@ class WebVM {
     if (tempArr.length > 10) {
       tempArr.removeLast();
     }
-    bool result = await prefs.setStringList(urlSearchHis, tempArr);
+    bool result =
+        await SPService.instance.set(urlSearchHis, jsonEncode(tempArr));
     return result;
   }
 
@@ -40,8 +45,7 @@ class WebVM {
    * 清除搜索历史
    */
   static Future<bool> delectSearchList() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var result = await prefs.remove(urlSearchHis);
+    var result = await SPService.instance.remove(urlSearchHis);
     return result;
   }
 }

@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apm.dart';
 import '../csx_dokit.dart';
 import '../kit.dart';
+import '../utils/shared_prefer_util.dart';
 import '../utils/time_util.dart';
 
 class LogKit extends ApmKit {
@@ -330,18 +330,15 @@ class _LogItemWidgetState extends State<LogItemWidget> {
         Clipboard.setData(ClipboardData(text: widget.item.msg));
         CsxDokit.i.toast?.call('已拷贝至剪贴板');
       },
-      onTap: () {
+      onTap: () async {
+        var isContain =
+            await SPService.instance.containsKey(keyShowLogExpandTips);
         setState(() {
           widget.item.expand = !widget.item.expand;
-          SharedPreferences.getInstance().then(
-            (prefs) => {
-              if (!prefs.containsKey(keyShowLogExpandTips))
-                {
-                  prefs.setBool(keyShowLogExpandTips, true),
-                  CsxDokit.i.toast?.call('日志超过7行时，点击可展开日志详情'),
-                },
-            },
-          );
+          if (!isContain) {
+            SPService.instance.set(keyShowLogExpandTips, true);
+            CsxDokit.i.toast?.call('日志超过7行时，点击可展开日志详情');
+          }
         });
       },
       child: Container(
@@ -365,8 +362,8 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                     color: widget.item.type == LogBean.typeError
                         ? Colors.red
                         : (widget.item.expand
-                              ? Colors.white
-                              : Color(0xff333333)),
+                            ? Colors.white
+                            : Color(0xff333333)),
                     height: 1.4,
                     fontSize: 10,
                   ),
@@ -377,8 +374,8 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                     color: widget.item.type == LogBean.typeError
                         ? Colors.red
                         : (widget.item.expand
-                              ? Colors.white
-                              : Color(0xff333333)),
+                            ? Colors.white
+                            : Color(0xff333333)),
                     height: 1.4,
                     fontSize: 10,
                   ),

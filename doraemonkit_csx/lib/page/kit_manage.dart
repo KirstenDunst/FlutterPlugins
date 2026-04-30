@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:doraemonkit_csx/utils/shared_prefer_util.dart';
 
 import '../apm.dart';
 import '../common/common.dart';
 import '../kit.dart';
 import 'resident_page.dart';
-
 
 class KitPageManager {
   KitPageManager._privateConstructor();
@@ -42,10 +41,7 @@ class KitPageManager {
         return false;
       }
       residentList.add(tag!);
-      SharedPreferences.getInstance().then(
-        (SharedPreferences prefs) =>
-            prefs.setString(keyKitPageCache, listToString(residentList)),
-      );
+      SPService.instance.set(keyKitPageCache, listToString(residentList));
       return true;
     }
     return false;
@@ -54,10 +50,7 @@ class KitPageManager {
   bool removeResidentKit(String tag) {
     if (residentList.contains(tag)) {
       residentList.remove(tag);
-      SharedPreferences.getInstance().then(
-        (SharedPreferences prefs) =>
-            prefs.setString(keyKitPageCache, listToString(residentList)),
-      );
+      SPService.instance.set(keyKitPageCache, listToString(residentList));
       return true;
     }
     return false;
@@ -123,9 +116,12 @@ class KitPageManager {
   }
 
   void loadCache() {
-    SharedPreferences.getInstance().then<dynamic>((SharedPreferences prefs) {
-      var pageCache = prefs.getString(KitPageManager.keyKitPageCache);
-      if (pageCache != null) {
+    SPService.instance
+        .containsKey(KitPageManager.keyKitPageCache)
+        .then((contain) async {
+      if (contain) {
+        var pageCache =
+            await SPService.instance.get(KitPageManager.keyKitPageCache, '');
         if (pageCache == '') {
           KitPageManager.instance.residentList = <String>[];
         } else {

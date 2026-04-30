@@ -5,11 +5,11 @@
  * @LastEditTime: 2021-02-18 18:04:28
  * @Description: 
  */
+import 'package:doraemonkit_csx/doraemonkit_csx.dart';
 import 'package:doraemonkit_csx/page/dokit_app.dart';
+import 'package:doraemonkit_csx/utils/shared_prefer_util.dart';
 import 'package:flutter/material.dart';
 
-import '../channel/common/common_channel.dart';
-import '../common/basic_userdefaults.dart';
 import '../model/userdefaults_model.dart';
 
 class UserDefaultCellPage extends StatefulWidget {
@@ -60,7 +60,7 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
   @override
   void initState() {
     super.initState();
-    _contentStr = widget.userModel.value.toString();
+    _contentStr = UserDefaultTransTool.transToString(widget.userModel.value);
   }
 
   @override
@@ -81,16 +81,20 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
           actions: [
             ElevatedButton(
               onPressed: () async {
-                var isSame = _contentStr == widget.userModel.value.toString();
                 FocusScope.of(context).requestFocus(FocusNode());
-                widget.userModel.value = _contentStr;
-                DoraemonkitCsx.setUserDefault({
-                  ((widget.userModel.isFlutter
-                          ? flutterUserdefaultsPrefix
-                          : '') +
-                      widget.userModel.key): _contentStr,
-                });
-                widget.archiveCall.call(!isSame);
+                var originValue = widget.userModel.value;
+                dynamic saveValue = UserDefaultTransTool.transFromString(
+                    _contentStr, originValue);
+                if (saveValue != null) {
+                  widget.userModel.value = saveValue;
+                  await SPService.instance.set(widget.userModel.key, saveValue);
+                  widget.archiveCall.call(_contentStr !=
+                      UserDefaultTransTool.transToString(
+                          widget.userModel.value));
+                } else {
+                  CsxDokit.i.toast?.call('内容格式与原格式解析异常，开发补充');
+                  widget.archiveCall.call(false);
+                }
               },
               child: Text('完成'),
             ),
@@ -122,9 +126,7 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
                     ),
                   ),
                 ),
-                onChanged: (text) {
-                  _contentStr = text;
-                },
+                onChanged: (text) => _contentStr = text,
               ),
             ),
           ],

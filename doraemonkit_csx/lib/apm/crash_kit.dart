@@ -1,7 +1,7 @@
+import 'package:doraemonkit_csx/utils/shared_prefer_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../apm.dart';
@@ -316,22 +316,20 @@ class _LogItemWidgetState extends State<LogItemWidget> {
           ),
         );
       },
-      onTap: () {
+      onTap: () async {
+        var isContain =
+            await SPService.instance.containsKey(keyShowLogExpandTips);
         setState(() {
           widget.item.expand = !widget.item.expand;
-          SharedPreferences.getInstance().then<dynamic>((
-            SharedPreferences prefs,
-          ) {
-            if (!prefs.containsKey(keyShowLogExpandTips)) {
-              prefs.setBool(keyShowLogExpandTips, true);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  duration: Duration(milliseconds: 2000),
-                  content: Text('日志超过7行时，点击可展开日志详情'),
-                ),
-              );
-            }
-          });
+          if (!isContain) {
+            SPService.instance.set(keyShowLogExpandTips, true);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                duration: Duration(milliseconds: 2000),
+                content: Text('日志超过7行时，点击可展开日志详情'),
+              ),
+            );
+          }
         });
       },
       child: Container(
@@ -355,8 +353,8 @@ class _LogItemWidgetState extends State<LogItemWidget> {
                     color: widget.item.type == CrashLogBean.typeError
                         ? Colors.red
                         : (widget.item.expand
-                              ? Colors.white
-                              : const Color(0xff333333)),
+                            ? Colors.white
+                            : const Color(0xff333333)),
                     height: 1.4,
                     fontSize: 10,
                   ),
