@@ -47,8 +47,8 @@ class IconReplanceCsxPlugin : FlutterPlugin, MethodCallHandler, DefaultLifecycle
         channel.setMethodCallHandler(null)
     }
 
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
+    override fun onStop(owner: LifecycleOwner) {
+        super.onStop(owner)
         dealChangeIcon()
     }
 

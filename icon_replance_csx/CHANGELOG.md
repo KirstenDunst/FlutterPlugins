@@ -1,3 +1,9 @@
+#
+
+## 0.0.6
+
+* Fixed the "false crash" issue caused by triggering replacement when obtaining permissions on Android devices
+  
 ## 0.0.5
 
 * iOS has added a pre-switch detection function to check if the icon is consistent with the current one. If not, the switch will be made
