@@ -20,7 +20,7 @@ const String dkPackageVersion = '1.0.1+1';
 //记录当前zone
 Zone? _zone;
 
-typedef CustomCallback = Function(BuildContext context, dynamic value);
+typedef CustomCallback = Widget Function(BuildContext context, dynamic value);
 
 class CsxDokit {
   // 初始化方法,app或者appCreator必须设置一个
@@ -29,6 +29,8 @@ class CsxDokit {
       bool useRunZoned = true,
       Future<IDoKitApp> Function()? appCreator,
       bool useInRelease = false,
+      //不能使用print之类的，否则会进入死循环，这里的打印又重新被捕获
+      //日志可以写入文件使用
       Function(String)? logCallback,
       Function(dynamic, StackTrace)? exceptionCallback,
       List<String> methodChannelBlackList = const <String>[],
@@ -64,7 +66,7 @@ class CsxDokit {
       DoKitWidgetsFlutterBinding.ensureInitialized();
       kitApp = await appCreator!();
     }
-    if (!useRunZoned) {
+    if (useRunZoned) {
       runZonedGuarded(
         () => {
           _ensureDoKitBinding(kitApp!, useInRelease: useInRelease),
@@ -88,11 +90,8 @@ class CsxDokit {
         ),
       );
     } else {
-      f() => {
-            _ensureDoKitBinding(kitApp!, useInRelease: useInRelease),
-            _zone = Zone.current
-          };
-      f();
+      _ensureDoKitBinding(kitApp, useInRelease: useInRelease);
+      _zone = Zone.current;
     }
   }
 
@@ -104,24 +103,59 @@ abstract class IDoKit {/* Just empty. */}
 
 class _DoKitInterfaces extends IDoKit with _BizKitMixin, _LeaksDoctorMixin {
   _DoKitInterfaces._();
+  OverlayEntry? _toastLayer;
 
   static final _DoKitInterfaces _instance = _DoKitInterfaces._();
 
   BuildContext? get overlayContext => doKitOverlayKey.currentState?.context;
 
   Function(bool)? callback;
-  Function(String)? toast;
   //记录外附回调
   Map<DokitCallType, CustomCallback>? doCustomCallMap;
 
   /// doKit是否打开了页面（只要是通过doKit打开的页面）
   void isDoKitPageShow(Function(bool)? callback) => this.callback = callback;
 
-  void toastCall(Function(String)? callback) => toast = callback;
-
   // 自定义显示回调
   void addCustomCallMap(Map<DokitCallType, CustomCallback>? customCallMap) =>
       doCustomCallMap = customCallMap;
+
+  void toastC(String? msg) {
+    if (msg == null || msg.isEmpty) {
+      return;
+    }
+    _toastLayer?.remove();
+    _toastLayer = null;
+    var tempLayer = OverlayEntry(
+        builder: (_) => Center(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.black54),
+                child: Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ));
+    final rootOverlay = doKitOverlayKey.currentState;
+    if (rootOverlay != null) {
+      rootOverlay.insert(tempLayer);
+      _toastLayer = tempLayer;
+      Future.delayed(Duration(milliseconds: 2500)).then((_) {
+        _toastLayer?.remove();
+        _toastLayer = null;
+      });
+    } else {
+      tempLayer.remove();
+    }
+  }
 }
 
 mixin _BizKitMixin on IDoKit {

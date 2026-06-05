@@ -328,7 +328,7 @@ class _LogItemWidgetState extends State<LogItemWidget> {
     return GestureDetector(
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: widget.item.msg));
-        CsxDokit.i.toast?.call('已拷贝至剪贴板');
+        CsxDokit.i.toastC('已拷贝至剪贴板');
       },
       onTap: () async {
         var isContain =
@@ -337,7 +337,7 @@ class _LogItemWidgetState extends State<LogItemWidget> {
           widget.item.expand = !widget.item.expand;
           if (!isContain) {
             SPService.instance.set(keyShowLogExpandTips, true);
-            CsxDokit.i.toast?.call('日志超过7行时，点击可展开日志详情');
+            CsxDokit.i.toastC('日志超过7行时，点击可展开日志详情');
           }
         });
       },

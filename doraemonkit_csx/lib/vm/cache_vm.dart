@@ -57,7 +57,7 @@ class CacheVM {
       await _delDir(tempDir);
     }
     callback();
-    CsxDokit.i.toast?.call('清除缓存成功');
+    CsxDokit.i.toastC('清除缓存成功');
   }
 
   ///递归方式删除目录

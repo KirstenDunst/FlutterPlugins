@@ -151,9 +151,9 @@ class _WebPageState extends State<WebPage> {
   Future _onTapSkipBtn() async {
     FocusScope.of(context).requestFocus(FocusNode());
     if (_contentStr.isEmpty) {
-      CsxDokit.i.toast?.call('Url地址内容不能为空');
+      CsxDokit.i.toastC('Url地址内容不能为空');
     } else if (!_contentStr.isWeb()) {
-      CsxDokit.i.toast?.call('web地址格式不正确');
+      CsxDokit.i.toastC('web地址格式不正确');
     } else {
       await WebVM.addSearchList(_contentStr);
       _streamController.addStream(WebVM.getLocalWebSearchList().asStream());

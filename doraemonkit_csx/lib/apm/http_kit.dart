@@ -297,7 +297,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                   'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.parameters)}\nResponse: ${widget.item.response.result}',
             ),
           );
-          CsxDokit.i.toast?.call('请求已拷贝至剪贴板');
+          CsxDokit.i.toastC('请求已拷贝至剪贴板');
         }
       },
       onTap: () {

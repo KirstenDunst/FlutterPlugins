@@ -1,3 +1,4 @@
+import 'package:doraemonkit_csx/apm/http_mock.dart';
 import 'package:flutter/material.dart';
 
 // import 'apm/crash_kit.dart';
@@ -20,6 +21,7 @@ class ApmKitManager {
     ApmKitName.kitFps: FpsKit(),
     ApmKitName.kitMemory: MemoryKit(),
     ApmKitName.kitHttp: HttpKit(),
+    ApmKitName.kitMock: HttpMcokKit(),
     // ApmKitName.kitSourceCode: SourceCodeKit(),
     // ApmKitName.kitCarsh: CrashKit()
   };
@@ -73,6 +75,14 @@ abstract class ApmKit implements IKit {
     return info != null && !storage.contains(info) && storage.save(info);
   }
 
+  bool edit(int index, IInfo info) {
+    return storage.edit(index, info);
+  }
+
+  bool delete(int index) {
+    return storage.delete(index);
+  }
+
   bool removeAllItem() {
     storage.clear();
     return true;
@@ -90,6 +100,7 @@ class ApmKitName {
   static const String kitRoute = '路由信息';
   static const String kitChannel = '方法通道';
   static const String kitHttp = '网络请求';
+  static const String kitMock = 'Mock';
   static const String kitSourceCode = '查看源码';
   static const String kitPageLaunch = '启动耗时';
   static const String kitCarsh = '崩溃检测';

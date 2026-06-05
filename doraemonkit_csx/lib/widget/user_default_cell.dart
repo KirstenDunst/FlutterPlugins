@@ -6,7 +6,6 @@
  * @Description: 
  */
 import 'package:doraemonkit_csx/doraemonkit_csx.dart';
-import 'package:doraemonkit_csx/page/dokit_app.dart';
 import 'package:doraemonkit_csx/utils/shared_prefer_util.dart';
 import 'package:flutter/material.dart';
 
@@ -92,7 +91,7 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
                       UserDefaultTransTool.transToString(
                           widget.userModel.value));
                 } else {
-                  CsxDokit.i.toast?.call('内容格式与原格式解析异常，开发补充');
+                  CsxDokit.i.toastC('内容格式与原格式解析异常，开发补充');
                   widget.archiveCall.call(false);
                 }
               },

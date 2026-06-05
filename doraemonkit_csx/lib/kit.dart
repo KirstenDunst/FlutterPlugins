@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 abstract class IInfo {
@@ -7,6 +6,10 @@ abstract class IInfo {
 
 abstract class IStorage {
   bool save(IInfo info);
+
+  bool edit(int index, IInfo info);
+
+  bool delete(int index);
 
   bool contains(IInfo info);
 
@@ -51,5 +54,21 @@ class CommonStorage implements IStorage {
   @override
   void clear() {
     return items.clear();
+  }
+
+  @override
+  bool edit(int index, IInfo info) {
+    List<IInfo> list = items.toList();
+    list[index] = info;
+    items = Queue.from(list);
+    return true;
+  }
+
+  @override
+  bool delete(int index) {
+    List<IInfo> list = items.toList();
+    list.removeAt(index);
+    items = Queue.from(list);
+    return true;
   }
 }

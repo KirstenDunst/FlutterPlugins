@@ -10,7 +10,7 @@ import '../kit.dart';
 import '../utils/time_util.dart';
 
 class HttpInfo1 implements IInfo {
-  HttpInfo1(this.uri, this.method, this.requestId)
+  HttpInfo1(this.uri, this.method, this.requestId, {this.isMock = false})
       : startTimestamp = DateTime.now().millisecondsSinceEpoch;
 
   final Uri? uri;
@@ -21,6 +21,7 @@ class HttpInfo1 implements IInfo {
   String? error;
   HttpRequest request = HttpRequest();
   HttpResponse? response;
+  bool isMock;
 
   bool expand = false;
 
@@ -270,16 +271,24 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var urlStr = widget.item.uri.toString();
+    var requestHeader = jsonEncode(widget.item.request.header);
+    var requestQuery = jsonEncode(widget.item.request.queryParameters);
+    var requestBody = jsonEncode(widget.item.request.body);
+    var responseHeader = jsonEncode(widget.item.response?.header);
+    var responseStr = (widget.item.response?.data is Map)
+        ? jsonEncode(widget.item.response?.data)
+        : widget.item.response?.data.toString();
     return GestureDetector(
       onLongPress: () async {
         var text =
-            'Uri: ${widget.item.uri}\nRequestParam: ${jsonEncode(widget.item.request.queryParameters)}\nRequestBody: ${jsonEncode(widget.item.request.body)}\nResponse: ${widget.item.response?.data}';
+            'Uri: $urlStr\n\n Request:\n Header:$requestHeader\n Query: $requestQuery\n Body:$requestBody\n Response:\n\n $responseStr';
         await Clipboard.setData(
           ClipboardData(
             text: text,
           ),
         );
-        CsxDokit.i.toast?.call('请求已拷贝至剪贴板');
+        CsxDokit.i.toastC('请求已拷贝至剪贴板');
       },
       onTap: () {
         setState(() {
@@ -304,6 +313,15 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(
                   children: <InlineSpan>[
+                    if (widget.item.isMock)
+                      TextSpan(
+                        text: '[Mock]:',
+                        style: const TextStyle(
+                          fontSize: 9,
+                          color: Colors.orange,
+                          height: 1.2,
+                        ),
+                      ),
                     TextSpan(
                       text:
                           '[${TimeUtils.toTimeString(widget.item.startTimestamp)}]',
@@ -358,7 +376,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: widget.item.uri.toString(),
+                      text: urlStr,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
@@ -375,7 +393,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: jsonEncode(widget.item.request.header),
+                      text: requestHeader,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
@@ -392,7 +410,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: jsonEncode(widget.item.request.queryParameters),
+                      text: requestQuery,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
@@ -409,7 +427,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: jsonEncode(widget.item.request.body),
+                      text: requestBody,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
@@ -426,7 +444,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: jsonEncode(widget.item.response?.header),
+                      text: responseHeader,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
@@ -443,9 +461,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: (widget.item.response?.data is Map)
-                          ? jsonEncode(widget.item.response?.data)
-                          : widget.item.response?.data.toString(),
+                      text: responseStr,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,

@@ -4,13 +4,28 @@ import 'package:dio/dio.dart';
 
 import '../apm.dart';
 import '../apm/http_kit_dio.dart';
+import '../apm/http_mock.dart';
+
+const requestIdKey = 'requestId';
 
 class AppLogInterceptor extends Interceptor {
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final requestId = generateRequestId();
-    options.extra["requestId"] = requestId;
+    options.extra[requestIdKey] = requestId;
+    var mockResponse = MockLocalTool.parseMockData(options);
+    if (mockResponse != null) {
+      handler.resolve(mockResponse);
+      _filterByRequestId(requestId, (httpInfo) {
+        httpInfo?.response = HttpResponse(
+          statusCode: mockResponse.statusCode,
+          data: mockResponse.data,
+          header: mockResponse.headers.map,
+        );
+        httpInfo?.isMock = true;
+      });
+      return;
+    }
     var httpInfo = HttpInfo1(options.uri, options.method, requestId);
     httpInfo.request = HttpRequest(
       header: options.headers,
@@ -25,7 +40,7 @@ class AppLogInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    final requestId = response.requestOptions.extra["requestId"];
+    final requestId = response.requestOptions.extra[requestIdKey];
     _filterByRequestId(requestId, (httpInfo) {
       httpInfo?.response = HttpResponse(
         statusCode: response.statusCode,
@@ -38,7 +53,7 @@ class AppLogInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    final requestId = err.requestOptions.extra["requestId"];
+    final requestId = err.requestOptions.extra[requestIdKey];
     _filterByRequestId(requestId, (httpInfo) {
       httpInfo?.error = err.message;
     });
@@ -48,8 +63,8 @@ class AppLogInterceptor extends Interceptor {
   void _filterByRequestId(String requestId, Function(HttpInfo1?) eventDeal) {
     var kit = ApmKitManager.instance.getKit<HttpKit>(ApmKitName.kitHttp);
     var filterArr = kit?.storage.getAll().where(
-      (e) => (e as HttpInfo1).requestId == requestId,
-    );
+          (e) => (e as HttpInfo1).requestId == requestId,
+        );
     HttpInfo1? httpInfo1;
     if (filterArr?.isNotEmpty ?? false) {
       httpInfo1 = filterArr!.first as HttpInfo1?;

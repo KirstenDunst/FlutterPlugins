@@ -138,8 +138,20 @@ class EnterWebTool {
   static enterWeb(BuildContext context, String url) {
     var callback = CsxDokit.i.doCustomCallMap?[DokitCallType.baseWeb];
     if (callback != null) {
-      callback(context, url);
-      return null;
+      return enterNewOverLayer(
+        (entry) => Scaffold(
+            appBar: AppBar(
+              title: Text(url),
+              leading: GestureDetector(
+                onTap: () => entry?.remove(),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 20,
+                ),
+              ),
+            ),
+            body: callback(context, url)),
+      );
     }
     var webViewController = WebViewController();
     webViewController.loadRequest(Uri.parse(url));
