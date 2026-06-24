@@ -81,24 +81,26 @@ class _BasicInfoPageState extends State<BasicInfoPage> {
 
   List<Widget> buildAppInfo() {
     var list = <Widget>[];
-    list.add(
-      Container(
-        height: 56,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          'VM信息 ${!kReleaseMode ? '' : '[release模式下不可用]'}',
-          style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+    if (!kReleaseMode) {
+      list.add(
+        Container(
+          height: 56,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'VM信息 ${!kReleaseMode ? '' : '[release模式下不可用]'}',
+            style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+          ),
         ),
-      ),
-    );
-    list.add(InfoItem('CPU', VmHelper.instance.vm?.hostCPU));
-    list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
-    list.add(InfoItem('Dart虚拟机', VmHelper.instance.vm?.version));
-    list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
-    list.add(InfoItem('Flutter版本', VmHelper.instance.flutterVersion));
-    list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
-    list.add(IsolateItem());
-    list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+      );
+      list.add(InfoItem('CPU', VmHelper.instance.vm?.hostCPU));
+      list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+      list.add(InfoItem('Dart虚拟机', VmHelper.instance.vm?.version));
+      list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+      list.add(InfoItem('Flutter版本', VmHelper.instance.flutterVersion));
+      list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+      list.add(IsolateItem());
+      list.add(Divider(height: 0.5, color: Color(0xffeeeeee)));
+    }
 
     list.add(
       Container(
@@ -177,10 +179,10 @@ class _IsolateItemState extends State<IsolateItem> {
   void initState() {
     super.initState();
     VmHelper.instance.startConnect().then(
-      (value) => setState(() {
-        vm = VmHelper.instance.vm;
-      }),
-    );
+          (value) => setState(() {
+            vm = VmHelper.instance.vm;
+          }),
+        );
   }
 
   @override

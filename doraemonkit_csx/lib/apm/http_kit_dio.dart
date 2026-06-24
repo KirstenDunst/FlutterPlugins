@@ -314,12 +314,22 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                 text: TextSpan(
                   children: <InlineSpan>[
                     if (widget.item.isMock)
-                      TextSpan(
-                        text: '[Mock]:',
-                        style: const TextStyle(
-                          fontSize: 9,
-                          color: Colors.orange,
-                          height: 1.2,
+                      WidgetSpan(
+                        child: Container(
+                          height: 11,
+                          margin: const EdgeInsets.only(right: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: Colors.orange),
+                          child: Text(
+                            '[Mock]',
+                            style: const TextStyle(
+                              fontSize: 8,
+                              color: Color(0xffffffff),
+                              height: 1.2,
+                            ),
+                          ),
                         ),
                       ),
                     TextSpan(

@@ -8,7 +8,8 @@ import 'kit_manage.dart';
 import 'kit_page.dart';
 
 class ResidentPage extends StatefulWidget {
-  ResidentPage() : super(key: residentPageKey);
+  final VoidCallback backCall;
+  ResidentPage(this.backCall) : super(key: residentPageKey);
 
   static String tag = KitPageManager.kitAll;
   static final GlobalKey<ResidentPageState> residentPageKey =
@@ -55,72 +56,77 @@ class ResidentPageState extends State<ResidentPage> {
     final topMargin =
         MediaQuery.of(context).orientation == Orientation.portrait ? 100 : 0;
     if (height == 0) {
-      return Container();
+      return SizedBox();
     }
-    return Positioned(
+    return GestureDetector(
+      onTap: widget.backCall,
       child: Container(
         width: width,
         color: const Color(0x88000000),
         height: height - topMargin,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.topCenter,
-              width: width,
-              height: height - topMargin - 50,
-              child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Stack(
-                    children: <Widget>[
-                      Container(
-                        height: 50,
-                        width: width,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          color: Color(0xfff6f6f7),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12)),
+        child: GestureDetector(
+          onTap: () {},
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.topCenter,
+                width: width,
+                height: height - topMargin - 50,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    resizeToAvoidBottomInset: false,
+                    body: Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 50,
+                          width: width,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            color: Color(0xfff6f6f7),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12)),
+                          ),
+                          child: Text(getTitle(),
+                              style: const TextStyle(
+                                  fontFamily: 'PingFang SC',
+                                  color: Color(0xff000000),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.none)),
                         ),
-                        child: Text(getTitle(),
-                            style: const TextStyle(
-                                fontFamily: 'PingFang SC',
-                                color: Color(0xff000000),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.none)),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 50),
-                        height: height - topMargin - 100,
-                        color: Colors.white,
-                        child: getPage(),
-                      ),
-                      Container(
-                        height: 0.5,
-                        color: const Color(0xffeae6ea),
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(top: 50),
-                      )
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(top: 50),
+                          height: height - topMargin - 100,
+                          color: Colors.white,
+                          child: getPage(),
+                        ),
+                        Container(
+                          height: 0.5,
+                          color: const Color(0xffeae6ea),
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.only(top: 50),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const Divider(height: 0.5, color: Color(0xffeae6ea)),
-            Container(
-              height: 49,
-              width: width,
-              color: const Color(0xfff6f6f7),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: buildBottomWidgets()),
-            )
-          ],
+              const Divider(height: 0.5, color: Color(0xffeae6ea)),
+              Container(
+                height: 49,
+                width: width,
+                color: const Color(0xfff6f6f7),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: buildBottomWidgets()),
+              )
+            ],
+          ),
         ),
       ),
     );

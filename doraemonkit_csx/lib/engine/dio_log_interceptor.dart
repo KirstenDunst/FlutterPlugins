@@ -13,6 +13,14 @@ class AppLogInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final requestId = generateRequestId();
     options.extra[requestIdKey] = requestId;
+    var httpInfo = HttpInfo1(options.uri, options.method, requestId);
+    httpInfo.request = HttpRequest(
+      header: options.headers,
+      queryParameters: options.queryParameters,
+      body: options.data,
+    );
+    final kit = ApmKitManager.instance.getKit(ApmKitName.kitHttp);
+    kit?.save(httpInfo);
     var mockResponse = MockLocalTool.parseMockData(options);
     if (mockResponse != null) {
       handler.resolve(mockResponse);
@@ -25,17 +33,9 @@ class AppLogInterceptor extends Interceptor {
         httpInfo?.isMock = true;
       });
       return;
+    } else {
+      handler.next(options);
     }
-    var httpInfo = HttpInfo1(options.uri, options.method, requestId);
-    httpInfo.request = HttpRequest(
-      header: options.headers,
-      queryParameters: options.queryParameters,
-      body: options.data,
-    );
-    final kit = ApmKitManager.instance.getKit(ApmKitName.kitHttp);
-    kit?.save(httpInfo);
-
-    handler.next(options);
   }
 
   @override
