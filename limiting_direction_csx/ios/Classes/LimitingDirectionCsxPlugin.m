@@ -98,7 +98,20 @@ static FlutterMethodChannel *channel;
                 iOSOrientation = UIDeviceOrientationPortrait;
             }
         }
-        [[UIDevice currentDevice] setValue:@(iOSOrientation) forKey:@"orientation"];
+        if (@available(iOS 16.0, *)) {
+            UIWindowScene *windowScene = UIApplication.sharedApplication.windows.firstObject.windowScene;
+            if (windowScene) {
+                UIWindowSceneGeometryPreferencesIOS *preferences =
+                    [[UIWindowSceneGeometryPreferencesIOS alloc]
+                     initWithInterfaceOrientations:[self transFromUIDeviceOrientation:(iOSOrientation)]];
+                [windowScene requestGeometryUpdateWithPreferences:preferences
+                                                       errorHandler:^(NSError * _Nonnull error) {
+                    NSLog(@"requestGeometryUpdate error: %@", error);
+                }];
+            }
+        } else {
+            [[UIDevice currentDevice] setValue:@(iOSOrientation) forKey:@"orientation"];
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LimitingDirectionCsxPlugin" object:nil userInfo:@{@"orientationMask": index}];
         [UIViewController attemptRotationToDeviceOrientation];
         result(nil);
@@ -107,6 +120,33 @@ static FlutterMethodChannel *channel;
     } else {
         result(FlutterMethodNotImplemented);
     }
+}
+
+- (UIInterfaceOrientationMask) transFromUIDeviceOrientation:(UIDeviceOrientation)orientation {
+    UIInterfaceOrientationMask orientationMask = UIInterfaceOrientationMaskPortrait;
+    switch (orientation) {
+        case UIDeviceOrientationUnknown:
+            orientationMask = UIInterfaceOrientationMaskPortrait;
+            break;
+        case UIDeviceOrientationPortrait:
+            orientationMask = UIInterfaceOrientationMaskPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            orientationMask = UIInterfaceOrientationMaskPortraitUpsideDown;
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            orientationMask = UIInterfaceOrientationMaskLandscapeLeft;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            orientationMask = UIInterfaceOrientationMaskLandscapeRight;
+            break;
+            
+        default:
+            orientationMask = UIInterfaceOrientationMaskPortrait;
+            break;
+    }
+    
+    return orientationMask;
 }
 
 @end
