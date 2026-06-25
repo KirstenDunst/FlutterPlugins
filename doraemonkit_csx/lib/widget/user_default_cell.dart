@@ -23,13 +23,13 @@ class _UserDefaultCellPageState extends State<UserDefaultCellPage> {
   Widget build(BuildContext context) {
     return InkWell(
       // 进入下一界面编辑
-      onTap: () => enterNewOverLayer(
-          (entry) => UserDefaultEditPage(widget.userModel, (needRefresh) {
-                entry?.remove();
-                if (needRefresh) {
-                  setState(() {});
-                }
-              })),
+      onTap: () => enterNewOverLayer((entry) => UserDefaultEditPage(
+              widget.userModel.key, widget.userModel.value, (needRefresh) {
+            entry?.remove();
+            if (needRefresh) {
+              setState(() {});
+            }
+          })),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         alignment: Alignment.centerLeft,
@@ -45,21 +45,27 @@ class _UserDefaultCellPageState extends State<UserDefaultCellPage> {
 }
 
 class UserDefaultEditPage extends StatefulWidget {
-  final UserDefaultModel userModel;
+  final String udKey;
+  final dynamic udValue;
   //返回是否需要刷新上一页面
   final Function(bool) archiveCall;
-  const UserDefaultEditPage(this.userModel, this.archiveCall, {super.key});
+  const UserDefaultEditPage(this.udKey, this.udValue, this.archiveCall,
+      {super.key});
   @override
   State<UserDefaultEditPage> createState() => _UserDefaultEditPageState();
 }
 
 class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
   late String _contentStr;
+  late String _udKey;
+  dynamic _udValue;
 
   @override
   void initState() {
     super.initState();
-    _contentStr = UserDefaultTransTool.transToString(widget.userModel.value);
+    _udKey = widget.udKey;
+    _udValue = widget.udValue;
+    _contentStr = UserDefaultTransTool.transToString(_udValue);
   }
 
   @override
@@ -81,15 +87,12 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
             ElevatedButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                var originValue = widget.userModel.value;
                 dynamic saveValue = UserDefaultTransTool.transFromString(
-                    _contentStr, originValue);
+                    _contentStr, _udValue);
                 if (saveValue != null) {
-                  widget.userModel.value = saveValue;
-                  await SPService.instance.set(widget.userModel.key, saveValue);
+                  await SPService.instance.set(_udKey, saveValue);
                   widget.archiveCall.call(_contentStr !=
-                      UserDefaultTransTool.transToString(
-                          widget.userModel.value));
+                      UserDefaultTransTool.transToString(_udValue));
                 } else {
                   CsxDokit.i.toastC('内容格式与原格式解析异常，开发补充');
                   widget.archiveCall.call(false);
@@ -103,7 +106,7 @@ class _UserDefaultEditPageState extends State<UserDefaultEditPage> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(widget.userModel.key),
+              child: Text(_udKey),
             ),
             Container(
               height: 200,

@@ -87,5 +87,6 @@ class UserDefaultTransTool {
         return jsonDecode(content);
       } catch (_) {}
     }
+    return null;
   }
 }

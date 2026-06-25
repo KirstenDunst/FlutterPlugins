@@ -91,6 +91,7 @@ class _UserDefaultsPageState extends State<UserDefaultsPage> {
             initialData: [UserDefaultModel()],
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               List<UserDefaultModel>? result = snapshot.data;
+              result?.sort((a, b) => a.key.compareTo(b.key));
               return ListView.separated(
                 itemCount: result?.length ?? 0,
                 itemBuilder: (_, int index) =>
