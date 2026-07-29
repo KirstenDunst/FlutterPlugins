@@ -9,10 +9,11 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
   限制屏幕旋转方位，需要在info.plist中设置包含此方位才可以..
                        DESC
-  s.homepage         = 'https://github.com/KirstenDunst/LimitingDirection'
-  s.license          = { :file => '../LICENSE' }
+  s.homepage         = 'https://github.com/KirstenDunst/FlutterPlugins/tree/main/limiting_direction_csx'
+  s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'csx' => 'cao_shixin@126.com' }
-  s.source           = { :path => '.' }
+  # s.source           = { :path => '.' }
+  s.source           = { :git => 'https://github.com/KirstenDunst/FlutterPlugins.git', :tag => s.version.to_s }
   s.source_files = 'limiting_direction_csx/Sources/limiting_direction_csx/**/*.swift'
   s.dependency 'Flutter'
   s.swift_version = '5.0'
