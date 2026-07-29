@@ -5,7 +5,7 @@
 //  Created by 曹世鑫 on 2020/12/28.
 //
 
-#import "MainViewController.h"
+#import "./include/limiting_direction_csx/MainViewController.h"
 
 @interface MainViewController ()
 @property (nonatomic, assign)UIInterfaceOrientationMask supportedOrientations;

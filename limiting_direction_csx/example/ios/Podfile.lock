@@ -1,22 +1,16 @@
 PODS:
   - Flutter (1.0.0)
-  - limiting_direction_csx (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - limiting_direction_csx (from `.symlinks/plugins/limiting_direction_csx/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  limiting_direction_csx:
-    :path: ".symlinks/plugins/limiting_direction_csx/ios"
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  limiting_direction_csx: cd9be59e277e842edb83577f482e78f3d8957f3e
 
-PODFILE CHECKSUM: d85ddc5f90e8c593f9dc16ef40fc88253b4f8f6b
+PODFILE CHECKSUM: af74e319ade797e7efb3adb74e113f875f0aa290
 
 COCOAPODS: 1.16.2

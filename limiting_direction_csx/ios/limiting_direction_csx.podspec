@@ -13,9 +13,9 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'BrainCo' => 'cao_shixin@126.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  s.source_files = 'limiting_direction_csx/Sources/limiting_direction_csx/**/*'
+  s.public_header_files = 'limiting_direction_csx/Sources/limiting_direction_csx/include/**/*.h'
   s.dependency 'Flutter'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '15.0'
 
 end

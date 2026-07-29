@@ -1,4 +1,4 @@
-#import "LimitingDirectionCsxPlugin.h"
+#import "./include/limiting_direction_csx/LimitingDirectionCsxPlugin.h"
 static FlutterMethodChannel *channel;
 
 @interface LimitingDirectionCsxPlugin () {
