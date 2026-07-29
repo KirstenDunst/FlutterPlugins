@@ -37,9 +37,6 @@ let package = Package(
                 // TODO: If you have other resources that need to be bundled with your plugin, refer to
                 // the following instructions to add them:
                 // https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package
-            ],
-            cSettings: [
-                .headerSearchPath("include/limiting_direction_csx")
             ]
         )
     ]

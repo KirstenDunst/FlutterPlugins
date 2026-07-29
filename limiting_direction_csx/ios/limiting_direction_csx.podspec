@@ -11,11 +11,11 @@ Pod::Spec.new do |s|
                        DESC
   s.homepage         = 'https://github.com/KirstenDunst/LimitingDirection'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'BrainCo' => 'cao_shixin@126.com' }
+  s.author           = { 'csx' => 'cao_shixin@126.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'limiting_direction_csx/Sources/limiting_direction_csx/**/*'
-  s.public_header_files = 'limiting_direction_csx/Sources/limiting_direction_csx/include/**/*.h'
+  s.source_files = 'limiting_direction_csx/Sources/limiting_direction_csx/**/*.swift'
   s.dependency 'Flutter'
+  s.swift_version = '5.0'
   s.platform = :ios, '15.0'
 
 end
