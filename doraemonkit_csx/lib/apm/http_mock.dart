@@ -185,19 +185,34 @@ class MockLocalTool {
   }
 
   //将字符串转化成对应类型
-  static dynamic parseStringByParamType(String data, ParamType paramType) {
-    switch (paramType) {
-      case ParamType.num:
-        return num.tryParse(data);
-      case ParamType.bool:
-        return data.toLowerCase() != 'false';
-      case ParamType.json:
-        return jsonDecode(data);
-      case ParamType.list:
-        return jsonDecode(data);
-      case ParamType.string:
-        return data;
+  // (是否转化成功, 转化后的数据)
+  static (bool isSuccess, dynamic result) parseStringByParamType(
+      String data, ParamType paramType) {
+    dynamic result;
+    bool isSuccess = true;
+    try {
+      switch (paramType) {
+        case ParamType.num:
+          result = num.parse(data);
+          break;
+        case ParamType.bool:
+          result = data.toLowerCase() != 'false';
+          break;
+        case ParamType.json:
+          result = jsonDecode(data);
+          break;
+        case ParamType.list:
+          result = jsonDecode(data);
+          break;
+        case ParamType.string:
+          result = data;
+          break;
+      }
+    } on Exception catch (_) {
+      result = 'response type trans error:$data,$paramType';
+      isSuccess = false;
     }
+    return (isSuccess, result);
   }
 
   //将字符串转化成对应类型 (data放数据大的，body放检测包含的)
@@ -300,11 +315,11 @@ class MockLocalTool {
     for (var i = 0; i < enableItems.length; i++) {
       var item = enableItems.elementAt(i) as MockModel;
       if (item.filter.match(options)) {
-        var result =
+        var (isSuccess, result) =
             MockLocalTool.parseStringByParamType(item.data, item.paramType);
         return Response(
           data: result,
-          statusCode: 200,
+          statusCode: isSuccess ? 200 : -1,
           requestOptions: options,
         );
       }

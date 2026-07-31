@@ -278,11 +278,11 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
     var responseHeader = jsonEncode(widget.item.response?.header);
     var responseStr = (widget.item.response?.data is Map)
         ? jsonEncode(widget.item.response?.data)
-        : widget.item.response?.data.toString();
+        : widget.item.response?.data;
     return GestureDetector(
       onLongPress: () async {
         var text =
-            'Uri: $urlStr\n\n Request:\n Header:$requestHeader\n Query: $requestQuery\n Body:$requestBody\n Response:\n\n $responseStr';
+            'Uri:$urlStr\n\nRequest:\nHeader:$requestHeader\nQuery:$requestQuery\nBody:$requestBody\n\nResponse:\n$responseStr';
         await Clipboard.setData(
           ClipboardData(
             text: text,
@@ -471,7 +471,7 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
                       ),
                     ),
                     TextSpan(
-                      text: responseStr,
+                      text: '$responseStr',
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.5,
