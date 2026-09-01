@@ -92,7 +92,11 @@ class _DoKitAppState extends State<DoKitApp> {
               locale: supportedLocales.first,
               delegates: _localizationsDelegates.toList(),
               child: ScaffoldMessenger(
-                child: Overlay(key: doKitOverlayKey),
+                // 该Overlay不在宿主的WidgetsApp下，缺少默认的文本编辑快捷键映射，
+                // 会导致Android软键盘删除键(以按键事件分发)无法删除文字
+                child: DefaultTextEditingShortcuts(
+                  child: Overlay(key: doKitOverlayKey),
+                ),
               ),
             ),
           ),

@@ -55,6 +55,7 @@ class ResidentPageState extends State<ResidentPage> {
     final height = size.height;
     final topMargin =
         MediaQuery.of(context).orientation == Orientation.portrait ? 100 : 0;
+    final bottomMargin = MediaQuery.of(context).padding.bottom;
     if (height == 0) {
       return SizedBox();
     }
@@ -72,7 +73,7 @@ class ResidentPageState extends State<ResidentPage> {
               Container(
                 alignment: Alignment.topCenter,
                 width: width,
-                height: height - topMargin - 50,
+                height: height - topMargin - 50 - bottomMargin,
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
@@ -118,6 +119,7 @@ class ResidentPageState extends State<ResidentPage> {
               ),
               const Divider(height: 0.5, color: Color(0xffeae6ea)),
               Container(
+                margin: EdgeInsets.only(bottom: bottomMargin),
                 height: 49,
                 width: width,
                 color: const Color(0xfff6f6f7),

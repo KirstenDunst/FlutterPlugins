@@ -28,46 +28,47 @@ class _KitPage extends State<KitPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Container(
-            color: const Color(0xffffffff),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 10, right: 10, top: 15, bottom: 10),
-                  child: Container(
-                    key: _residentContainerKey,
-                    decoration: _onDrag
-                        ? const DashedDecoration(
-                            dashedColor: Colors.red,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)))
-                        : null,
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _normalStateContent(
-                            '常驻工具',
-                            subTitle: '[最多放置4个]',
-                            KitPageManager.instance.getResidentKit()),
-                      ],
-                    ),
-                  ),
+      child: Container(
+        color: const Color(0xffffffff),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, top: 15, bottom: 10),
+              child: Container(
+                key: _residentContainerKey,
+                decoration: _onDrag
+                    ? const DashedDecoration(
+                        dashedColor: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)))
+                    : null,
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _normalStateContent(
+                        '常驻工具',
+                        subTitle: '[最多放置4个]',
+                        KitPageManager.instance.getResidentKit()),
+                  ],
                 ),
-                _sectionContent('基础工具', KitPageManager.instance.getBaseKit(),
-                    subTitle: '[拖动图标放入常驻工具]'),
-                _sectionContent('性能检测工具', KitPageManager.instance.getApmKit(),
-                    subTitle: '[拖动图标放入常驻工具]'),
-                _sectionContent('其他工具', KitPageManager.instance.getVisualKit(),
-                    subTitle: '[拖动图标放入常驻工具]'),
-                // 自定义工具
-                buildBizGroupView(context),
-              ],
-            )));
+              ),
+            ),
+            _sectionContent('基础工具', KitPageManager.instance.getBaseKit(),
+                subTitle: '[拖动图标放入常驻工具]'),
+            _sectionContent('性能检测工具', KitPageManager.instance.getApmKit(),
+                subTitle: '[拖动图标放入常驻工具]'),
+            _sectionContent('其他工具', KitPageManager.instance.getVisualKit(),
+                subTitle: '[拖动图标放入常驻工具]'),
+            // 自定义工具
+            buildBizGroupView(context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _normalStateContent(
