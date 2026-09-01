@@ -84,9 +84,7 @@ class _CachePageState extends State<CachePage> {
       child: GestureDetector(
         onTap: () {
           overlayEntry?.remove();
-          CacheVM.clearCache(() async {
-            _streamController.sink.add(await CacheVM.loadCache());
-          });
+          CacheVM.clearCache(() => CacheVM.loadCache().then((value)=>_streamController.sink.add(value)));
         },
         child: Container(
           alignment: Alignment.center,

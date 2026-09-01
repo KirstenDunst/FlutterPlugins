@@ -5,67 +5,40 @@
  * @LastEditTime: 2021-02-18 15:09:04
  * @Description: 
  */
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRController extends StatefulWidget {
-  const QRController({super.key});
+  final OverlayEntry? entry;
+  final Function(String)? detectBack;
+  const QRController({super.key, this.entry, this.detectBack});
 
   @override
   State<QRController> createState() => _QRControllerState();
 }
 
 class _QRControllerState extends State<QRController> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? _qrController;
-  late bool _isOver;
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      _qrController?.pauseCamera();
-    } else if (Platform.isIOS) {
-      _qrController?.resumeCamera();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _isOver = false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('扫描界面')),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated),
+      appBar: AppBar(
+        title: Text('扫描界面'),
+        leading: GestureDetector(
+          onTap: () => widget.entry?.remove(),
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
           ),
-        ],
+        ),
       ),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) async {
-    _qrController = controller;
-    controller.scannedDataStream.listen((scanData) {
-      if (!_isOver) {
-        _isOver = true;
-        if (mounted) {
-          Navigator.of(context, rootNavigator: true).pop(scanData.code);
+      body: MobileScanner(onDetect: (barcodeCap) {
+        var barcodes = barcodeCap.barcodes.where((e) => e.rawValue != null);
+        var barcodeValue = barcodes.isEmpty ? null : barcodes.first.rawValue!;
+        if (mounted && barcodeValue != null) {
+          widget.detectBack?.call(barcodeValue);
+          widget.entry?.remove();
         }
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _qrController?.dispose();
-    super.dispose();
+      }),
+    );
   }
 }

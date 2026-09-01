@@ -39,7 +39,7 @@ class _WebCellState extends State<WebCell> {
               package: dkPackageName,
             ),
             SizedBox(width: 10),
-            Text(widget.url, maxLines: 100),
+            Expanded(child: Text(widget.url, maxLines: 100)),
           ],
         ),
       ),

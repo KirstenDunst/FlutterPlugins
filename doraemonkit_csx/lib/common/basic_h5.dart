@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:doraemonkit_csx/utils/regular_ext.dart';
 import 'package:flutter/material.dart';
 import '../csx_dokit.dart';
+import '../page/dokit_app.dart';
 import '../vm/web_vm.dart';
 import '../widget/qr_scan.dart';
 import '../widget/web_cell.dart';
@@ -93,15 +94,17 @@ class _WebPageState extends State<WebPage> {
                   onTap: () {
                     //扫描
                     FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => QRController()),
-                    ).then((result) {
-                      if (result != null) {
-                        _contentStr = result.toString();
-                        editKey.currentState?.changeValue(_contentStr);
-                      }
-                    });
+                    enterNewOverLayer((entry) => QRController(
+                          entry: entry,
+                          detectBack: (value) {
+                            if (value.startsWith('http')) {
+                              _contentStr = value;
+                              editKey.currentState?.changeValue(_contentStr);
+                            } else {
+                              CsxDokit.i.toastC('识别到的不是网页地址，请重新扫码');
+                            }
+                          },
+                        ));
                   },
                   child: Image.asset(
                     'assets/images/dk_web_door_history_qrcode.png',

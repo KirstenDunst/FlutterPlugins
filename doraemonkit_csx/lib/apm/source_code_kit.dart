@@ -93,7 +93,7 @@ class _SourceCodePageState extends State<SourceCodePage> {
 
   RenderObject? findTopRenderObject() {
     Element? topElement;
-    var context = CsxDokit.i.overlayContext;
+    var context = DoKitApp.appKey.currentContext;
     if (context == null) {
       return null;
     }

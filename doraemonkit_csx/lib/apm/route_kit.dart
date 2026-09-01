@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../apm.dart';
-import '../csx_dokit.dart';
 import '../kit.dart';
+import '../page/dokit_app.dart';
 
 class RouteKit extends ApmKit {
   @override
@@ -217,7 +217,7 @@ class RouteInfoPageState extends State<RouteInfoPage> {
 
   RouteInfo? findRoute() {
     Element? topElement;
-    var context = CsxDokit.i.overlayContext;
+    var context = DoKitApp.appKey.currentContext;
     if (context == null) return null;
     final ModalRoute<dynamic>? rootRoute = ModalRoute.of(context);
     void listTopView(Element element) {

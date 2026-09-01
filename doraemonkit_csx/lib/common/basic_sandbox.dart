@@ -86,7 +86,7 @@ class _SandBoxPageState extends State<SandBoxPage> {
       } else {
         storageDirectory = await getExternalStorageDirectory();
       }
-      return storageDirectory?.parent.path;
+      return storageDirectory?.path;
     }
   }
 

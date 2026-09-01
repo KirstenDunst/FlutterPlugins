@@ -12,14 +12,14 @@ dependencies:
   device_info_plus: ^12.1.0
   flutter:
     sdk: flutter
-  package_info: ^2.0.2
+  package_info_plus: ^9.0.0
   path_provider: ^2.1.5
-  plugin_platform_interface: ^2.0.2
-  qr_code_scanner: ^1.0.1
+  plugin_platform_interface: ^2.1.8
+  mobile_scanner: ^7.4.0
   qr_flutter: ^4.1.0
   share_plus: ^12.0.1
-  shared_preferences: ^2.5.3
-  vm_service: ^15.0.2
+  shared_preferences: ^2.5.5
+  vm_service: ^15.3.0
   webview_flutter: ^4.13.0
   dio: ^5.9.0
   string_scanner: ^1.4.1

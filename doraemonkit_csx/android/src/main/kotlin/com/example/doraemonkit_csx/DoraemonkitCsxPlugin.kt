@@ -5,6 +5,8 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import android.content.Context
+import java.io.IOException
 
 /** DoraemonkitCsxPlugin */
 class DoraemonkitCsxPlugin :
@@ -34,14 +36,20 @@ class DoraemonkitCsxPlugin :
         } else if (call.method == "openLocalLanguagesPage") {
             CommonTool.startLocalActivity(context);
         }  else if (call.method == "getUserDefaults") {
-            Map<String, ?> allPrefs = new HashMap<>();
             try {
-                allPrefs = SharedPreferencesPlugin.getUserDefaults(context);
-            } catch (IOException e) {
+                val data = SharedPreferencesPlugin.getUserDefaults(context)
+                result.success(data)
+            } catch (e: IOException) {
+                result.success(HashMap<String, Any?>())
             }
-            result.success(allPrefs);
         } else if (call.method == "setUserDefault") {
-            SharedPreferencesPlugin.setUserDefault(context,((HashMap<String, ?>) call.arguments));
+            val arguments = call.arguments as? HashMap<String, Any?>
+            if (arguments != null) {
+                SharedPreferencesPlugin.setUserDefault(
+                    context,
+                    arguments
+                )
+            } 
         } else {
             result.notImplemented();
         }

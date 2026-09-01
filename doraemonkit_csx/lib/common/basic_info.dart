@@ -126,7 +126,7 @@ class _BasicInfoPageState extends State<BasicInfoPage> {
     list.add(
       Row(
         children: [
-          Text('----自定义包信息获取,后续可以融合一下'),
+          Expanded(child: Text('----自定义包信息获取,后续可以融合一下')),
           ElevatedButton.icon(
             onPressed: () => initPlatformState(),
             label: Icon(Icons.refresh),

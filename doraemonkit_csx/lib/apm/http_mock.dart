@@ -67,7 +67,7 @@ class HttpMcokKit extends ApmKit {
 
   @override
   IStorage createStorage() {
-    return CommonStorage(maxCount: 200);
+    return CommonStorage(maxCount: 60);
   }
 
   @override
@@ -133,18 +133,7 @@ class MockPageState extends State<MockPage> {
           )),
           ElevatedButton(
             onPressed: () => enterNewOverLayer(
-              (entry) => Scaffold(
-                appBar: AppBar(
-                  title: Text('新增Mock'),
-                  leading: GestureDetector(
-                    onTap: () => entry?.remove(),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                body: EditMockPage(
+              (entry) => EditMockPage(
                   saveCallBack: (mockModel) {
                     ApmKitManager.instance
                         .getKit<HttpMcokKit>(ApmKitName.kitMock)
@@ -153,8 +142,7 @@ class MockPageState extends State<MockPage> {
                     setState(() {});
                     entry?.remove();
                   },
-                ),
-              ),
+                  entity: entry),
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),

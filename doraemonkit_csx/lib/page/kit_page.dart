@@ -272,7 +272,7 @@ class _KitPage extends State<KitPage> {
                     });
                   },
                   padding: EdgeInsets.all(0),
-                  minWidth: 40,
+                  minWidth: 30,
                   child: KitItem(e),
                 ),
               ),
@@ -316,7 +316,7 @@ class _KitPage extends State<KitPage> {
                 ),
               ),
               SizedBox(height: 10),
-              Wrap(spacing: 20, runSpacing: 10, children: wrapChildrens),
+              Wrap(spacing: 10, runSpacing: 10, children: wrapChildrens),
               SizedBox(height: 20)
             ],
           );

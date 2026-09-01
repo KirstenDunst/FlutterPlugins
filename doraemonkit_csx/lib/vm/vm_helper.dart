@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:doraemonkit_csx/apm/version.dart';
 import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vm_service/vm_service.dart';
 
 import 'vm_service_wrapper.dart';

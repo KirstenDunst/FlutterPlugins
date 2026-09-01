@@ -8,8 +8,10 @@ import 'http_mock.dart';
 
 class EditMockPage extends StatefulWidget {
   final MockModel? mockModel;
+  final OverlayEntry? entity;
   final Function(MockModel)? saveCallBack;
-  const EditMockPage({super.key, this.mockModel, this.saveCallBack});
+  const EditMockPage(
+      {super.key, this.mockModel, this.saveCallBack, this.entity});
 
   @override
   State<EditMockPage> createState() => _EditMockPageState();
@@ -53,6 +55,16 @@ class _EditMockPageState extends State<EditMockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('新增Mock'),
+        leading: GestureDetector(
+          onTap: () => widget.entity?.remove(),
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+          ),
+        ),
+      ),
       backgroundColor: const Color(0xFFF5F7FA),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
