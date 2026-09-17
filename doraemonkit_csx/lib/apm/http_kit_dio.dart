@@ -7,7 +7,10 @@ import 'package:flutter/services.dart';
 import '../apm.dart';
 import '../csx_dokit.dart';
 import '../kit.dart';
+import '../page/dokit_app.dart';
 import '../utils/time_util.dart';
+import 'http_mock.dart';
+import 'http_mock_edit.dart';
 
 class HttpInfo1 implements IInfo {
   HttpInfo1(this.uri, this.method, this.requestId, {this.isMock = false})
@@ -40,14 +43,14 @@ class HttpInfo1 implements IInfo {
 
 class HttpRequest {
   final Map<String, dynamic>? header;
-  final Map<String, dynamic>? body;
+  final dynamic body;
   final Map<String, dynamic>? queryParameters;
 
   HttpRequest({this.header, this.body, this.queryParameters});
 
   @override
   String toString() {
-    return 'HEADER: ${jsonEncode(header)}\nBODY: ${jsonEncode(body)}\nQUERY:${jsonEncode(queryParameters)}';
+    return 'HEADER: ${jsonEncode(header)}\nBODY: ${(body is Map || body is List) ? jsonEncode(body) : body.toString()}\nQUERY:${jsonEncode(queryParameters)}';
   }
 }
 
@@ -272,227 +275,284 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
   @override
   Widget build(BuildContext context) {
     var urlStr = widget.item.uri.toString();
-    var requestHeader = jsonEncode(widget.item.request.header);
-    var requestQuery = jsonEncode(widget.item.request.queryParameters);
-    var requestBody = jsonEncode(widget.item.request.body);
-    var responseHeader = jsonEncode(widget.item.response?.header);
-    var responseStr = (widget.item.response?.data is Map)
-        ? jsonEncode(widget.item.response?.data)
-        : widget.item.response?.data;
+    var requestHeader = widget.item.request.header == null
+        ? null
+        : jsonEncode(widget.item.request.header);
+    var requestQuery = widget.item.request.queryParameters == null
+        ? null
+        : jsonEncode(widget.item.request.queryParameters);
+    var requestTempBody = widget.item.request.body;
+    String? requestBody = requestTempBody == null
+        ? null
+        : ((requestTempBody is Map || requestTempBody is List)
+            ? jsonEncode(requestTempBody)
+            : requestTempBody.toString());
+    var responseHeader = widget.item.response?.header == null
+        ? null
+        : jsonEncode(widget.item.response?.header);
+    var responseData = widget.item.response?.data;
+    String? responseStr = responseData == null
+        ? null
+        : ((responseData is Map || responseData is List)
+            ? jsonEncode(widget.item.response?.data)
+            : widget.item.response!.data.toString());
     return GestureDetector(
-      onLongPress: () async {
-        var text =
-            'Uri:$urlStr\n\nRequest:\nHeader:$requestHeader\nQuery:$requestQuery\nBody:$requestBody\n\nResponse:\n$responseStr';
-        await Clipboard.setData(
-          ClipboardData(
-            text: text,
-          ),
-        );
-        CsxDokit.i.toastC('请求已拷贝至剪贴板');
-      },
-      onTap: () {
-        setState(() {
-          widget.item.expand = !widget.item.expand;
-        });
-      },
-      child: Card(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width - 80,
-              margin: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 12,
-                bottom: 12,
-              ),
-              child: RichText(
-                maxLines: widget.item.expand ? 9999 : 7,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(
-                  children: <InlineSpan>[
-                    if (widget.item.isMock)
-                      WidgetSpan(
-                        child: Container(
-                          height: 11,
-                          margin: const EdgeInsets.only(right: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 6),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: Colors.orange),
-                          child: Text(
-                            '[Mock]',
+        onLongPress: () async {
+          var text =
+              'Uri:$urlStr\n\nRequest:\nHeader:$requestHeader\nQuery:$requestQuery\nBody:$requestBody\n\nResponse:\nx-request-id:${widget.item.response?.header?['x-request-id']}\n$responseStr';
+          await Clipboard.setData(
+            ClipboardData(
+              text: text,
+            ),
+          );
+          CsxDokit.i.toastC('请求已拷贝至剪贴板');
+        },
+        onTap: () {
+          setState(() {
+            widget.item.expand = !widget.item.expand;
+          });
+        },
+        child: Stack(
+          children: [
+            Card(
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width - 80,
+                    margin: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: 12,
+                    ),
+                    child: RichText(
+                      maxLines: widget.item.expand ? 9999 : 7,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: <InlineSpan>[
+                          if (widget.item.isMock)
+                            WidgetSpan(
+                              child: Container(
+                                height: 11,
+                                margin: const EdgeInsets.only(right: 4),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    color: Colors.orange),
+                                child: Text(
+                                  '[Mock]',
+                                  style: const TextStyle(
+                                    fontSize: 8,
+                                    color: Color(0xffffffff),
+                                    height: 1.2,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          TextSpan(
+                            text:
+                                '[${TimeUtils.toTimeString(widget.item.startTimestamp)}]',
                             style: const TextStyle(
-                              fontSize: 8,
-                              color: Color(0xffffffff),
+                              fontSize: 9,
+                              color: Color(0xff333333),
                               height: 1.2,
                             ),
                           ),
-                        ),
-                      ),
-                    TextSpan(
-                      text:
-                          '[${TimeUtils.toTimeString(widget.item.startTimestamp)}]',
-                      style: const TextStyle(
-                        fontSize: 9,
-                        color: Color(0xff333333),
-                        height: 1.2,
-                      ),
-                    ),
-                    WidgetSpan(
-                      child: Container(
-                        height: 11,
-                        margin: const EdgeInsets.only(left: 4),
-                        padding: const EdgeInsets.only(left: 6, right: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(2),
+                          WidgetSpan(
+                            child: Container(
+                              height: 11,
+                              margin: const EdgeInsets.only(left: 4),
+                              padding: const EdgeInsets.only(left: 6, right: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(2),
+                                ),
+                                color: [
+                                  200,
+                                  0,
+                                ].contains(widget.item.response?.statusCode)
+                                    ? const Color(0xff337cc4)
+                                    : const Color(0xffd0607e),
+                              ),
+                              child: Text(
+                                getCode(),
+                                style: const TextStyle(
+                                  fontSize: 8,
+                                  color: Color(0xffffffff),
+                                  height: 1.2,
+                                ),
+                              ),
+                            ),
                           ),
-                          color: [
-                            200,
-                            0,
-                          ].contains(widget.item.response?.statusCode)
-                              ? const Color(0xff337cc4)
-                              : const Color(0xffd0607e),
-                        ),
-                        child: Text(
-                          getCode(),
-                          style: const TextStyle(
-                            fontSize: 8,
-                            color: Color(0xffffffff),
-                            height: 1.2,
+                          TextSpan(
+                            text: '  ${widget.item.method}'
+                                '  Cost:${(widget.item.response?.endTimestamp ?? 0) > 0 ? ('${widget.item.response!.endTimestamp - widget.item.startTimestamp}ms') : '-'} ',
+                            style: const TextStyle(
+                              fontSize: 9,
+                              color: Color(0xff666666),
+                              height: 1.5,
+                            ),
                           ),
-                        ),
+                          const TextSpan(
+                            text: '\nUri: ',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Color(0xff333333),
+                              height: 1.5,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: urlStr,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '\nRequestHeader: ',
+                            style: TextStyle(
+                              height: 1.5,
+                              fontSize: 10,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: requestHeader,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '\nParameters: ',
+                            style: TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: requestQuery,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '\nRequestBody: ',
+                            style: TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: requestBody,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '\nResponseHeader: ',
+                            style: TextStyle(
+                              height: 1.5,
+                              fontSize: 10,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: responseHeader,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '\nResponse: ',
+                            style: TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff333333),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: responseStr,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              height: 1.5,
+                              color: Color(0xff666666),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: '  ${widget.item.method}'
-                          '  Cost:${(widget.item.response?.endTimestamp ?? 0) > 0 ? ('${widget.item.response!.endTimestamp - widget.item.startTimestamp}ms') : '-'} ',
-                      style: const TextStyle(
-                        fontSize: 9,
-                        color: Color(0xff666666),
-                        height: 1.5,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nUri: ',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Color(0xff333333),
-                        height: 1.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: urlStr,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nRequestHeader: ',
-                      style: TextStyle(
-                        height: 1.5,
-                        fontSize: 10,
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: requestHeader,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nParameters: ',
-                      style: TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: requestQuery,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nRequestBody: ',
-                      style: TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: requestBody,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nResponseHeader: ',
-                      style: TextStyle(
-                        height: 1.5,
-                        fontSize: 10,
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: responseHeader,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\nResponse: ',
-                      style: TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '$responseStr',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        height: 1.5,
-                        color: Color(0xff666666),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  Image.asset(
+                    widget.item.expand
+                        ? 'assets/images/dk_channel_expand_h.png'
+                        : 'assets/images/dk_channel_expand_n.png',
+                    package: dkPackageName,
+                    height: 14,
+                    width: 9,
+                  ),
+                ],
               ),
             ),
-            Image.asset(
-              widget.item.expand
-                  ? 'assets/images/dk_channel_expand_h.png'
-                  : 'assets/images/dk_channel_expand_n.png',
-              package: dkPackageName,
-              height: 14,
-              width: 9,
-            ),
+            Positioned(
+              top: 5,
+              right: 5,
+              child: GestureDetector(
+                //转到添加mock处理页面
+                onTap: () => enterNewOverLayer(
+                  (entry) => EditMockPage(
+                    mockModel: MockModel(
+                        '',
+                        responseStr ?? '',
+                        MockFilterModel(
+                          widget.item.uri?.path ?? '',
+                          filterAskType: HttpAskType.parse(widget.item.method),
+                          filterQueryParam: widget.item.request.queryParameters,
+                          filterBodyParam: requestBody,
+                          bodyParamType: MockLocalTool.parseDataForParamType(
+                                  requestTempBody) ??
+                              ParamType.json,
+                        ),
+                        paramType: MockLocalTool.parseDataForParamType(
+                                widget.item.response?.data) ??
+                            ParamType.json),
+                    saveCallBack: (mockModel) {
+                      ApmKitManager.instance
+                          .getKit<HttpMockKit>(ApmKitName.kitMock)
+                          ?.save(mockModel);
+                      MockLocalTool.editData();
+                      entry?.remove();
+                      CsxDokit.i.toastC('添加成功,请前往Mock分组查看');
+                    },
+                  ),
+                ),
+                child: Icon(
+                  Icons.data_object,
+                  size: 20,
+                  color: Colors.blueAccent,
+                ),
+              ),
+            )
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

@@ -23,7 +23,8 @@ class MockModel implements IInfo {
   //过滤条件，满足条件才会进行mock替换
   MockFilterModel filter;
 
-  MockModel(this.title, this.data, this.paramType, this.enable, this.filter);
+  MockModel(this.title, this.data, this.filter,
+      {this.paramType = ParamType.json, this.enable = true});
 
   @override
   getValue() {
@@ -32,13 +33,14 @@ class MockModel implements IInfo {
 
   factory MockModel.fromJson(Map<String, dynamic> json) {
     return MockModel(
-        json['title'],
-        json['data'],
-        json['paramType'] != null
-            ? ParamType.values.firstWhere((e) => e.label == json['paramType'])
-            : ParamType.json,
-        json['enable'],
-        MockFilterModel.fromJson(json['filter']));
+      json['title'],
+      json['data'],
+      MockFilterModel.fromJson(json['filter']),
+      paramType: json['paramType'] != null
+          ? ParamType.values.firstWhere((e) => e.label == json['paramType'])
+          : ParamType.json,
+      enable: json['enable'],
+    );
   }
 
   Map toJson() {
@@ -52,7 +54,7 @@ class MockModel implements IInfo {
   }
 }
 
-class HttpMcokKit extends ApmKit {
+class HttpMockKit extends ApmKit {
   @override
   Widget createDisplayPage() {
     return MockPage();
@@ -82,7 +84,7 @@ class HttpMcokKit extends ApmKit {
     if (data.isNotEmpty) {
       var list = (jsonDecode(data) as List).map((e) => MockModel.fromJson(e));
       var storage = ApmKitManager.instance
-          .getKit<HttpMcokKit>(ApmKitName.kitMock)
+          .getKit<HttpMockKit>(ApmKitName.kitMock)
           ?.getStorage();
       for (var ele in list) {
         storage?.save(ele);
@@ -107,7 +109,7 @@ class MockPageState extends State<MockPage> {
   @override
   Widget build(BuildContext context) {
     final items = ApmKitManager.instance
-            .getKit<HttpMcokKit>(ApmKitName.kitMock)
+            .getKit<HttpMockKit>(ApmKitName.kitMock)
             ?.getStorage()
             .getAll() ??
         [];
@@ -123,7 +125,7 @@ class MockPageState extends State<MockPage> {
               isLast: index == items.length - 1,
               deleteTap: () {
                 ApmKitManager.instance
-                    .getKit<HttpMcokKit>(ApmKitName.kitMock)
+                    .getKit<HttpMockKit>(ApmKitName.kitMock)
                     ?.delete(index);
                 MockLocalTool.editData();
                 setState(() {});
@@ -136,7 +138,7 @@ class MockPageState extends State<MockPage> {
               (entry) => EditMockPage(
                   saveCallBack: (mockModel) {
                     ApmKitManager.instance
-                        .getKit<HttpMcokKit>(ApmKitName.kitMock)
+                        .getKit<HttpMockKit>(ApmKitName.kitMock)
                         ?.save(mockModel);
                     MockLocalTool.editData();
                     setState(() {});
@@ -162,7 +164,7 @@ class MockLocalTool {
   //记录mock操作数据
   static Future editData() async {
     var items = ApmKitManager.instance
-            .getKit<HttpMcokKit>(ApmKitName.kitMock)
+            .getKit<HttpMockKit>(ApmKitName.kitMock)
             ?.getStorage()
             .getAll() ??
         [];
@@ -201,6 +203,22 @@ class MockLocalTool {
       isSuccess = false;
     }
     return (isSuccess, result);
+  }
+
+  //解析数据类型
+  static ParamType? parseDataForParamType(dynamic data) {
+    if (data is num) {
+      return ParamType.num;
+    } else if (data is bool) {
+      return ParamType.bool;
+    } else if (data is Map) {
+      return ParamType.json;
+    } else if (data is List) {
+      return ParamType.list;
+    } else if (data is String) {
+      return ParamType.string;
+    }
+    return null;
   }
 
   //将字符串转化成对应类型 (data放数据大的，body放检测包含的)
@@ -289,7 +307,7 @@ class MockLocalTool {
   //检测拦截mock数据处理，返回null表示未匹配到，正常进行网络请求
   static Response? parseMockData(RequestOptions options) {
     var items = ApmKitManager.instance
-            .getKit<HttpMcokKit>(ApmKitName.kitMock)
+            .getKit<HttpMockKit>(ApmKitName.kitMock)
             ?.getStorage()
             .getAll() ??
         [];
@@ -431,25 +449,16 @@ class _HttpItemWidgetState extends State<HttpItemWidget> {
   }
 
   void _edit() => enterNewOverLayer(
-        (entry) => Scaffold(
-          appBar: AppBar(
-            title: const Text('编辑Mock'),
-            leading: IconButton(
-              onPressed: () => entry?.remove(),
-              icon: const Icon(Icons.arrow_back_ios),
-            ),
-          ),
-          body: EditMockPage(
-            mockModel: widget.mockModel,
-            saveCallBack: (mockModel) {
-              ApmKitManager.instance
-                  .getKit<HttpMcokKit>(ApmKitName.kitMock)
-                  ?.edit(widget.index, mockModel);
-              MockLocalTool.editData();
-              setState(() {});
-              entry?.remove();
-            },
-          ),
+        (entry) => EditMockPage(
+          mockModel: widget.mockModel,
+          saveCallBack: (mockModel) {
+            ApmKitManager.instance
+                .getKit<HttpMockKit>(ApmKitName.kitMock)
+                ?.edit(widget.index, mockModel);
+            MockLocalTool.editData();
+            setState(() {});
+            entry?.remove();
+          },
         ),
       );
 }

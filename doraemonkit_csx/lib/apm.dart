@@ -21,7 +21,7 @@ class ApmKitManager {
     ApmKitName.kitFps: FpsKit(),
     ApmKitName.kitMemory: MemoryKit(),
     ApmKitName.kitHttp: HttpKit(),
-    ApmKitName.kitMock: HttpMcokKit(),
+    ApmKitName.kitMock: HttpMockKit(),
     // ApmKitName.kitSourceCode: SourceCodeKit(),
     // ApmKitName.kitCarsh: CrashKit()
   };

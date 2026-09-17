@@ -453,8 +453,6 @@ class _EditMockPageState extends State<EditMockPage> {
     final model = MockModel(
       _titleController.text,
       _dataController.text,
-      _responseType,
-      _enable,
       MockFilterModel(
         _urlController.text,
         filterAskType: _askType,
@@ -462,6 +460,8 @@ class _EditMockPageState extends State<EditMockPage> {
         filterQueryParam: filterQueryParam,
         bodyParamType: _bodyType,
       ),
+      paramType: _responseType,
+      enable: _enable,
     );
 
     widget.saveCallBack?.call(model);
@@ -500,6 +500,18 @@ enum HttpAskType {
 
   const HttpAskType(this.method);
   final String method;
+
+  static HttpAskType? parse(String? key) {
+    HttpAskType? type;
+    for (var i = 0; i < HttpAskType.values.length; i++) {
+      var ele = HttpAskType.values[i];
+      if (ele.method == key) {
+        type = ele;
+        break;
+      }
+    }
+    return type;
+  }
 }
 
 class MockFilterModel {
