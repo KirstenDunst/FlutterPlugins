@@ -15,15 +15,36 @@ class DoKitBtn extends StatefulWidget {
   static GlobalKey<DoKitBtnState> doKitBtnKey = GlobalKey<DoKitBtnState>();
   late OverlayEntry overlayEntry;
 
+  // 当前入口按钮是否已经添加到Overlay中
+  bool _addedToOverlay = false;
+
+  /// 入口按钮是否已存在于Overlay中
+  bool get isAddedToOverlay => _addedToOverlay;
+
   @override
   State<DoKitBtn> createState() => DoKitBtnState();
 
   void addToOverlay() {
-    overlayEntry = OverlayEntry(builder: (BuildContext context) => this);
+    if (_addedToOverlay) {
+      return;
+    }
     final rootOverlay = doKitOverlayKey.currentState;
     assert(rootOverlay != null);
-    rootOverlay?.insert(overlayEntry);
+    if (rootOverlay == null) {
+      return;
+    }
+    overlayEntry = OverlayEntry(builder: (BuildContext context) => this);
+    rootOverlay.insert(overlayEntry);
+    _addedToOverlay = true;
     ApmKitManager.instance.startUp();
+  }
+
+  void removeFromOverlay() {
+    if (!_addedToOverlay) {
+      return;
+    }
+    overlayEntry.remove();
+    _addedToOverlay = false;
   }
 }
 

@@ -119,8 +119,8 @@ class ResidentPageState extends State<ResidentPage> {
               ),
               const Divider(height: 0.5, color: Color(0xffeae6ea)),
               Container(
-                margin: EdgeInsets.only(bottom: bottomMargin),
-                height: 49,
+                padding: EdgeInsets.only(bottom: bottomMargin),
+                height: 49 + bottomMargin,
                 width: width,
                 color: const Color(0xfff6f6f7),
                 child: Row(

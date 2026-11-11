@@ -80,6 +80,9 @@ class _DoKitAppState extends State<DoKitApp> {
     yield DefaultWidgetsLocalizations.delegate;
   }
 
+  /// doKit的Overlay当前挂载的entry数量(不含origin)
+  Iterable<OverlayEntry> get initialEntries => entries.skip(1);
+
   @override
   Widget build(BuildContext context) {
     return Directionality(

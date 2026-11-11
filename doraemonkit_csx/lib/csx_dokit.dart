@@ -34,7 +34,9 @@ class CsxDokit {
       Function(String)? logCallback,
       Function(dynamic, StackTrace)? exceptionCallback,
       List<String> methodChannelBlackList = const <String>[],
-      VoidCallback? releaseAction}) async {
+      VoidCallback? releaseAction,
+      // 展示入口按钮(默认展示)
+      bool showEntrance = true}) async {
     assert(
         app != null || appCreator != null, 'app and appCreator are both null');
     if (kReleaseMode && !useInRelease) {
@@ -69,7 +71,8 @@ class CsxDokit {
     if (useRunZoned) {
       runZonedGuarded(
         () => {
-          _ensureDoKitBinding(kitApp!, useInRelease: useInRelease),
+          _ensureDoKitBinding(kitApp!,
+              useInRelease: useInRelease, showEntrance: showEntrance),
           _zone = Zone.current
         },
         (Object obj, StackTrace stack) {
@@ -90,7 +93,8 @@ class CsxDokit {
         ),
       );
     } else {
-      _ensureDoKitBinding(kitApp, useInRelease: useInRelease);
+      _ensureDoKitBinding(kitApp,
+          useInRelease: useInRelease, showEntrance: showEntrance);
       _zone = Zone.current;
     }
   }
@@ -102,6 +106,8 @@ class CsxDokit {
 abstract class IDoKit {/* Just empty. */}
 
 class _DoKitInterfaces extends IDoKit with _BizKitMixin, _LeaksDoctorMixin {
+  // 当前入口是否是展示状态
+  final ValueNotifier<bool> entranceState = ValueNotifier(false);
   _DoKitInterfaces._();
   OverlayEntry? _toastLayer;
 
@@ -154,6 +160,15 @@ class _DoKitInterfaces extends IDoKit with _BizKitMixin, _LeaksDoctorMixin {
       });
     } else {
       tempLayer.remove();
+    }
+  }
+
+  // 切换入口显隐
+  void switchEntrance(bool show) {
+    if (show) {
+      _addEntrance();
+    } else {
+      _dispose();
     }
   }
 }
@@ -260,7 +275,8 @@ mixin _LeaksDoctorMixin on IDoKit {
 }
 
 // 如果在runApp之前执行了WidgetsFlutterBinding.ensureInitialized，会导致methodchannel功能不可用，可以在runApp前先调用一下ensureDoKitBinding
-void _ensureDoKitBinding(IDoKitApp wrapper, {bool useInRelease = false}) {
+void _ensureDoKitBinding(IDoKitApp wrapper,
+    {bool useInRelease = false, bool showEntrance = true}) {
   if (!kReleaseMode || useInRelease) {
     DoKitWidgetsFlutterBinding.ensureInitialized();
   }
@@ -272,7 +288,7 @@ void _ensureDoKitBinding(IDoKitApp wrapper, {bool useInRelease = false}) {
     binding.attachRootWidget(defaultWidget);
     binding.scheduleWarmUpFrame();
   }
-  addEntrance();
+  if (showEntrance) _addEntrance();
 }
 
 void _collectLog(String line) {
@@ -289,15 +305,37 @@ void _collectError(Object? details, Object? stack) {
   }
 }
 
-void addEntrance() {
+// 当前已经添加到Overlay的入口按钮
+DoKitBtn? _entranceBtn;
+
+void _addEntrance() {
   WidgetsBinding.instance.addPostFrameCallback((_) {
+    // 已经添加过入口按钮，且Overlay中仍然存在，则无需重复添加
+    final existing = _entranceBtn;
+    if (existing != null) {
+      final overlayEntries =
+          doKitOverlayKey.currentState?.widget.initialEntries;
+      final stillInOverlay = overlayEntries == null ||
+          overlayEntries
+              .any((element) => identical(element, existing.overlayEntry));
+      if (existing.isAddedToOverlay && stillInOverlay) {
+        return;
+      }
+    }
     final floatBtn = DoKitBtn(CsxDokit.i.callback);
     floatBtn.addToOverlay();
+    if (floatBtn.isAddedToOverlay) {
+      _entranceBtn = floatBtn;
+      CsxDokit.i.entranceState.value = true;
+    }
     KitPageManager.instance.loadCache();
   });
 }
 
-void dispose(BuildContext context) {
+void _dispose() {
   doKitOverlayKey.currentState?.widget.initialEntries
       .forEach((element) => element.remove());
+  _entranceBtn?.removeFromOverlay();
+  _entranceBtn = null;
+  CsxDokit.i.entranceState.value = false;
 }
